@@ -1,0 +1,44 @@
+{
+  "servicios": [
+    {
+      "titulo": "Corte femenino",
+      "precio": "$5000",
+      "categoria": "Cortes",
+      "descripcion": "Cortes modernos adaptados a tu estilo."
+    },
+    {
+      "titulo": "Coloración profesional",
+      "precio": "$12000",
+      "categoria": "Color",
+      "descripcion": "Balayage, mechas y color personalizado."
+    },
+    {
+      "titulo": "Tratamientos capilares",
+      "precio": "$7000",
+      "categoria": "Tratamientos",
+      "descripcion": "Hidratación y recuperación del cabello."
+    },
+    {
+      "titulo": "Peinados para eventos",
+      "precio": "$6000",
+      "categoria": "Peinados",
+      "descripcion": "Peinados elegantes para ocasiones especiales."
+    },
+
+    {
+      "titulo": "Lavado",
+      "precio": "$2000",
+      "categoria": "Cortes"
+    },
+    {
+      "titulo": "Perfilado de cejas",
+      "precio": "$2500",
+      "categoria": "Estética"
+    },
+    {
+      "titulo": "Brushing",
+      "precio": "$3500",
+      "categoria": "Peinados"
+    }
+  ]
+}
