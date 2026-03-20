@@ -854,12 +854,23 @@ fetch("servicios.json")
 
 const contenedor = document.getElementById("contenedor-servicios");
 const listaPrecios = document.getElementById("lista-precios");
+const btnEditar = document.getElementById("btnEditarPrecios");
 
 contenedor.innerHTML = "";
 listaPrecios.innerHTML = "";
 
-// 👉 SERVICIOS DESTACADOS (primeros de la primera categoría)
-const destacados = data.categorias[0].servicios.slice(0, 4);
+// 👉 CARGAR DATOS GUARDADOS SI EXISTEN
+let dataGuardada = localStorage.getItem("serviciosEditados");
+if(dataGuardada){
+    try{
+        data = JSON.parse(dataGuardada);
+    }catch(e){
+        console.error("Error leyendo datos guardados:", e);
+    }
+}
+
+// 👉 SERVICIOS DESTACADOS
+const destacados = data.categorias?.[0]?.servicios?.slice(0, 4) || [];
 
 destacados.forEach(servicio => {
 
@@ -875,35 +886,99 @@ contenedor.appendChild(div);
 
 });
 
-// 👉 LISTA DE PRECIOS DESDE NUEVO JSON
-data.categorias.forEach(categoria => {
+// 👉 FUNCION RENDER PRECIOS
+function renderPrecios(modoEdicion = false){
 
-const tituloCat = document.createElement("h3");
-tituloCat.classList.add("categoria-precio");
-tituloCat.textContent = categoria.nombre;
+    listaPrecios.innerHTML = "";
 
-listaPrecios.appendChild(tituloCat);
+    data.categorias.forEach((categoria, iCat) => {
 
-categoria.servicios.forEach(servicio => {
+        const tituloCat = document.createElement("h3");
+        tituloCat.classList.add("categoria-precio");
+        tituloCat.textContent = categoria.nombre;
 
-const item = document.createElement("div");
-item.classList.add("item-precio");
+        listaPrecios.appendChild(tituloCat);
 
-item.innerHTML = `
-<div class="nombre-servicio">${servicio.titulo}</div>
+        categoria.servicios.forEach((servicio, iServ) => {
 
-<div class="precios-grid">
-  <div><span>Corto</span><strong>${servicio.corto}</strong></div>
-  <div><span>Medio</span><strong>${servicio.medio}</strong></div>
-  <div><span>Largo</span><strong>${servicio.largo}</strong></div>
-</div>
-`;
+            const item = document.createElement("div");
+            item.classList.add("item-precio");
 
-listaPrecios.appendChild(item);
+            if(modoEdicion){
+
+                item.innerHTML = `
+                <div class="nombre-servicio">${servicio.titulo}</div>
+
+                <div class="precios-grid">
+                    <input data-cat="${iCat}" data-serv="${iServ}" data-tipo="corto" value="${servicio.corto}">
+                    <input data-cat="${iCat}" data-serv="${iServ}" data-tipo="medio" value="${servicio.medio}">
+                    <input data-cat="${iCat}" data-serv="${iServ}" data-tipo="largo" value="${servicio.largo}">
+                </div>
+                `;
+
+            } else {
+
+                item.innerHTML = `
+                <div class="nombre-servicio">${servicio.titulo}</div>
+
+                <div class="precios-grid">
+                    <div><span>Corto</span><strong>${servicio.corto}</strong></div>
+                    <div><span>Medio</span><strong>${servicio.medio}</strong></div>
+                    <div><span>Largo</span><strong>${servicio.largo}</strong></div>
+                </div>
+                `;
+
+            }
+
+            listaPrecios.appendChild(item);
+
+        });
+
+    });
+
+}
+
+// 👉 ESTADO
+let modoEdicion = false;
+
+// 👉 BOTON EDITAR
+btnEditar.addEventListener("click", () => {
+
+    modoEdicion = !modoEdicion;
+
+    if(modoEdicion){
+        btnEditar.textContent = "Guardar cambios";
+    }else{
+        btnEditar.textContent = "Editar precios";
+
+        // 👉 GUARDAR CAMBIOS
+        const inputs = listaPrecios.querySelectorAll("input");
+
+        inputs.forEach(input => {
+
+            const iCat = input.dataset.cat;
+            const iServ = input.dataset.serv;
+            const tipo = input.dataset.tipo;
+
+            if(data.categorias[iCat] && data.categorias[iCat].servicios[iServ]){
+                data.categorias[iCat].servicios[iServ][tipo] = input.value;
+            }
+
+        });
+
+        try{
+            localStorage.setItem("serviciosEditados", JSON.stringify(data));
+        }catch(e){
+            console.error("Error guardando:", e);
+        }
+    }
+
+    renderPrecios(modoEdicion);
 
 });
 
-});
+// 👉 PRIMER RENDER
+renderPrecios(false);
 
 })
 .catch(error => { 
