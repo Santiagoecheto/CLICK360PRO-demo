@@ -1038,3 +1038,30 @@ display:none;
 .video-item::after{
 display:none;
 }
+.precios-grid {
+  display: flex;
+  gap: 15px;
+  margin-top: 5px;
+  flex-wrap: wrap;
+}
+
+.precios-grid div {
+  background: #111;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 70px;
+}
+
+.precios-grid span {
+  color: #aaa;
+  font-size: 11px;
+}
+
+.precios-grid strong {
+  color: #fff;
+  font-size: 14px;
+}
