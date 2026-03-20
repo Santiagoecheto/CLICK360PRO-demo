@@ -1040,9 +1040,9 @@ display:none;
 }
 .precios-grid {
   display: flex;
-  gap: 15px;
+  justify-content: space-between;
+  gap: 10px;
   margin-top: 5px;
-  flex-wrap: wrap;
 }
 
 .precios-grid div {
