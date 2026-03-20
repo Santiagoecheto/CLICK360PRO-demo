@@ -1,57 +1,144 @@
 {
   "servicios": [
     {
-      "titulo": "Corte femenino",
-      "corto": "$5000",
-      "medio": "$7000",
-      "largo": "$9000",
-      "categoria": "Cortes",
-      "descripcion": "Cortes modernos adaptados a tu estilo."
-    },
-    {
-      "titulo": "Coloración profesional",
-      "corto": "$12000",
-      "medio": "$15000",
-      "largo": "$18000",
-      "categoria": "Color",
-      "descripcion": "Balayage, mechas y color personalizado."
-    },
-    {
-      "titulo": "Tratamientos capilares",
-      "corto": "$7000",
-      "medio": "$9000",
-      "largo": "$11000",
-      "categoria": "Tratamientos",
-      "descripcion": "Hidratación y recuperación del cabello."
-    },
-    {
-      "titulo": "Peinados para eventos",
-      "corto": "$6000",
-      "medio": "$8000",
-      "largo": "$10000",
-      "categoria": "Peinados",
-      "descripcion": "Peinados elegantes para ocasiones especiales."
-    },
-    {
-      "titulo": "Lavado",
-      "corto": "$2000",
-      "medio": "$2500",
-      "largo": "$3000",
+      "titulo": "Corte de cabello dama",
+      "corto": "$20000",
+      "medio": "$20000",
+      "largo": "$20000",
       "categoria": "Cortes"
     },
     {
-      "titulo": "Perfilado de cejas",
-      "corto": "$2500",
-      "medio": "$2500",
-      "largo": "$2500",
-      "categoria": "Estética"
+      "titulo": "Corte de cabello hombre",
+      "corto": "$15000",
+      "medio": "$15000",
+      "largo": "$15000",
+      "categoria": "Cortes"
+    },
+    {
+      "titulo": "Barba",
+      "corto": "$15000",
+      "medio": "$15000",
+      "largo": "$15000",
+      "categoria": "Cortes"
+    },
+    {
+      "titulo": "Lavado",
+      "corto": "$10000",
+      "medio": "$10000",
+      "largo": "$10000",
+      "categoria": "Cortes"
     },
     {
       "titulo": "Brushing",
-      "corto": "$3500",
-      "medio": "$4500",
-      "largo": "$5500",
+      "corto": "$25000",
+      "medio": "$28000",
+      "largo": "$28000",
       "categoria": "Peinados"
+    },
+    {
+      "titulo": "Planchado",
+      "corto": "$20000",
+      "medio": "$25000",
+      "largo": "$25000",
+      "categoria": "Peinados"
+    },
+    {
+      "titulo": "Peinado de fiesta",
+      "corto": "$50000",
+      "medio": "$65000",
+      "largo": "$120000",
+      "categoria": "Peinados"
+    },
+    {
+      "titulo": "Hidratación",
+      "corto": "$35000",
+      "medio": "$45000",
+      "largo": "$45000",
+      "categoria": "Tratamientos"
+    },
+    {
+      "titulo": "Color",
+      "corto": "$53800",
+      "medio": "$76000",
+      "largo": "$108800",
+      "categoria": "Color"
+    },
+    {
+      "titulo": "Reflejos con gorra",
+      "corto": "$87300",
+      "medio": "$110200",
+      "largo": "$138900",
+      "categoria": "Color"
+    },
+    {
+      "titulo": "Reflejos con papel",
+      "corto": "$110000",
+      "medio": "$138000",
+      "largo": "$166000",
+      "categoria": "Color"
+    },
+    {
+      "titulo": "Alisado",
+      "corto": "$88000",
+      "medio": "$98000",
+      "largo": "$127000",
+      "categoria": "Tratamientos"
+    },
+    {
+      "titulo": "Permanente",
+      "corto": "$105000",
+      "medio": "$136000",
+      "largo": "$157000",
+      "categoria": "Tratamientos"
+    },
+    {
+      "titulo": "Iluminaciones",
+      "corto": "$77000",
+      "medio": "$99000",
+      "largo": "$119000",
+      "categoria": "Color"
+    },
+    {
+      "titulo": "Shock de keratina",
+      "corto": "$68000",
+      "medio": "$78000",
+      "largo": "$89000",
+      "categoria": "Tratamientos"
+    },
+    {
+      "titulo": "Botox capilar",
+      "corto": "$48000",
+      "medio": "$44000",
+      "largo": "$67000",
+      "categoria": "Tratamientos"
+    },
+    {
+      "titulo": "Balayage / Babylight",
+      "corto": "$125000",
+      "medio": "$153000",
+      "largo": "$178000",
+      "categoria": "Color"
+    },
+    {
+      "titulo": "Pre pigmentación",
+      "corto": "$29000",
+      "medio": "$38000",
+      "largo": "$45000",
+      "categoria": "Color"
+    },
+    {
+      "titulo": "Decoloración",
+      "corto": "$29000",
+      "medio": "$38000",
+      "largo": "$47000",
+      "categoria": "Color"
+    },
+    {
+      "titulo": "Perfilado",
+      "corto": "$15000",
+      "medio": "$15000",
+      "largo": "$15000",
+      "categoria": "Estética"
     }
   ]
 }
