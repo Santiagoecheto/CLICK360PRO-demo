@@ -1,130 +1,85 @@
 {
-  "servicios": [
+  "categorias": [
     {
-      "titulo": "Corte de cabello dama",
-      "corto": "$20000",
-      "medio": "$20000",
-      "largo": "$20000",
-      "categoria": "Cortes"
+      "nombre": "Cortes",
+      "servicios": [
+        {
+          "titulo": "Corte dama",
+          "corto": "$20000",
+          "medio": "$20000",
+          "largo": "$20000"
+        },
+        {
+          "titulo": "Corte hombre",
+          "corto": "$15000",
+          "medio": "$15000",
+          "largo": "$15000"
+        },
+        {
+          "titulo": "Barba",
+          "corto": "$15000",
+          "medio": "$15000",
+          "largo": "$35000"
+        }
+      ]
     },
     {
-      "titulo": "Lavado",
-      "corto": "$10000",
-      "medio": "$10000",
-      "largo": "$10000",
-      "categoria": "Cortes"
+      "nombre": "Servicios básicos",
+      "servicios": [
+        {
+          "titulo": "Lavado",
+          "corto": "$10000",
+          "medio": "$10000",
+          "largo": "$10000"
+        },
+        {
+          "titulo": "Brushing",
+          "corto": "$25000",
+          "medio": "$28000",
+          "largo": "$28000"
+        },
+        {
+          "titulo": "Planchado",
+          "corto": "$20000",
+          "medio": "$25000",
+          "largo": "$25000"
+        }
+      ]
     },
     {
-      "titulo": "Brushing",
-      "corto": "$25000",
-      "medio": "$28000",
-      "largo": "$28000",
-      "categoria": "Peinados"
-    },
-    {
-      "titulo": "Planchado",
-      "corto": "$20000",
-      "medio": "$25000",
-      "largo": "$25000",
-      "categoria": "Peinados"
-    },
-    {
-      "titulo": "Peinado de fiesta",
-      "corto": "$50000",
-      "medio": "$65000",
-      "largo": "$120000",
-      "categoria": "Peinados"
-    },
-    {
-      "titulo": "Hidratación",
-      "corto": "$35000",
-      "medio": "$45000",
-      "largo": "$45000",
-      "categoria": "Tratamientos"
-    },
-    {
-      "titulo": "Color",
-      "corto": "$53800",
-      "medio": "$76000",
-      "largo": "$108800",
-      "categoria": "Color"
-    },
-    {
-      "titulo": "Reflejos con gorra",
-      "corto": "$87300",
-      "medio": "$110200",
-      "largo": "$138900",
-      "categoria": "Color"
-    },
-    {
-      "titulo": "Reflejos con papel",
-      "corto": "$110000",
-      "medio": "$138000",
-      "largo": "$166000",
-      "categoria": "Color"
-    },
-    {
-      "titulo": "Alisado",
-      "corto": "$88000",
-      "medio": "$98000",
-      "largo": "$127000",
-      "categoria": "Tratamientos"
-    },
-    {
-      "titulo": "Permanente",
-      "corto": "$105000",
-      "medio": "$136000",
-      "largo": "$157000",
-      "categoria": "Tratamientos"
-    },
-    {
-      "titulo": "Iluminaciones",
-      "corto": "$77000",
-      "medio": "$99000",
-      "largo": "$119000",
-      "categoria": "Color"
-    },
-    {
-      "titulo": "Shock de keratina",
-      "corto": "$68000",
-      "medio": "$78000",
-      "largo": "$89000",
-      "categoria": "Tratamientos"
-    },
-    {
-      "titulo": "Botox capilar",
-      "corto": "$48000",
-      "medio": "$44000",
-      "largo": "$67000",
-      "categoria": "Tratamientos"
-    },
-    {
-      "titulo": "Balayage / Babylight",
-      "corto": "$125000",
-      "medio": "$153000",
-      "largo": "$178000",
-      "categoria": "Color"
-    },
-    {
-      "titulo": "Pre pigmentación",
-      "corto": "$29000",
-      "medio": "$38000",
-      "largo": "$45000",
-      "categoria": "Color"
-    },
-    {
-      "titulo": "Decoloración",
-      "corto": "$29000",
-      "medio": "$38000",
-      "largo": "$47000",
-      "categoria": "Color"
-    },
-    {
-      "titulo": "Perfilado",
-      "corto": "$15000",
-      "medio": "$15000",
-      "largo": "$15000",
-      "categoria": "Estética"
+      "nombre": "Color y tratamientos",
+      "servicios": [
+        {
+          "titulo": "Color",
+          "corto": "$53800",
+          "medio": "$76000",
+          "largo": "$108800"
+        },
+        {
+          "titulo": "Reflejos con gorra",
+          "corto": "$87300",
+          "medio": "$110200",
+          "largo": "$138900"
+        },
+        {
+          "titulo": "Reflejos con papel",
+          "corto": "$110000",
+          "medio": "$138000",
+          "largo": "$166000"
+        },
+        {
+          "titulo": "Alisado",
+          "corto": "$88000",
+          "medio": "$98000",
+          "largo": "$127000"
+        },
+        {
+          "titulo": "Permanente",
+          "corto": "$105000",
+          "medio": "$136000",
+          "largo": "$157000"
+        }
+      ]
     }
   ]
 }
