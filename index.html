@@ -902,7 +902,9 @@ item.classList.add("item-precio");
 
 item.innerHTML = `
 <span class="nombre-servicio">${servicio.titulo}</span>
-<span class="precio-servicio">${servicio.precio}</span>
+<span class="precio-servicio">
+C: ${servicio.corto} | M: ${servicio.medio} | L: ${servicio.largo}
+</span>
 `;
 
 listaPrecios.appendChild(item);
