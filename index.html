@@ -901,10 +901,13 @@ const item = document.createElement("div");
 item.classList.add("item-precio");
 
 item.innerHTML = `
-<span class="nombre-servicio">${servicio.titulo}</span>
-<span class="precio-servicio">
-C: ${servicio.corto} | M: ${servicio.medio} | L: ${servicio.largo}
-</span>
+<div class="nombre-servicio">${servicio.titulo}</div>
+
+<div class="precios-grid">
+  <div><span>Corto</span><strong>${servicio.corto}</strong></div>
+  <div><span>Medio</span><strong>${servicio.medio}</strong></div>
+  <div><span>Largo</span><strong>${servicio.largo}</strong></div>
+</div>
 `;
 
 listaPrecios.appendChild(item);
