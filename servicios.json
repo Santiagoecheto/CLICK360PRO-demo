@@ -8,20 +8,6 @@
       "categoria": "Cortes"
     },
     {
-      "titulo": "Corte de cabello hombre",
-      "corto": "$15000",
-      "medio": "$15000",
-      "largo": "$15000",
-      "categoria": "Cortes"
-    },
-    {
-      "titulo": "Barba",
-      "corto": "$15000",
-      "medio": "$15000",
-      "largo": "$15000",
-      "categoria": "Cortes"
-    },
-    {
       "titulo": "Lavado",
       "corto": "$10000",
       "medio": "$10000",
