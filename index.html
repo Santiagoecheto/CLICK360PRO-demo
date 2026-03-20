@@ -854,8 +854,8 @@ const listaPrecios = document.getElementById("lista-precios");
 contenedor.innerHTML = "";
 listaPrecios.innerHTML = "";
 
-// 👉 SOLO 4 SERVICIOS DESTACADOS
-const destacados = data.servicios.slice(0, 4);
+// 👉 SERVICIOS DESTACADOS (primeros de la primera categoría)
+const destacados = data.categorias[0].servicios.slice(0, 4);
 
 destacados.forEach(servicio => {
 
@@ -864,36 +864,23 @@ div.classList.add("servicio");
 
 div.innerHTML = `
 <h3>${servicio.titulo}</h3>
-<p>${servicio.descripcion || "Servicio profesional de alta calidad."}</p>
+<p>Servicio profesional de alta calidad.</p>
 `;
 
 contenedor.appendChild(div);
 
 });
 
-// 👉 AGRUPAR PARA EL MODAL
-const categorias = {};
-
-data.servicios.forEach(servicio => {
-
-if(!categorias[servicio.categoria]){
-categorias[servicio.categoria] = [];
-}
-
-categorias[servicio.categoria].push(servicio);
-
-});
-
-// 👉 ARMAR LISTA DE PRECIOS
-for(const categoria in categorias){
+// 👉 LISTA DE PRECIOS DESDE NUEVO JSON
+data.categorias.forEach(categoria => {
 
 const tituloCat = document.createElement("h3");
 tituloCat.classList.add("categoria-precio");
-tituloCat.textContent = categoria;
+tituloCat.textContent = categoria.nombre;
 
 listaPrecios.appendChild(tituloCat);
 
-categorias[categoria].forEach(servicio => {
+categoria.servicios.forEach(servicio => {
 
 const item = document.createElement("div");
 item.classList.add("item-precio");
@@ -912,8 +899,10 @@ listaPrecios.appendChild(item);
 
 });
 
+});
+
 })
-.catch(error => {
+.catch(error => { 
 console.error("Error cargando servicios:", error);
 });
 </script>
