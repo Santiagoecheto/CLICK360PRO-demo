@@ -859,7 +859,7 @@ const btnEditar = document.getElementById("btnEditarPrecios");
 contenedor.innerHTML = "";
 listaPrecios.innerHTML = "";
 
-// 👉 CARGAR DATOS GUARDADOS SI EXISTEN
+// 👉 CARGAR DATOS GUARDADOS
 let dataGuardada = localStorage.getItem("serviciosEditados");
 if(dataGuardada){
     try{
@@ -869,7 +869,7 @@ if(dataGuardada){
     }
 }
 
-// 👉 SERVICIOS DESTACADOS
+// 👉 DESTACADOS
 const destacados = data.categorias?.[0]?.servicios?.slice(0, 4) || [];
 
 destacados.forEach(servicio => {
@@ -886,7 +886,7 @@ contenedor.appendChild(div);
 
 });
 
-// 👉 FUNCION RENDER PRECIOS
+// 👉 RENDER
 function renderPrecios(modoEdicion = false){
 
     listaPrecios.innerHTML = "";
@@ -910,9 +910,20 @@ function renderPrecios(modoEdicion = false){
                 <div class="nombre-servicio">${servicio.titulo}</div>
 
                 <div class="precios-grid">
-                    <input data-cat="${iCat}" data-serv="${iServ}" data-tipo="corto" value="${servicio.corto}">
-                    <input data-cat="${iCat}" data-serv="${iServ}" data-tipo="medio" value="${servicio.medio}">
-                    <input data-cat="${iCat}" data-serv="${iServ}" data-tipo="largo" value="${servicio.largo}">
+                    <div>
+                        <span>Corto</span>
+                        <input data-cat="${iCat}" data-serv="${iServ}" data-tipo="corto" value="${servicio.corto}">
+                    </div>
+
+                    <div>
+                        <span>Medio</span>
+                        <input data-cat="${iCat}" data-serv="${iServ}" data-tipo="medio" value="${servicio.medio}">
+                    </div>
+
+                    <div>
+                        <span>Largo</span>
+                        <input data-cat="${iCat}" data-serv="${iServ}" data-tipo="largo" value="${servicio.largo}">
+                    </div>
                 </div>
                 `;
 
@@ -941,7 +952,7 @@ function renderPrecios(modoEdicion = false){
 // 👉 ESTADO
 let modoEdicion = false;
 
-// 👉 BOTON EDITAR
+// 👉 BOTÓN
 btnEditar.addEventListener("click", () => {
 
     modoEdicion = !modoEdicion;
@@ -951,7 +962,6 @@ btnEditar.addEventListener("click", () => {
     }else{
         btnEditar.textContent = "Editar precios";
 
-        // 👉 GUARDAR CAMBIOS
         const inputs = listaPrecios.querySelectorAll("input");
 
         inputs.forEach(input => {
@@ -977,7 +987,7 @@ btnEditar.addEventListener("click", () => {
 
 });
 
-// 👉 PRIMER RENDER
+// 👉 INICIO
 renderPrecios(false);
 
 })
