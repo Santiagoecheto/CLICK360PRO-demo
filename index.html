@@ -912,35 +912,40 @@ function renderPrecios(modoEdicion = false){
             const item = document.createElement("div");
             item.classList.add("item-precio");
 
-            if(modoEdicion){
+         if(modoEdicion){
 
-                item.innerHTML = `
-                <input class="nombre-servicio"
-                    data-cat="${iCat}"
-                    data-serv="${iServ}"
-                    data-tipo="titulo"
-                    value="${servicio.titulo || ''}"
-                />
+    item.innerHTML = `
+    <input class="nombre-servicio"
+        data-cat="${iCat}"
+        data-serv="${iServ}"
+        data-tipo="titulo"
+    />
 
-                <div class="precios-grid">
-                    <div>
-                        <span>Corto</span>
-                        <input data-cat="${iCat}" data-serv="${iServ}" data-tipo="corto" value="${servicio.corto || ''}">
-                    </div>
+    <div class="precios-grid">
+        <div>
+            <span>Corto</span>
+            <input data-cat="${iCat}" data-serv="${iServ}" data-tipo="corto" value="${servicio.corto || ''}">
+        </div>
 
-                    <div>
-                        <span>Medio</span>
-                        <input data-cat="${iCat}" data-serv="${iServ}" data-tipo="medio" value="${servicio.medio || ''}">
-                    </div>
+        <div>
+            <span>Medio</span>
+            <input data-cat="${iCat}" data-serv="${iServ}" data-tipo="medio" value="${servicio.medio || ''}">
+        </div>
 
-                    <div>
-                        <span>Largo</span>
-                        <input data-cat="${iCat}" data-serv="${iServ}" data-tipo="largo" value="${servicio.largo || ''}">
-                    </div>
-                </div>
+        <div>
+            <span>Largo</span>
+            <input data-cat="${iCat}" data-serv="${iServ}" data-tipo="largo" value="${servicio.largo || ''}">
+        </div>
+    </div>
 
-                <button class="btn-eliminar" data-cat="${iCat}" data-serv="${iServ}">🗑</button>
-                `;
+    <button class="btn-eliminar" data-cat="${iCat}" data-serv="${iServ}">🗑</button>
+    `;
+
+    const inputNombre = item.querySelector(".nombre-servicio");
+    if(inputNombre){
+        inputNombre.value = servicio.titulo || "";
+    }
+}
 
             } else {
 
