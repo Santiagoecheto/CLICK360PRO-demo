@@ -1087,6 +1087,23 @@ modalPrecios.style.display = "none";
 
   // Ejecutar prueba
   guardarPrueba();
+  async function leerServicios() {
+  try {
+    const querySnapshot = await getDocs(collection(db, "servicios"));
+
+    console.log("📦 Servicios desde Firebase:");
+
+    querySnapshot.forEach((doc) => {
+      console.log(doc.id, doc.data());
+    });
+
+  } catch (e) {
+    console.error("❌ Error leyendo:", e);
+  }
+}
+
+// Ejecutar lectura
+leerServicios();
 </script>
 
 </body>
