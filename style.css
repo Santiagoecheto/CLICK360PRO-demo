@@ -1013,6 +1013,9 @@ font-size: 15px;
 .nombre-servicio {
 color: #ffffff;
 }
+input.nombre-servicio {
+    color: #000000;
+}
 
 .precio-servicio {
 color: #ff2e6e;
