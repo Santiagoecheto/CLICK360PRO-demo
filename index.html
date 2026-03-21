@@ -1046,10 +1046,13 @@ modalPrecios.style.display = "none";
 </script>
   
 <script type="module">
-  // Import Firebase
+  // Firebase App
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
-  // Configuración de tu proyecto
+  // 🔥 NUEVO: Firestore
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+  // Configuración
   const firebaseConfig = {
     apiKey: "AIzaSyCgFcf0-3ufcK65tF4jsBBtzFPUCyooHu8",
     authDomain: "studio-hair-demo.firebaseapp.com",
@@ -1062,7 +1065,28 @@ modalPrecios.style.display = "none";
   // Inicializar Firebase
   const app = initializeApp(firebaseConfig);
 
-  console.log("🔥 Firebase conectado correctamente");
+  // 🔥 Inicializar base de datos
+  const db = getFirestore(app);
+
+  console.log("🔥 Firebase + Firestore listo");
+
+  // 🧪 PRUEBA: guardar un servicio
+  async function guardarPrueba() {
+    try {
+      const docRef = await addDoc(collection(db, "servicios"), {
+        nombre: "Corte de prueba",
+        precio: 1234,
+        fecha: new Date()
+      });
+
+      console.log("✅ Guardado con ID:", docRef.id);
+    } catch (e) {
+      console.error("❌ Error guardando:", e);
+    }
+  }
+
+  // Ejecutar prueba
+  guardarPrueba();
 </script>
 
 </body>
