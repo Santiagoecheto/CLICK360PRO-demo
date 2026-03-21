@@ -1087,23 +1087,31 @@ modalPrecios.style.display = "none";
 
   // Ejecutar prueba
   guardarPrueba();
-  async function leerServicios() {
+ async function leerServicios() {
   try {
+    const contenedor = document.getElementById("contenedor-servicios");
+    contenedor.innerHTML = "";
+
     const querySnapshot = await getDocs(collection(db, "servicios"));
 
-    console.log("📦 Servicios desde Firebase:");
-
     querySnapshot.forEach((doc) => {
-      console.log(doc.id, doc.data());
+      const data = doc.data();
+
+      const div = document.createElement("div");
+      div.className = "servicio-item";
+
+      div.innerHTML = `
+        <h3>${data.nombre}</h3>
+        <p>$${data.precio}</p>
+      `;
+
+      contenedor.appendChild(div);
     });
 
   } catch (e) {
     console.error("❌ Error leyendo:", e);
   }
 }
-
-// Ejecutar lectura
-leerServicios();
 </script>
 
 </body>
