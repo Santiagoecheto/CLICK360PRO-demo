@@ -1065,3 +1065,31 @@ display:none;
   color: #fff;
   font-size: 14px;
 }
+/* PRECIOS EN 3 COLUMNAS */
+
+.precios-grid{
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 10px;
+text-align: center;
+min-width: 180px;
+}
+
+.precios-grid div{
+background: #1a1a1a;
+padding: 6px;
+border-radius: 6px;
+}
+
+.precios-grid span{
+display: block;
+font-size: 11px;
+color: #aaa;
+}
+
+.precios-grid strong{
+display: block;
+color: #ff2e6e;
+font-size: 14px;
+margin-top: 2px;
+}
