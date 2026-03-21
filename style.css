@@ -1093,3 +1093,46 @@ color: #ff2e6e;
 font-size: 14px;
 margin-top: 2px;
 }
+/* INPUTS EN MODO EDICION DE PRECIOS */
+
+.precios-grid input{
+width: 100%;
+max-width: 60px;
+padding: 4px 6px;
+font-size: 13px;
+text-align: center;
+
+border-radius: 6px;
+border: 1px solid #333;
+background: #222;
+color: #fff;
+
+outline: none;
+}
+
+/* EVITA QUE CREZCAN */
+.precios-grid div{
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+}
+
+/* CONTENEDOR GENERAL DEL ITEM */
+.item-precio{
+display: flex;
+justify-content: space-between;
+align-items: center;
+gap: 10px;
+}
+
+/* NOMBRE DEL SERVICIO CONTROLADO */
+.nombre-servicio{
+flex: 1;
+font-size: 14px;
+}
+
+/* BLOQUE DE PRECIOS FIJO */
+.precios-grid{
+flex-shrink: 0;
+}
