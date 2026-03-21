@@ -907,11 +907,7 @@ function renderPrecios(modoEdicion = false){
             if(modoEdicion){
 
                 item.innerHTML = `
-                <input class="nombre-servicio"
-                       data-cat="${iCat}"
-                       data-serv="${iServ}"
-                       data-tipo="titulo"
-                       value="${servicio.titulo || ''}">
+               <input class="nombre-servicio" data-cat="${iCat}" data-serv="${iServ}" data-tipo="titulo" value="${servicio.titulo || ''}">
 
                 <div class="precios-grid">
                     <div>
