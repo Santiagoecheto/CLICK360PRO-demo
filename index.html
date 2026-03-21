@@ -847,192 +847,6 @@ modalTurnos.style.display = "none";
 
 </script>
 
-<script type="module">
-fetch("servicios.json")
-.then(res => res.json())
-.then(data => {
-
-    const contenedor = document.getElementById("contenedor-servicios");
-    const listaPrecios = document.getElementById("lista-precios");
-    const btnEditar = document.getElementById("btnEditarPrecios");
-  
-contenedor.innerHTML = "";
-listaPrecios.innerHTML = "";
-
-// 👉 CARGAR DATOS GUARDADOS PRIMERO
-let dataGuardada = localStorage.getItem("serviciosEditados");
-if(dataGuardada){
-    try{
-        data = JSON.parse(dataGuardada);
-    }catch(e){
-        console.error("Error leyendo datos guardados:", e);
-    }
-}
-
-// 👉 RECIÉN DESPUÉS renderizar
-renderPrecios();
-
-btnEditar.addEventListener("click", () => {
-    renderPrecios(true);
-});
-
-// 👉 DESTACADOS
-// 👉 DESTACADOS DESDE FIREBASE
-async function cargarDestacadosFirebase() {
-
-    const contenedor = document.getElementById("contenedor-servicios");
-    contenedor.innerHTML = "";
-
-    try {
-        const querySnapshot = await getDocs(collection(db, "servicios"));
-
-        querySnapshot.forEach((doc) => {
-            const servicio = doc.data();
-
-            const div = document.createElement("div");
-            div.classList.add("servicio");
-
-            div.innerHTML = `
-                <h3>${servicio.nombre}</h3>
-                <p>Servicio profesional de alta calidad.</p>
-            `;
-
-            contenedor.appendChild(div);
-        });
-
-    } catch (e) {
-        console.error("❌ Error Firebase:", e);
-    }
-}
-
-// Ejecutar Firebase
-cargarDestacadosFirebase();
-
-// 👉 RENDER
-function renderPrecios(modoEdicion = false){
-
-    listaPrecios.innerHTML = "";
-
-    data.categorias.forEach((categoria, iCat) => {
-
-        const tituloCat = document.createElement("h3");
-        tituloCat.classList.add("categoria-precio");
-        tituloCat.textContent = categoria.nombre;
-
-        listaPrecios.appendChild(tituloCat);
-
-        categoria.servicios.forEach((servicio, iServ) => {
-            console.log("SERVICIO:", servicio);
-
-            const item = document.createElement("div");
-            item.classList.add("item-precio");
-
-         if(modoEdicion){
-
-    item.innerHTML = `
-    <input class="nombre-servicio"
-        data-cat="${iCat}"
-        data-serv="${iServ}"
-        data-tipo="titulo"
-    />
-
-    <div class="precios-grid">
-        <div>
-            <span>Corto</span>
-            <input data-cat="${iCat}" data-serv="${iServ}" data-tipo="corto" value="${servicio.corto || ''}">
-        </div>
-
-        <div>
-            <span>Medio</span>
-            <input data-cat="${iCat}" data-serv="${iServ}" data-tipo="medio" value="${servicio.medio || ''}">
-        </div>
-
-        <div>
-            <span>Largo</span>
-            <input data-cat="${iCat}" data-serv="${iServ}" data-tipo="largo" value="${servicio.largo || ''}">
-        </div>
-    </div>
-
-    <button class="btn-eliminar" data-cat="${iCat}" data-serv="${iServ}">🗑</button>
-    `;
-
-   const inputNombre = item.children[0];
-if(inputNombre){
-    inputNombre.value = servicio.titulo || "";
-}
-            } else {
-
-                item.innerHTML = `
-                <div class="nombre-servicio">${servicio.titulo}</div>
-
-                <div class="precios-grid">
-                    <div><span>Corto</span><strong>${servicio.corto}</strong></div>
-                    <div><span>Medio</span><strong>${servicio.medio}</strong></div>
-                    <div><span>Largo</span><strong>${servicio.largo}</strong></div>
-                </div>
-                `;
-            }
-
-            listaPrecios.appendChild(item);
-        });
-
-        if(modoEdicion){
-            const btnAgregar = document.createElement("button");
-            btnAgregar.textContent = "➕ Agregar servicio";
-            btnAgregar.classList.add("btn-agregar");
-            btnAgregar.dataset.cat = iCat;
-
-            listaPrecios.appendChild(btnAgregar);
-        }
-
-    });
-
-    if(modoEdicion){
-
-        const inputs = listaPrecios.querySelectorAll("input");
-
-        inputs.forEach(input => {
-            input.addEventListener("input", () => {
-                const iCat = input.dataset.cat;
-                const iServ = input.dataset.serv;
-                const tipo = input.dataset.tipo;
-
-                data.categorias[iCat].servicios[iServ][tipo] = input.value;
-            });
-        });
-
-        const botonesEliminar = listaPrecios.querySelectorAll(".btn-eliminar");
-
-        botonesEliminar.forEach(btn => {
-            btn.addEventListener("click", () => {
-                const iCat = btn.dataset.cat;
-                const iServ = btn.dataset.serv;
-
-                data.categorias[iCat].servicios.splice(iServ, 1);
-                renderPrecios(true);
-            });
-        });
-
-        const botonesAgregar = listaPrecios.querySelectorAll(".btn-agregar");
-
-        botonesAgregar.forEach(btn => {
-            btn.addEventListener("click", () => {
-                const iCat = btn.dataset.cat;
-
-                data.categorias[iCat].servicios.push({
-                    titulo: "Nuevo servicio",
-                    corto: "",
-                    medio: "",
-                    largo: ""
-                });
-
-                renderPrecios(true);
-            });
-        });
-    }
-}
-});  
-</script>
 
 <script>
 
@@ -1061,47 +875,182 @@ modalPrecios.style.display = "none";
 </script>
   
 <script type="module">
-  // Firebase App
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
-  // 🔥 NUEVO: Firestore
-  import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+// Firebase App
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
-  // Configuración
-  const firebaseConfig = {
-    apiKey: "AIzaSyCgFcf0-3ufcK65tF4jsBBtzFPUCyooHu8",
-    authDomain: "studio-hair-demo.firebaseapp.com",
-    projectId: "studio-hair-demo",
-    storageBucket: "studio-hair-demo.firebasestorage.app",
-    messagingSenderId: "880884385632",
-    appId: "1:880884385632:web:acbaeedd5784829012c005"
-  };
+// Firestore
+import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-  // Inicializar Firebase
-  const app = initializeApp(firebaseConfig);
+// Configuración
+const firebaseConfig = {
+  apiKey: "AIzaSyCgFcf0-3ufcK65tF4jsBBtzFPUCyooHu8",
+  authDomain: "studio-hair-demo.firebaseapp.com",
+  projectId: "studio-hair-demo",
+  storageBucket: "studio-hair-demo.firebasestorage.app",
+  messagingSenderId: "880884385632",
+  appId: "1:880884385632:web:acbaeedd5784829012c005"
+};
 
-  // 🔥 Inicializar base de datos
-  const db = getFirestore(app);
+// Inicializar Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-  console.log("🔥 Firebase + Firestore listo");
+console.log("🔥 Firebase + Firestore listo");
 
-  // 🧪 PRUEBA: guardar un servicio
-  async function guardarPrueba() {
-    try {
-      const docRef = await addDoc(collection(db, "servicios"), {
-        nombre: "Corte de prueba",
-        precio: 1234,
-        fecha: new Date()
-      });
 
-      console.log("✅ Guardado con ID:", docRef.id);
-    } catch (e) {
-      console.error("❌ Error guardando:", e);
+// ===============================
+// 🔽 TU LÓGICA (ANTES EN EL OTRO SCRIPT)
+// ===============================
+
+fetch("servicios.json")
+.then(res => res.json())
+.then(data => {
+
+    const contenedor = document.getElementById("contenedor-servicios");
+    const listaPrecios = document.getElementById("lista-precios");
+    const btnEditar = document.getElementById("btnEditarPrecios");
+
+    contenedor.innerHTML = "";
+    listaPrecios.innerHTML = "";
+
+    let dataGuardada = localStorage.getItem("serviciosEditados");
+    if(dataGuardada){
+        try{
+            data = JSON.parse(dataGuardada);
+        }catch(e){
+            console.error("Error leyendo datos guardados:", e);
+        }
     }
-  }
 
-  // Ejecutar prueba
-  guardarPrueba();
+    renderPrecios();
+
+    btnEditar.addEventListener("click", () => {
+        renderPrecios(true);
+    });
+
+    // 🔥 DESTACADOS FIREBASE
+    async function cargarDestacadosFirebase() {
+
+        const contenedor = document.getElementById("contenedor-servicios");
+        contenedor.innerHTML = "";
+
+        try {
+            const querySnapshot = await getDocs(collection(db, "servicios"));
+
+            querySnapshot.forEach((doc) => {
+                const servicio = doc.data();
+
+                const div = document.createElement("div");
+                div.classList.add("servicio");
+
+                div.innerHTML = `
+                    <h3>${servicio.nombre}</h3>
+                    <p>Servicio profesional de alta calidad.</p>
+                `;
+
+                contenedor.appendChild(div);
+            });
+
+        } catch (e) {
+            console.error("❌ Error Firebase:", e);
+        }
+    }
+
+    cargarDestacadosFirebase();
+
+
+    // ===============================
+    // RENDER PRECIOS
+    // ===============================
+    function renderPrecios(modoEdicion = false){
+
+        listaPrecios.innerHTML = "";
+
+        data.categorias.forEach((categoria, iCat) => {
+
+            const tituloCat = document.createElement("h3");
+            tituloCat.classList.add("categoria-precio");
+            tituloCat.textContent = categoria.nombre;
+
+            listaPrecios.appendChild(tituloCat);
+
+            categoria.servicios.forEach((servicio, iServ) => {
+
+                const item = document.createElement("div");
+                item.classList.add("item-precio");
+
+                if(modoEdicion){
+
+                    item.innerHTML = `
+                    <input class="nombre-servicio"
+                        data-cat="${iCat}"
+                        data-serv="${iServ}"
+                        data-tipo="titulo"
+                    />
+
+                    <div class="precios-grid">
+                        <div>
+                            <span>Corto</span>
+                            <input data-cat="${iCat}" data-serv="${iServ}" data-tipo="corto" value="${servicio.corto || ''}">
+                        </div>
+
+                        <div>
+                            <span>Medio</span>
+                            <input data-cat="${iCat}" data-serv="${iServ}" data-tipo="medio" value="${servicio.medio || ''}">
+                        </div>
+
+                        <div>
+                            <span>Largo</span>
+                            <input data-cat="${iCat}" data-serv="${iServ}" data-tipo="largo" value="${servicio.largo || ''}">
+                        </div>
+                    </div>
+
+                    <button class="btn-eliminar" data-cat="${iCat}" data-serv="${iServ}">🗑</button>
+                    `;
+
+                    const inputNombre = item.children[0];
+                    if(inputNombre){
+                        inputNombre.value = servicio.titulo || "";
+                    }
+
+                } else {
+
+                    item.innerHTML = `
+                    <div class="nombre-servicio">${servicio.titulo}</div>
+
+                    <div class="precios-grid">
+                        <div><span>Corto</span><strong>${servicio.corto}</strong></div>
+                        <div><span>Medio</span><strong>${servicio.medio}</strong></div>
+                        <div><span>Largo</span><strong>${servicio.largo}</strong></div>
+                    </div>
+                    `;
+                }
+
+                listaPrecios.appendChild(item);
+            });
+        });
+    }
+
+});
+
+
+// 🧪 PRUEBA FIREBASE
+async function guardarPrueba() {
+    try {
+        const docRef = await addDoc(collection(db, "servicios"), {
+            nombre: "Corte de prueba",
+            precio: 1234,
+            fecha: new Date()
+        });
+
+        console.log("✅ Guardado con ID:", docRef.id);
+    } catch (e) {
+        console.error("❌ Error guardando:", e);
+    }
+}
+
+guardarPrueba();
 
 </script>
 
