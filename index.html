@@ -911,7 +911,7 @@ function renderPrecios(modoEdicion = false){
                        data-cat="${iCat}"
                        data-serv="${iServ}"
                        data-tipo="titulo"
-                    value="${servicio.titulo || ''}"
+                       value="${servicio.titulo || ''}">
 
                 <div class="precios-grid">
                     <div>
@@ -951,7 +951,6 @@ function renderPrecios(modoEdicion = false){
 
         });
 
-        // 👉 BOTÓN AGREGAR SERVICIO (POR CATEGORÍA)
         if(modoEdicion){
             const btnAgregar = document.createElement("button");
             btnAgregar.textContent = "➕ Agregar servicio";
@@ -963,7 +962,6 @@ function renderPrecios(modoEdicion = false){
 
     });
 
-    // 👉 EVENTOS ELIMINAR
     if(modoEdicion){
         const botonesEliminar = listaPrecios.querySelectorAll(".btn-eliminar");
 
@@ -977,7 +975,6 @@ function renderPrecios(modoEdicion = false){
             });
         });
 
-        // 👉 EVENTOS AGREGAR
         const botonesAgregar = listaPrecios.querySelectorAll(".btn-agregar");
 
         botonesAgregar.forEach(btn => {
