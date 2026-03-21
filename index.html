@@ -852,18 +852,10 @@ fetch("servicios.json")
 .then(res => res.json())
 .then(data => {
 
-const contenedor = document.getElementById("contenedor-servicios");
-const listaPrecios = document.getElementById("lista-precios");
-const btnEditar = document.getElementById("btnEditarPrecios");
-
 contenedor.innerHTML = "";
 listaPrecios.innerHTML = "";
-renderPrecios();
-  btnEditar.addEventListener("click", () => {
-    renderPrecios(true);
-});
-  
-// 👉 CARGAR DATOS GUARDADOS
+
+// 👉 CARGAR DATOS GUARDADOS PRIMERO
 let dataGuardada = localStorage.getItem("serviciosEditados");
 if(dataGuardada){
     try{
@@ -872,6 +864,13 @@ if(dataGuardada){
         console.error("Error leyendo datos guardados:", e);
     }
 }
+
+// 👉 RECIÉN DESPUÉS renderizar
+renderPrecios();
+
+btnEditar.addEventListener("click", () => {
+    renderPrecios(true);
+});
 
 // 👉 DESTACADOS
 const destacados = data.categorias?.[0]?.servicios?.slice(0, 4) || [];
