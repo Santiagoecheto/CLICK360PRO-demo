@@ -907,7 +907,11 @@ function renderPrecios(modoEdicion = false){
             if(modoEdicion){
 
                 item.innerHTML = `
-                <div class="nombre-servicio">${servicio.titulo}</div>
+                <input class="nombre-servicio"
+                       data-cat="${iCat}"
+                       data-serv="${iServ}"
+                       data-tipo="titulo"
+                       value="${servicio.titulo}">
 
                 <div class="precios-grid">
                     <div>
@@ -925,6 +929,8 @@ function renderPrecios(modoEdicion = false){
                         <input data-cat="${iCat}" data-serv="${iServ}" data-tipo="largo" value="${servicio.largo}">
                     </div>
                 </div>
+
+                <button class="btn-eliminar" data-cat="${iCat}" data-serv="${iServ}">🗑</button>
                 `;
 
             } else {
@@ -945,55 +951,51 @@ function renderPrecios(modoEdicion = false){
 
         });
 
+        // 👉 BOTÓN AGREGAR SERVICIO (POR CATEGORÍA)
+        if(modoEdicion){
+            const btnAgregar = document.createElement("button");
+            btnAgregar.textContent = "➕ Agregar servicio";
+            btnAgregar.classList.add("btn-agregar");
+            btnAgregar.dataset.cat = iCat;
+
+            listaPrecios.appendChild(btnAgregar);
+        }
+
     });
 
-}
-
-// 👉 ESTADO
-let modoEdicion = false;
-
-// 👉 BOTÓN
-btnEditar.addEventListener("click", () => {
-
-    modoEdicion = !modoEdicion;
-
+    // 👉 EVENTOS ELIMINAR
     if(modoEdicion){
-        btnEditar.textContent = "Guardar cambios";
-    }else{
-        btnEditar.textContent = "Editar precios";
+        const botonesEliminar = listaPrecios.querySelectorAll(".btn-eliminar");
 
-        const inputs = listaPrecios.querySelectorAll("input");
+        botonesEliminar.forEach(btn => {
+            btn.addEventListener("click", () => {
+                const iCat = btn.dataset.cat;
+                const iServ = btn.dataset.serv;
 
-        inputs.forEach(input => {
-
-            const iCat = input.dataset.cat;
-            const iServ = input.dataset.serv;
-            const tipo = input.dataset.tipo;
-
-            if(data.categorias[iCat] && data.categorias[iCat].servicios[iServ]){
-                data.categorias[iCat].servicios[iServ][tipo] = input.value;
-            }
-
+                data.categorias[iCat].servicios.splice(iServ, 1);
+                renderPrecios(true);
+            });
         });
 
-        try{
-            localStorage.setItem("serviciosEditados", JSON.stringify(data));
-        }catch(e){
-            console.error("Error guardando:", e);
-        }
+        // 👉 EVENTOS AGREGAR
+        const botonesAgregar = listaPrecios.querySelectorAll(".btn-agregar");
+
+        botonesAgregar.forEach(btn => {
+            btn.addEventListener("click", () => {
+                const iCat = btn.dataset.cat;
+
+                data.categorias[iCat].servicios.push({
+                    titulo: "Nuevo servicio",
+                    corto: "",
+                    medio: "",
+                    largo: ""
+                });
+
+                renderPrecios(true);
+            });
+        });
     }
-
-    renderPrecios(modoEdicion);
-
-});
-
-// 👉 INICIO
-renderPrecios(false);
-
-})
-.catch(error => { 
-console.error("Error cargando servicios:", error);
-});
+}
 </script>
 
 <script>
