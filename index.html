@@ -911,22 +911,22 @@ function renderPrecios(modoEdicion = false){
                        data-cat="${iCat}"
                        data-serv="${iServ}"
                        data-tipo="titulo"
-                       value="${servicio.titulo}">
+                    value="${servicio.titulo || ''}"
 
                 <div class="precios-grid">
                     <div>
                         <span>Corto</span>
-                        <input data-cat="${iCat}" data-serv="${iServ}" data-tipo="corto" value="${servicio.corto}">
+                        <input data-cat="${iCat}" data-serv="${iServ}" data-tipo="corto" value="${servicio.corto || ''}">
                     </div>
 
                     <div>
                         <span>Medio</span>
-                        <input data-cat="${iCat}" data-serv="${iServ}" data-tipo="medio" value="${servicio.medio}">
+                        <input data-cat="${iCat}" data-serv="${iServ}" data-tipo="medio" value="${servicio.medio || ''}">
                     </div>
 
                     <div>
                         <span>Largo</span>
-                        <input data-cat="${iCat}" data-serv="${iServ}" data-tipo="largo" value="${servicio.largo}">
+                        <input data-cat="${iCat}" data-serv="${iServ}" data-tipo="largo" value="${servicio.largo || ''}">
                     </div>
                 </div>
 
