@@ -911,7 +911,12 @@ function renderPrecios(modoEdicion = false){
             if(modoEdicion){
 
                 item.innerHTML = `
-               <input class="nombre-servicio" data-cat="${iCat}" data-serv="${iServ}" data-tipo="titulo" value="${servicio.titulo ?? 'Sin nombre'}"
+                <input class="nombre-servicio"
+                       data-cat="${iCat}"
+                       data-serv="${iServ}"
+                       data-tipo="titulo"
+                       value="${servicio.titulo ?? 'Sin nombre'}">
+
                 <div class="precios-grid">
                     <div>
                         <span>Corto</span>
@@ -962,6 +967,20 @@ function renderPrecios(modoEdicion = false){
     });
 
     if(modoEdicion){
+
+        // 🔴 GUARDAR CAMBIOS EN TIEMPO REAL (CLAVE)
+        const inputs = listaPrecios.querySelectorAll("input");
+
+        inputs.forEach(input => {
+            input.addEventListener("input", () => {
+                const iCat = input.dataset.cat;
+                const iServ = input.dataset.serv;
+                const tipo = input.dataset.tipo;
+
+                data.categorias[iCat].servicios[iServ][tipo] = input.value;
+            });
+        });
+
         const botonesEliminar = listaPrecios.querySelectorAll(".btn-eliminar");
 
         botonesEliminar.forEach(btn => {
@@ -990,9 +1009,8 @@ function renderPrecios(modoEdicion = false){
                 renderPrecios(true);
             });
         });
-       } 
-} 
-  });
+    }
+}
 </script>
 
 <script>
