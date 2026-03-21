@@ -904,7 +904,7 @@ function renderPrecios(modoEdicion = false){
         listaPrecios.appendChild(tituloCat);
 
         categoria.servicios.forEach((servicio, iServ) => {
-
+            console.log("SERVICIO:", servicio);
             const item = document.createElement("div");
             item.classList.add("item-precio");
 
@@ -915,7 +915,7 @@ function renderPrecios(modoEdicion = false){
                        data-cat="${iCat}"
                        data-serv="${iServ}"
                        data-tipo="titulo"
-                       value="${servicio.titulo ?? 'Sin nombre'}">
+                 value="${servicio.titulo || ''}">
 
                 <div class="precios-grid">
                     <div>
