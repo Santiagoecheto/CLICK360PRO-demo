@@ -877,21 +877,36 @@ btnEditar.addEventListener("click", () => {
 });
 
 // 👉 DESTACADOS
-const destacados = data.categorias?.[0]?.servicios?.slice(0, 4) || [];
+// 👉 DESTACADOS DESDE FIREBASE
+async function cargarDestacadosFirebase() {
 
-destacados.forEach(servicio => {
+    const contenedor = document.getElementById("contenedor-servicios");
+    contenedor.innerHTML = "";
 
-const div = document.createElement("div");
-div.classList.add("servicio");
+    try {
+        const querySnapshot = await getDocs(collection(db, "servicios"));
 
-div.innerHTML = `
-<h3>${servicio.titulo}</h3>
-<p>Servicio profesional de alta calidad.</p>
-`;
+        querySnapshot.forEach((doc) => {
+            const servicio = doc.data();
 
-contenedor.appendChild(div);
+            const div = document.createElement("div");
+            div.classList.add("servicio");
 
-});
+            div.innerHTML = `
+                <h3>${servicio.nombre}</h3>
+                <p>Servicio profesional de alta calidad.</p>
+            `;
+
+            contenedor.appendChild(div);
+        });
+
+    } catch (e) {
+        console.error("❌ Error Firebase:", e);
+    }
+}
+
+// Ejecutar Firebase
+cargarDestacadosFirebase();
 
 // 👉 RENDER
 function renderPrecios(modoEdicion = false){
