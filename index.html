@@ -915,7 +915,7 @@ function renderPrecios(modoEdicion = false){
                        data-cat="${iCat}"
                        data-serv="${iServ}"
                        data-tipo="titulo"
-                 value="${servicio.titulo || ''}">
+                value="">
 
                 <div class="precios-grid">
                     <div>
@@ -952,7 +952,10 @@ function renderPrecios(modoEdicion = false){
             }
 
             listaPrecios.appendChild(item);
-
+             const inputNombre = item.querySelector(".nombre-servicio");
+             if(inputNombre){
+             inputNombre.value = servicio.titulo || "";
+}
         });
 
         if(modoEdicion){
