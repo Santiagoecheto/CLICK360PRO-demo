@@ -1102,31 +1102,7 @@ modalPrecios.style.display = "none";
 
   // Ejecutar prueba
   guardarPrueba();
- async function leerServicios() {
-  try {
-    const contenedor = document.getElementById("contenedor-servicios");
-    contenedor.innerHTML = "";
 
-    const querySnapshot = await getDocs(collection(db, "servicios"));
-
-    querySnapshot.forEach((doc) => {
-      const data = doc.data();
-
-      const div = document.createElement("div");
-      div.className = "servicio-item";
-
-      div.innerHTML = `
-        <h3>${data.nombre}</h3>
-        <p>$${data.precio}</p>
-      `;
-
-      contenedor.appendChild(div);
-    });
-
-  } catch (e) {
-    console.error("❌ Error leyendo:", e);
-  }
-}
 </script>
 
 </body>
