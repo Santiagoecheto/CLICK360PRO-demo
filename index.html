@@ -852,6 +852,10 @@ fetch("servicios.json")
 .then(res => res.json())
 .then(data => {
 
+    const contenedor = document.getElementById("contenedor-servicios");
+    const listaPrecios = document.getElementById("lista-precios");
+    const btnEditar = document.getElementById("btnEditarPrecios");
+  
 contenedor.innerHTML = "";
 listaPrecios.innerHTML = "";
 
