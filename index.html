@@ -905,18 +905,19 @@ function renderPrecios(modoEdicion = false){
 
         categoria.servicios.forEach((servicio, iServ) => {
             console.log("SERVICIO:", servicio);
+
             const item = document.createElement("div");
             item.classList.add("item-precio");
 
             if(modoEdicion){
 
                 item.innerHTML = `
-              <input class="nombre-servicio"
-       data-cat="${iCat}"
-       data-serv="${iServ}"
-       data-tipo="titulo"
-       value=""
-       />
+                <input class="nombre-servicio"
+                    data-cat="${iCat}"
+                    data-serv="${iServ}"
+                    data-tipo="titulo"
+                    value="${servicio.titulo || ''}"
+                />
 
                 <div class="precios-grid">
                     <div>
@@ -949,14 +950,9 @@ function renderPrecios(modoEdicion = false){
                     <div><span>Largo</span><strong>${servicio.largo}</strong></div>
                 </div>
                 `;
-
             }
 
             listaPrecios.appendChild(item);
-             const inputNombre = item.querySelector(".nombre-servicio");
-             if(inputNombre){
-             inputNombre.value = servicio.titulo || "";
-}
         });
 
         if(modoEdicion){
@@ -972,7 +968,6 @@ function renderPrecios(modoEdicion = false){
 
     if(modoEdicion){
 
-        // 🔴 GUARDAR CAMBIOS EN TIEMPO REAL (CLAVE)
         const inputs = listaPrecios.querySelectorAll("input");
 
         inputs.forEach(input => {
@@ -1015,7 +1010,6 @@ function renderPrecios(modoEdicion = false){
         });
     }
 }
-  });
 </script>
 
 <script>
