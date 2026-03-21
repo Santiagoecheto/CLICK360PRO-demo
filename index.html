@@ -944,10 +944,12 @@ fetch("servicios.json")
                 const div = document.createElement("div");
                 div.classList.add("servicio");
 
-                div.innerHTML = `
-                    <h3>${servicio.nombre}</h3>
-                    <p>Servicio profesional de alta calidad.</p>
-                `;
+              div.innerHTML = `
+    <div class="servicio-card">
+        <img src="imagenes/servicio1.jpg" alt="servicio">
+        <h3>${servicio.nombre}</h3>
+    </div>
+`;
 
                 contenedor.appendChild(div);
             });
