@@ -1044,7 +1044,26 @@ modalPrecios.style.display = "none";
 });
 
 </script>
+  
+<script type="module">
+  // Import Firebase
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
+  // Configuración de tu proyecto
+  const firebaseConfig = {
+    apiKey: "AIzaSyCgFcf0-3ufcK65tF4jsBBtzFPUCyooHu8",
+    authDomain: "studio-hair-demo.firebaseapp.com",
+    projectId: "studio-hair-demo",
+    storageBucket: "studio-hair-demo.firebasestorage.app",
+    messagingSenderId: "880884385632",
+    appId: "1:880884385632:web:acbaeedd5784829012c005"
+  };
+
+  // Inicializar Firebase
+  const app = initializeApp(firebaseConfig);
+
+  console.log("🔥 Firebase conectado correctamente");
+</script>
 
 </body>
 </html>
