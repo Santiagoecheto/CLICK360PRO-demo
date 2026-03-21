@@ -1139,3 +1139,10 @@ font-size: 14px;
 .precios-grid{
 flex-shrink: 0;
 }
+.placeholder-img {
+    width: 100%;
+    height: 120px;
+    background: #222;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
