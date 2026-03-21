@@ -858,7 +858,11 @@ const btnEditar = document.getElementById("btnEditarPrecios");
 
 contenedor.innerHTML = "";
 listaPrecios.innerHTML = "";
-
+renderPrecios();
+  btnEditar.addEventListener("click", () => {
+    renderPrecios(true);
+});
+  
 // 👉 CARGAR DATOS GUARDADOS
 let dataGuardada = localStorage.getItem("serviciosEditados");
 if(dataGuardada){
