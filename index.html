@@ -906,7 +906,9 @@ console.log("🔥 Firebase + Firestore listo");
 fetch("servicios.json")
 .then(res => res.json())
 .then(data => {
- console.log("📦 Datos desde JSON:", data);
+ console.log("📦 JSON completo:", data);
+console.log("📂 Categorías:", data.categorias);
+console.log("🧾 Primer servicio:", data.categorias?.[0]?.servicios?.[0]);
   
     const contenedor = document.getElementById("contenedor-servicios");
     const listaPrecios = document.getElementById("lista-precios");
