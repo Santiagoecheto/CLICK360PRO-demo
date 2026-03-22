@@ -934,7 +934,73 @@ console.log("🧾 Primer servicio:", data.categorias?.[0]?.servicios?.[0]);
   
 });
    
-    cargarPreciosFirebase();
+   function renderPrecios(data, modoEdicion = false){
+
+    const listaPrecios = document.getElementById("lista-precios");
+    listaPrecios.innerHTML = "";
+
+    data.categorias.forEach((categoria, iCat) => {
+
+        const tituloCat = document.createElement("h3");
+        tituloCat.classList.add("categoria-precio");
+        tituloCat.textContent = categoria.nombre;
+
+        listaPrecios.appendChild(tituloCat);
+
+        categoria.servicios.forEach((servicio, iServ) => {
+
+            const item = document.createElement("div");
+            item.classList.add("item-precio");
+
+            if(modoEdicion){
+
+                item.innerHTML = `
+                <input class="nombre-servicio"
+                    data-cat="${iCat}"
+                    data-serv="${iServ}"
+                    data-tipo="titulo"
+                />
+
+                <div class="precios-grid">
+                    <div>
+                        <span>Corto</span>
+                        <input data-cat="${iCat}" data-serv="${iServ}" data-tipo="corto" value="${servicio.corto || ''}">
+                    </div>
+
+                    <div>
+                        <span>Medio</span>
+                        <input data-cat="${iCat}" data-serv="${iServ}" data-tipo="medio" value="${servicio.medio || ''}">
+                    </div>
+
+                    <div>
+                        <span>Largo</span>
+                        <input data-cat="${iCat}" data-serv="${iServ}" data-tipo="largo" value="${servicio.largo || ''}">
+                    </div>
+                </div>
+                `;
+
+                const inputNombre = item.children[0];
+                if(inputNombre){
+                    inputNombre.value = servicio.titulo || "";
+                }
+
+            } else {
+
+                item.innerHTML = `
+                <div class="nombre-servicio">${servicio.titulo}</div>
+
+                <div class="precios-grid">
+                    <div><span>Corto</span><strong>${servicio.corto}</strong></div>
+                    <div><span>Medio</span><strong>${servicio.medio}</strong></div>
+                    <div><span>Largo</span><strong>${servicio.largo}</strong></div>
+                </div>
+                `;
+            }
+
+            listaPrecios.appendChild(item);
+        });
+    });
+}
   
 async function cargarPreciosFirebase() {
     try {
@@ -974,7 +1040,9 @@ async function cargarPreciosFirebase() {
         console.error("❌ Error cargando precios Firebase:", e);
     }
 }
-
+  
+ cargarPreciosFirebase();
+  
 // 🧪 PRUEBA FIREBASE
 async function guardarPrueba() {
     try {
