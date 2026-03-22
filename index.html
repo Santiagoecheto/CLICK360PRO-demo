@@ -1011,7 +1011,23 @@ async function cargarPreciosFirebase() {
         querySnapshot.forEach((doc) => {
             const servicio = doc.data();
 
-            const categoria = servicio.categoria || "General";
+            const categoria = (servicio.categoria || "").trim();
+            const titulo = (servicio.titulo || servicio.nombre || "").trim();
+
+            const corto = servicio.corto;
+            const medio = servicio.medio;
+            const largo = servicio.largo;
+
+            const tieneEstructuraPrecios =
+                categoria !== "" &&
+                titulo !== "" &&
+                corto !== undefined &&
+                medio !== undefined &&
+                largo !== undefined;
+
+            if (!tieneEstructuraPrecios) {
+                return;
+            }
 
             if (!categoriasMap[categoria]) {
                 categoriasMap[categoria] = {
@@ -1021,10 +1037,10 @@ async function cargarPreciosFirebase() {
             }
 
             categoriasMap[categoria].servicios.push({
-                titulo: servicio.nombre || "",
-                corto: servicio.precio || 0,
-                medio: servicio.precio || 0,
-                largo: servicio.precio || 0
+                titulo: titulo,
+                corto: corto,
+                medio: medio,
+                largo: largo
             });
         });
 
@@ -1033,6 +1049,11 @@ async function cargarPreciosFirebase() {
         };
 
         console.log("🔥 Datos desde Firebase:", dataFirebase);
+
+        if (!dataFirebase.categorias.length) {
+            console.warn("⚠️ Firebase no tiene aún documentos con estructura de precios completa.");
+            return;
+        }
 
         renderPrecios(dataFirebase);
 
