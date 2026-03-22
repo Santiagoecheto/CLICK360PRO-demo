@@ -964,7 +964,7 @@ console.log("🧾 Primer servicio:", data.categorias?.[0]?.servicios?.[0]);
         console.error("❌ Error Firebase:", e);
     }
 }
-
+       cargarDestacadosFirebase();
    
     // ===============================
     // RENDER PRECIOS
@@ -1039,8 +1039,7 @@ console.log("🧾 Primer servicio:", data.categorias?.[0]?.servicios?.[0]);
     }
 
 });
-
-   cargarDestacadosFirebase();
+   
     cargarPreciosFirebase();
   
 async function cargarPreciosFirebase() {
