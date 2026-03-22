@@ -965,9 +965,7 @@ console.log("🧾 Primer servicio:", data.categorias?.[0]?.servicios?.[0]);
     }
 }
 
-    cargarDestacadosFirebase();
-    cargarPreciosFirebase();
-
+   
     // ===============================
     // RENDER PRECIOS
     // ===============================
@@ -1041,6 +1039,10 @@ console.log("🧾 Primer servicio:", data.categorias?.[0]?.servicios?.[0]);
     }
 
 });
+
+   cargarDestacadosFirebase();
+    cargarPreciosFirebase();
+  
 async function cargarPreciosFirebase() {
     try {
         const querySnapshot = await getDocs(collection(db, "servicios"));
