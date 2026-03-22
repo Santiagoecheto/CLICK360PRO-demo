@@ -930,7 +930,7 @@ fetch("servicios.json")
     });
 
     // 🔥 DESTACADOS FIREBASE
-  async function cargarDestacadosFirebase() {
+ async function cargarDestacadosFirebase() {
 
     const contenedor = document.getElementById("contenedor-servicios");
     contenedor.innerHTML = "";
@@ -951,8 +951,6 @@ fetch("servicios.json")
                     <h3>${servicio.nombre || "Sin nombre"}</h3>
 
                     <p>${servicio.descripcion || ""}</p>
-
-                    <strong>$${servicio.precio || 0}</strong>
                 </div>
             `;
 
