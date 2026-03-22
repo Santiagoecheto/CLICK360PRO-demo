@@ -1041,7 +1041,44 @@ console.log("🧾 Primer servicio:", data.categorias?.[0]?.servicios?.[0]);
     }
 
 });
+async function cargarPreciosFirebase() {
+    try {
+        const querySnapshot = await getDocs(collection(db, "servicios"));
 
+        const categoriasMap = {};
+
+        querySnapshot.forEach((doc) => {
+            const servicio = doc.data();
+
+            const categoria = servicio.categoria || "General";
+
+            if (!categoriasMap[categoria]) {
+                categoriasMap[categoria] = {
+                    nombre: categoria,
+                    servicios: []
+                };
+            }
+
+            categoriasMap[categoria].servicios.push({
+                titulo: servicio.nombre || "",
+                corto: servicio.precio || 0,
+                medio: servicio.precio || 0,
+                largo: servicio.precio || 0
+            });
+        });
+
+        const dataFirebase = {
+            categorias: Object.values(categoriasMap)
+        };
+
+        console.log("🔥 Datos desde Firebase:", dataFirebase);
+
+        renderPrecios(dataFirebase);
+
+    } catch (e) {
+        console.error("❌ Error cargando precios Firebase:", e);
+    }
+}
 
 // 🧪 PRUEBA FIREBASE
 async function guardarPrueba() {
