@@ -930,34 +930,39 @@ fetch("servicios.json")
     });
 
     // 🔥 DESTACADOS FIREBASE
-    async function cargarDestacadosFirebase() {
+  async function cargarDestacadosFirebase() {
 
-        const contenedor = document.getElementById("contenedor-servicios");
-        contenedor.innerHTML = "";
+    const contenedor = document.getElementById("contenedor-servicios");
+    contenedor.innerHTML = "";
 
-        try {
-            const querySnapshot = await getDocs(collection(db, "servicios"));
+    try {
+        const querySnapshot = await getDocs(collection(db, "servicios"));
 
-         Array.from(querySnapshot.docs).slice(0, 4).forEach((doc) => {
-                const servicio = doc.data();
+        Array.from(querySnapshot.docs).slice(0, 4).forEach((doc) => {
+            const servicio = doc.data();
 
-                const div = document.createElement("div");
-                div.classList.add("servicio");
+            const div = document.createElement("div");
+            div.classList.add("servicio");
 
-              div.innerHTML = `
-    <div class="servicio-card">
-    <div class="placeholder-img"></div>
-        <h3>${servicio.nombre}</h3>
-    </div>
-`;
+            div.innerHTML = `
+                <div class="servicio-card">
+                    <div class="placeholder-img"></div>
 
-                contenedor.appendChild(div);
-            });
+                    <h3>${servicio.nombre || "Sin nombre"}</h3>
 
-        } catch (e) {
-            console.error("❌ Error Firebase:", e);
-        }
+                    <p>${servicio.descripcion || ""}</p>
+
+                    <strong>$${servicio.precio || 0}</strong>
+                </div>
+            `;
+
+            contenedor.appendChild(div);
+        });
+
+    } catch (e) {
+        console.error("❌ Error Firebase:", e);
     }
+}
 
     cargarDestacadosFirebase();
 
