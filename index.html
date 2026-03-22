@@ -896,6 +896,34 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+  async function cargarDatosInicialesFirebase() {
+  try {
+
+    const servicios = [
+      { categoria: "Cortes", titulo: "Corte dama", corto: 20000, medio: 20000, largo: 20000 },
+
+      { categoria: "Servicios básicos", titulo: "Lavado", corto: 10000, medio: 10000, largo: 10000 },
+      { categoria: "Servicios básicos", titulo: "Brushing", corto: 25000, medio: 28000, largo: 28000 },
+      { categoria: "Servicios básicos", titulo: "Planchado", corto: 20000, medio: 25000, largo: 25000 },
+
+      { categoria: "Color y tratamientos", titulo: "Color", corto: 53800, medio: 76000, largo: 108800 },
+      { categoria: "Color y tratamientos", titulo: "Reflejos con gorra", corto: 87300, medio: 110200, largo: 138900 },
+      { categoria: "Color y tratamientos", titulo: "Reflejos con papel", corto: 110000, medio: 138000, largo: 166000 },
+      { categoria: "Color y tratamientos", titulo: "Alisado", corto: 88000, medio: 98000, largo: 127000 },
+      { categoria: "Color y tratamientos", titulo: "Permanente", corto: 105000, medio: 136000, largo: 157000 }
+    ];
+
+    for (const servicio of servicios) {
+      await addDoc(collection(db, "servicios"), servicio);
+    }
+
+    console.log("🔥 Datos cargados correctamente en Firebase");
+
+  } catch (error) {
+    console.error("❌ Error cargando datos:", error);
+  }
+}
+  cargarDatosInicialesFirebase();
 console.log("🔥 Firebase + Firestore listo");
 
 
