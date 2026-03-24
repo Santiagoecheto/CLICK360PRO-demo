@@ -905,8 +905,6 @@ console.log("🔥 Firebase + Firestore listo");
 // 🔽 TU LÓGICA (ANTES EN EL OTRO SCRIPT)
 // ===============================
 
-import { getDocs, collection } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
 async function cargarServiciosDesdeFirebase() {
     try {
         const snapshot = await getDocs(collection(db, "servicios"));
