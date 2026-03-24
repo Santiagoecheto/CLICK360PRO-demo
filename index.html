@@ -1010,11 +1010,10 @@ async function cargarServiciosDesdeFirebase() {
         // 🔥 RENDER INICIAL
         renderPrecios(data, modoEdicion);
 
-        // 🔥 BOTÓN EDITAR (TOGGLE)
-        btnEditar.addEventListener("click", () => {
-            modoEdicion = !modoEdicion;
-            renderPrecios(data, modoEdicion);
-        });
+     btnEditar.onclick = () => {
+    modoEdicion = !modoEdicion;
+    renderPrecios(data, modoEdicion);
+};
 
     } catch (error) {
         console.error("Error cargando desde Firebase:", error);
