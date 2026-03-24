@@ -1027,7 +1027,6 @@ function renderPrecios(data, modoEdicion = false){
     const listaPrecios = document.getElementById("lista-precios");
     listaPrecios.innerHTML = "";
 
-    // 🔥 ORDEN DE CATEGORÍAS
     const ordenCategorias = [
         "Cortes",
         "Servicios básicos",
@@ -1038,7 +1037,7 @@ function renderPrecios(data, modoEdicion = false){
         return ordenCategorias.indexOf(a.nombre) - ordenCategorias.indexOf(b.nombre);
     });
 
-   categoriasOrdenadas.forEach((categoria) => {
+    categoriasOrdenadas.forEach((categoria) => {
 
         const tituloCat = document.createElement("h3");
         tituloCat.classList.add("categoria-precio");
@@ -1083,23 +1082,28 @@ function renderPrecios(data, modoEdicion = false){
                     inputNombre.value = servicio.titulo || "";
                 }
 
-                // 🔥 GUARDADO AUTOMÁTICO
+                // 🔥 GUARDADO AUTOMÁTICO CORREGIDO
                 item.querySelectorAll("input").forEach(input => {
 
                     input.addEventListener("input", (e) => {
 
-                        const cat = e.target.dataset.cat;
-                        const serv = e.target.dataset.serv;
+                        const catNombre = e.target.dataset.cat;
+                        const servIndex = e.target.dataset.servicio;
                         const tipo = e.target.dataset.tipo;
                         let valor = e.target.value;
 
+                        const categoriaReal = data.categorias.find(c => c.nombre === catNombre);
+                        if (!categoriaReal) return;
+
+                        const servicioReal = categoriaReal.servicios[servIndex];
+                        if (!servicioReal) return;
+
                         if(tipo === "titulo"){
-                            data.categorias[cat].servicios[serv].titulo = valor;
+                            servicioReal.titulo = valor;
                         } else {
-                            data.categorias[cat].servicios[serv][tipo] = Number(valor) || 0;
+                            servicioReal[tipo] = Number(valor) || 0;
                         }
 
-                        // 🔥 GUARDAR EN LOCALSTORAGE
                         localStorage.setItem("serviciosEditados", JSON.stringify(data));
                     });
 
