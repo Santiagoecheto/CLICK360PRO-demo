@@ -967,7 +967,6 @@ async function cargarServiciosDesdeFirebase() {
 
         console.log("Datos desde Firebase:", servicios);
 
-        // 🔥 Agrupar por categoría (para mantener tu estructura)
         let categoriasMap = {};
 
         servicios.forEach(servicio => {
@@ -992,24 +991,29 @@ async function cargarServiciosDesdeFirebase() {
         contenedor.innerHTML = "";
         listaPrecios.innerHTML = "";
 
-      let dataGuardada = localStorage.getItem("serviciosEditados");
-if (dataGuardada) {
-    try {
-        const dataLocal = JSON.parse(dataGuardada);
-
-        if (dataLocal && dataLocal.categorias) {
-            data.categorias = dataLocal.categorias;
+        // 🔥 CARGAR LOCALSTORAGE
+        let dataGuardada = localStorage.getItem("serviciosEditados");
+        if (dataGuardada) {
+            try {
+                const dataLocal = JSON.parse(dataGuardada);
+                if (dataLocal && dataLocal.categorias) {
+                    data.categorias = dataLocal.categorias;
+                }
+            } catch (e) {
+                console.error("Error leyendo datos guardados:", e);
+            }
         }
 
-    } catch (e) {
-        console.error("Error leyendo datos guardados:", e);
-    }
-}
+        // 🔥 ESTADO GLOBAL DE EDICIÓN
+        let modoEdicion = false;
 
-        renderPrecios(data);
+        // 🔥 RENDER INICIAL
+        renderPrecios(data, modoEdicion);
 
+        // 🔥 BOTÓN EDITAR (TOGGLE)
         btnEditar.addEventListener("click", () => {
-            renderPrecios(data, true);
+            modoEdicion = !modoEdicion;
+            renderPrecios(data, modoEdicion);
         });
 
     } catch (error) {
