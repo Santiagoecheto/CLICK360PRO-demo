@@ -1053,6 +1053,8 @@ if (dataGuardada) {
 function renderPrecios(data, modoEdicion = false){
 
     const listaPrecios = document.getElementById("lista-precios");
+    const btnEditar = document.getElementById("btnEditarPrecios");
+
     listaPrecios.innerHTML = "";
 
     const ordenCategorias = [
@@ -1064,6 +1066,68 @@ function renderPrecios(data, modoEdicion = false){
     const categoriasOrdenadas = [...data.categorias].sort((a, b) => {
         return ordenCategorias.indexOf(a.nombre) - ordenCategorias.indexOf(b.nombre);
     });
+
+    // 🔥 BOTÓN GUARDAR
+    if (modoEdicion) {
+
+        let btnGuardar = document.getElementById("btnGuardarPrecios");
+
+        if (!btnGuardar) {
+            btnGuardar = document.createElement("button");
+            btnGuardar.id = "btnGuardarPrecios";
+            btnGuardar.textContent = "Guardar cambios";
+            btnGuardar.style.marginLeft = "10px";
+            btnEditar.insertAdjacentElement("afterend", btnGuardar);
+        }
+
+        btnGuardar.onclick = async () => {
+
+            try {
+                btnGuardar.disabled = true;
+                btnGuardar.textContent = "Guardando...";
+
+                for (const categoria of data.categorias) {
+
+                    for (const servicio of categoria.servicios) {
+
+                        if (!servicio.id) continue;
+
+                        await setDoc(
+                            doc(db, "servicios", servicio.id),
+                            {
+                                categoria: servicio.categoria,
+                                titulo: servicio.titulo,
+                                corto: Number(servicio.corto) || 0,
+                                medio: Number(servicio.medio) || 0,
+                                largo: Number(servicio.largo) || 0
+                            },
+                            { merge: true }
+                        );
+
+                        console.log("🔥 Guardado en Firebase:", servicio.id);
+                    }
+                }
+
+                localStorage.setItem("serviciosEditados", JSON.stringify(data));
+
+                btnGuardar.textContent = "Guardado ✔";
+
+                setTimeout(() => {
+                    btnGuardar.textContent = "Guardar cambios";
+                    btnGuardar.disabled = false;
+                }, 1500);
+
+            } catch (error) {
+                console.error("❌ Error guardando:", error);
+                btnGuardar.textContent = "Guardar cambios";
+                btnGuardar.disabled = false;
+            }
+        };
+
+    } else {
+        const btnGuardar = document.getElementById("btnGuardarPrecios");
+        if (btnGuardar) btnGuardar.remove();
+    }
 
     categoriasOrdenadas.forEach((categoria) => {
 
@@ -1111,15 +1175,14 @@ function renderPrecios(data, modoEdicion = false){
                     inputNombre.value = servicio.titulo || "";
                 }
 
-                // 🔥 GUARDADO AUTOMÁTICO + FIREBASE
+                // 🔥 SOLO LOCAL (SIN FIREBASE)
                 item.querySelectorAll("input").forEach(input => {
 
-                    input.addEventListener("input", async (e) => {
+                    input.addEventListener("input", (e) => {
 
                         const catNombre = e.target.dataset.cat;
                         const servIndex = e.target.dataset.servicio;
                         const tipo = e.target.dataset.tipo;
-                        const id = e.target.dataset.id;
                         let valor = e.target.value;
 
                         const categoriaReal = data.categorias.find(c => c.nombre === catNombre);
@@ -1134,19 +1197,11 @@ function renderPrecios(data, modoEdicion = false){
                             servicioReal[tipo] = Number(valor) || 0;
                         }
 
-                        // 🔥 LOCAL
                         localStorage.setItem("serviciosEditados", JSON.stringify(data));
 
-                        // 🔥 FIREBASE (PRO)
-                        try {
-                            await setDoc(doc(db, "servicios", id), {
-                                ...servicioReal
-                            }, { merge: true });
-
-                            console.log("🔥 Guardado en Firebase:", id);
-
-                        } catch (error) {
-                            console.error("❌ Error guardando en Firebase:", error);
+                        const btnGuardar = document.getElementById("btnGuardarPrecios");
+                        if (btnGuardar) {
+                            btnGuardar.textContent = "Guardar cambios *";
                         }
 
                     });
