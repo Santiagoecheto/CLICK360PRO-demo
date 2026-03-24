@@ -943,33 +943,40 @@ async function cargarServiciosRestantes() {
 }
 cargarServiciosRestantes();
   
-  async function cargarDatosInicialesFirebase() {
+import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+async function cargarServiciosDefinitivos() {
   try {
 
     const servicios = [
-      { categoria: "Cortes", titulo: "Corte dama", corto: 20000, medio: 20000, largo: 20000 },
+      { id: "corte_dama", categoria: "Cortes", titulo: "Corte dama", corto: 20000, medio: 20000, largo: 20000 },
 
-      { categoria: "Servicios básicos", titulo: "Lavado", corto: 10000, medio: 10000, largo: 10000 },
-      { categoria: "Servicios básicos", titulo: "Brushing", corto: 25000, medio: 28000, largo: 28000 },
-      { categoria: "Servicios básicos", titulo: "Planchado", corto: 20000, medio: 25000, largo: 25000 },
+      { id: "lavado", categoria: "Servicios básicos", titulo: "Lavado", corto: 10000, medio: 10000, largo: 10000 },
+      { id: "brushing", categoria: "Servicios básicos", titulo: "Brushing", corto: 25000, medio: 28000, largo: 28000 },
+      { id: "planchado", categoria: "Servicios básicos", titulo: "Planchado", corto: 20000, medio: 25000, largo: 25000 },
 
-      { categoria: "Color y tratamientos", titulo: "Color", corto: 53800, medio: 76000, largo: 108800 },
-      { categoria: "Color y tratamientos", titulo: "Reflejos con gorra", corto: 87300, medio: 110200, largo: 138900 },
-      { categoria: "Color y tratamientos", titulo: "Reflejos con papel", corto: 110000, medio: 138000, largo: 166000 },
-      { categoria: "Color y tratamientos", titulo: "Alisado", corto: 88000, medio: 98000, largo: 127000 },
-      { categoria: "Color y tratamientos", titulo: "Permanente", corto: 105000, medio: 136000, largo: 157000 }
+      { id: "color", categoria: "Color y tratamientos", titulo: "Color", corto: 53800, medio: 76000, largo: 108800 },
+      { id: "reflejos_gorra", categoria: "Color y tratamientos", titulo: "Reflejos con gorra", corto: 87300, medio: 110200, largo: 138900 },
+      { id: "reflejos_papel", categoria: "Color y tratamientos", titulo: "Reflejos con papel", corto: 110000, medio: 138000, largo: 166000 },
+      { id: "alisado", categoria: "Color y tratamientos", titulo: "Alisado", corto: 88000, medio: 98000, largo: 127000 },
+      { id: "permanente", categoria: "Color y tratamientos", titulo: "Permanente", corto: 105000, medio: 136000, largo: 157000 }
     ];
 
     for (const servicio of servicios) {
-      await addDoc(collection(db, "servicios"), servicio);
+      const { id, ...data } = servicio;
+
+      await setDoc(doc(db, "servicios", id), data);
     }
 
-    console.log("🔥 Datos cargados correctamente en Firebase");
+    console.log("🔥 Servicios cargados correctamente (modo definitivo)");
 
   } catch (error) {
-    console.error("❌ Error cargando datos:", error);
+    console.error("❌ Error cargando servicios:", error);
   }
 }
+
+ ⚠️ Ejecutar UNA sola vez
+ cargarServiciosDefinitivos();
 // cargarDatosInicialesFirebase();
 console.log("🔥 Firebase + Firestore listo");
 
