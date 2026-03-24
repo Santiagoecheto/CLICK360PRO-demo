@@ -964,8 +964,15 @@ async function cargarServiciosDesdeFirebase() {
 
         let servicios = [];
 
-        snapshot.forEach(doc => {
-            servicios.push(doc.data());
+        snapshot.forEach(docSnap => {
+
+            const dataDoc = docSnap.data();
+
+            servicios.push({
+                id: docSnap.id, // 🔥 CLAVE: ahora tenemos el ID real
+                ...dataDoc
+            });
+
         });
 
         console.log("Datos desde Firebase:", servicios);
@@ -1007,16 +1014,14 @@ async function cargarServiciosDesdeFirebase() {
             }
         }
 
-        // 🔥 ESTADO GLOBAL DE EDICIÓN
         let modoEdicion = false;
 
-        // 🔥 RENDER INICIAL
         renderPrecios(data, modoEdicion);
 
-     btnEditar.onclick = () => {
-    modoEdicion = !modoEdicion;
-    renderPrecios(data, modoEdicion);
-};
+        btnEditar.onclick = () => {
+            modoEdicion = !modoEdicion;
+            renderPrecios(data, modoEdicion);
+        };
 
     } catch (error) {
         console.error("Error cargando desde Firebase:", error);
