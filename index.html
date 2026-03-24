@@ -942,14 +942,19 @@ async function cargarServiciosDesdeFirebase() {
         contenedor.innerHTML = "";
         listaPrecios.innerHTML = "";
 
-        let dataGuardada = localStorage.getItem("serviciosEditados");
-        if (dataGuardada) {
-            try {
-                Object.assign(data, JSON.parse(dataGuardada));
-            } catch (e) {
-                console.error("Error leyendo datos guardados:", e);
-            }
+      let dataGuardada = localStorage.getItem("serviciosEditados");
+if (dataGuardada) {
+    try {
+        const dataLocal = JSON.parse(dataGuardada);
+
+        if (dataLocal && dataLocal.categorias) {
+            data.categorias = dataLocal.categorias;
         }
+
+    } catch (e) {
+        console.error("Error leyendo datos guardados:", e);
+    }
+}
 
         renderPrecios(data);
 
