@@ -1081,7 +1081,25 @@ function renderPrecios(data, modoEdicion = false){
         }
 
         btnGuardar.onclick = async () => {
+          // 🔥 VALIDAR DUPLICADOS POR TÍTULO
+          let titulos = new Set();
 
+          for (const categoria of data.categorias) {
+          for (const servicio of categoria.servicios) {
+
+        const nombre = (servicio.titulo || "").trim().toLowerCase();
+
+        if (!nombre) continue;
+
+        if (titulos.has(nombre)) {
+            alert("⚠️ Hay servicios duplicados: " + servicio.titulo);
+            console.warn("Duplicado detectado:", servicio);
+            return;
+        }
+
+        titulos.add(nombre);
+    }
+}
             try {
                 btnGuardar.disabled = true;
                 btnGuardar.textContent = "Guardando...";
