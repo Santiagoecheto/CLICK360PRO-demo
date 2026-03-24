@@ -899,7 +899,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
   
 
-async function cargarServiciosDefinitivos() {
+// async function cargarServiciosDefinitivos();
   try {
 
     const servicios = [
@@ -936,29 +936,67 @@ console.log("🔥 Firebase + Firestore listo");
 // 🔽 TU LÓGICA (ANTES EN EL OTRO SCRIPT)
 // ===============================
 
-fetch("servicios.json")
-.then(res => res.json())
-.then(data => {
- console.log("📦 JSON completo:", data);
-console.log("📂 Categorías:", data.categorias);
-console.log("🧾 Primer servicio:", data.categorias?.[0]?.servicios?.[0]);
-  
-    const contenedor = document.getElementById("contenedor-servicios");
-    const listaPrecios = document.getElementById("lista-precios");
-    const btnEditar = document.getElementById("btnEditarPrecios");
+import { getDocs, collection } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-    contenedor.innerHTML = "";
-    listaPrecios.innerHTML = "";
+async function cargarServiciosDesdeFirebase() {
+    try {
+        const snapshot = await getDocs(collection(db, "servicios"));
 
-    let dataGuardada = localStorage.getItem("serviciosEditados");
-    if(dataGuardada){
-        try{
-            data = JSON.parse(dataGuardada);
-        }catch(e){
-            console.error("Error leyendo datos guardados:", e);
+        let servicios = [];
+
+        snapshot.forEach(doc => {
+            servicios.push(doc.data());
+        });
+
+        console.log("Datos desde Firebase:", servicios);
+
+        // 🔥 Agrupar por categoría (para mantener tu estructura)
+        let categoriasMap = {};
+
+        servicios.forEach(servicio => {
+            if (!categoriasMap[servicio.categoria]) {
+                categoriasMap[servicio.categoria] = [];
+            }
+
+            categoriasMap[servicio.categoria].push(servicio);
+        });
+
+        const data = {
+            categorias: Object.keys(categoriasMap).map(cat => ({
+                nombre: cat,
+                servicios: categoriasMap[cat]
+            }))
+        };
+
+        const contenedor = document.getElementById("contenedor-servicios");
+        const listaPrecios = document.getElementById("lista-precios");
+        const btnEditar = document.getElementById("btnEditarPrecios");
+
+        contenedor.innerHTML = "";
+        listaPrecios.innerHTML = "";
+
+        let dataGuardada = localStorage.getItem("serviciosEditados");
+        if (dataGuardada) {
+            try {
+                Object.assign(data, JSON.parse(dataGuardada));
+            } catch (e) {
+                console.error("Error leyendo datos guardados:", e);
+            }
         }
-    }
 
+        renderPrecios(data);
+
+        btnEditar.addEventListener("click", () => {
+            renderPrecios(data, true);
+        });
+
+    } catch (error) {
+        console.error("Error cargando desde Firebase:", error);
+    }
+}
+
+// Ejecutar
+cargarServiciosDesdeFirebase();
     renderPrecios(data);
 
     btnEditar.addEventListener("click", () => {
