@@ -1037,7 +1037,7 @@ function renderPrecios(data, modoEdicion = false){
         return ordenCategorias.indexOf(a.nombre) - ordenCategorias.indexOf(b.nombre);
     });
 
-    categoriasOrdenadas.forEach((categoria, iCat) => {
+   categoriasOrdenadas.forEach((categoria) => {
 
         const tituloCat = document.createElement("h3");
         tituloCat.classList.add("categoria-precio");
