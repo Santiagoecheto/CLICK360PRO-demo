@@ -880,8 +880,10 @@ modalPrecios.style.display = "none";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
 // Firestore
-import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
+import { getFirestore, collection, addDoc, getDocs, doc, setDoc } 
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+  
+  
 // Configuración
 const firebaseConfig = {
   apiKey: "AIzaSyCgFcf0-3ufcK65tF4jsBBtzFPUCyooHu8",
@@ -942,9 +944,9 @@ async function cargarServiciosRestantes() {
   }
 }
   
-cargarServiciosRestantes();
+// cargarServiciosRestantes();
   
-import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 
 async function cargarServiciosDefinitivos() {
   try {
@@ -976,8 +978,9 @@ async function cargarServiciosDefinitivos() {
   }
 }
 
- ⚠️ Ejecutar UNA sola vez
- cargarServiciosDefinitivos();
+// ⚠️ Ejecutar UNA sola vez
+cargarServiciosDefinitivos();
+  
 // cargarDatosInicialesFirebase();
 console.log("🔥 Firebase + Firestore listo");
 
