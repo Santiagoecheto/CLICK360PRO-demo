@@ -1062,23 +1062,24 @@ function renderPrecios(data, modoEdicion = false){
                 <input class="nombre-servicio"
                     data-cat="${categoria.nombre}"
                     data-servicio="${iServ}"
+                    data-id="${servicio.id}"
                     data-tipo="titulo"
                 />
 
                 <div class="precios-grid">
                     <div>
                         <span>Corto</span>
-                        <input data-cat="${categoria.nombre}" data-servicio="${iServ}" data-tipo="corto" value="${servicio.corto || ''}">
+                        <input data-cat="${categoria.nombre}" data-servicio="${iServ}" data-id="${servicio.id}" data-tipo="corto" value="${servicio.corto || ''}">
                     </div>
 
                     <div>
                         <span>Medio</span>
-                        <input data-cat="${categoria.nombre}" data-servicio="${iServ}" data-tipo="medio" value="${servicio.medio || ''}">
+                        <input data-cat="${categoria.nombre}" data-servicio="${iServ}" data-id="${servicio.id}" data-tipo="medio" value="${servicio.medio || ''}">
                     </div>
 
                     <div>
                         <span>Largo</span>
-                        <input data-cat="${categoria.nombre}" data-servicio="${iServ}" data-tipo="largo" value="${servicio.largo || ''}">
+                        <input data-cat="${categoria.nombre}" data-servicio="${iServ}" data-id="${servicio.id}" data-tipo="largo" value="${servicio.largo || ''}">
                     </div>
                 </div>
                 `;
@@ -1088,14 +1089,15 @@ function renderPrecios(data, modoEdicion = false){
                     inputNombre.value = servicio.titulo || "";
                 }
 
-                // 🔥 GUARDADO AUTOMÁTICO CORREGIDO
+                // 🔥 GUARDADO AUTOMÁTICO + FIREBASE
                 item.querySelectorAll("input").forEach(input => {
 
-                    input.addEventListener("input", (e) => {
+                    input.addEventListener("input", async (e) => {
 
                         const catNombre = e.target.dataset.cat;
                         const servIndex = e.target.dataset.servicio;
                         const tipo = e.target.dataset.tipo;
+                        const id = e.target.dataset.id;
                         let valor = e.target.value;
 
                         const categoriaReal = data.categorias.find(c => c.nombre === catNombre);
@@ -1110,7 +1112,21 @@ function renderPrecios(data, modoEdicion = false){
                             servicioReal[tipo] = Number(valor) || 0;
                         }
 
+                        // 🔥 LOCAL
                         localStorage.setItem("serviciosEditados", JSON.stringify(data));
+
+                        // 🔥 FIREBASE (PRO)
+                        try {
+                            await setDoc(doc(db, "servicios", id), {
+                                ...servicioReal
+                            }, { merge: true });
+
+                            console.log("🔥 Guardado en Firebase:", id);
+
+                        } catch (error) {
+                            console.error("❌ Error guardando en Firebase:", error);
+                        }
+
                     });
 
                 });
