@@ -1018,7 +1018,7 @@ if (dataGuardada) {
 }
 
   
- function renderPrecios(data, modoEdicion = false){
+function renderPrecios(data, modoEdicion = false){
 
     const listaPrecios = document.getElementById("lista-precios");
     listaPrecios.innerHTML = "";
@@ -1030,7 +1030,6 @@ if (dataGuardada) {
         "Color y tratamientos"
     ];
 
-    // 🔥 ORDENAR CATEGORÍAS
     const categoriasOrdenadas = [...data.categorias].sort((a, b) => {
         return ordenCategorias.indexOf(a.nombre) - ordenCategorias.indexOf(b.nombre);
     });
@@ -1079,6 +1078,28 @@ if (dataGuardada) {
                 if(inputNombre){
                     inputNombre.value = servicio.titulo || "";
                 }
+
+                // 🔥 GUARDADO AUTOMÁTICO
+                item.querySelectorAll("input").forEach(input => {
+
+                    input.addEventListener("input", (e) => {
+
+                        const cat = e.target.dataset.cat;
+                        const serv = e.target.dataset.serv;
+                        const tipo = e.target.dataset.tipo;
+                        let valor = e.target.value;
+
+                        if(tipo === "titulo"){
+                            data.categorias[cat].servicios[serv].titulo = valor;
+                        } else {
+                            data.categorias[cat].servicios[serv][tipo] = Number(valor) || 0;
+                        }
+
+                        // 🔥 GUARDAR EN LOCALSTORAGE
+                        localStorage.setItem("serviciosEditados", JSON.stringify(data));
+                    });
+
+                });
 
             } else {
 
