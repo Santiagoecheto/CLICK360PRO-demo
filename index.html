@@ -1001,18 +1001,40 @@ async function cargarServiciosDesdeFirebase() {
         contenedor.innerHTML = "";
         listaPrecios.innerHTML = "";
 
-        // 🔥 CARGAR LOCALSTORAGE
-        let dataGuardada = localStorage.getItem("serviciosEditados");
-        if (dataGuardada) {
-            try {
-                const dataLocal = JSON.parse(dataGuardada);
-                if (dataLocal && dataLocal.categorias) {
-                    data.categorias = dataLocal.categorias;
-                }
-            } catch (e) {
-                console.error("Error leyendo datos guardados:", e);
-            }
+     // 🔥 CARGAR LOCALSTORAGE (SIN PERDER ID)
+let dataGuardada = localStorage.getItem("serviciosEditados");
+if (dataGuardada) {
+    try {
+        const dataLocal = JSON.parse(dataGuardada);
+
+        if (dataLocal && dataLocal.categorias) {
+
+            data.categorias.forEach(categoriaFirebase => {
+
+                const categoriaLocal = dataLocal.categorias.find(c => c.nombre === categoriaFirebase.nombre);
+                if (!categoriaLocal) return;
+
+                categoriaFirebase.servicios.forEach(servicioFirebase => {
+
+                    const servicioLocal = categoriaLocal.servicios.find(s => s.titulo === servicioFirebase.titulo);
+                    if (!servicioLocal) return;
+
+                    // 🔥 SOLO COPIAMOS VALORES, NO EL ID
+                    servicioFirebase.corto = servicioLocal.corto;
+                    servicioFirebase.medio = servicioLocal.medio;
+                    servicioFirebase.largo = servicioLocal.largo;
+                    servicioFirebase.titulo = servicioLocal.titulo;
+
+                });
+
+            });
+
         }
+
+    } catch (e) {
+        console.error("Error leyendo datos guardados:", e);
+    }
+}
 
         let modoEdicion = false;
 
