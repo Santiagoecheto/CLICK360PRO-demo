@@ -1090,7 +1090,10 @@ function renderPrecios(data, modoEdicion = false){
 
                     for (const servicio of categoria.servicios) {
 
-                        if (!servicio.id) continue;
+                     if (!servicio.id) {
+                        console.warn("⚠️ Servicio sin ID, se omite:", servicio);
+                        continue;
+                            }
 
                         await setDoc(
                             doc(db, "servicios", servicio.id),
