@@ -1015,6 +1015,25 @@ async function cargarServiciosDesdeFirebase() {
     try {
         const snapshot = await getDocs(collection(db, "servicios"));
 
+        // 🔵 CARGAR TÍTULO DESDE FIREBASE
+        try {
+            const docRef = doc(db, "configuracion", "web");
+            const docSnap = await getDoc(docRef);
+
+            const titulo = document.getElementById("tituloWeb");
+
+            if (titulo) {
+                if (docSnap.exists()) {
+                    titulo.textContent = docSnap.data().titulo || "Jenny Estilista Profesional";
+                } else {
+                    titulo.textContent = "Jenny Estilista Profesional";
+                }
+            }
+
+        } catch (e) {
+            console.error("Error cargando título:", e);
+        }
+
         let servicios = [];
 
         snapshot.forEach(docSnap => {
@@ -1022,7 +1041,7 @@ async function cargarServiciosDesdeFirebase() {
             const dataDoc = docSnap.data();
 
             servicios.push({
-                id: docSnap.id, // 🔥 CLAVE: ahora tenemos el ID real
+                id: docSnap.id,
                 ...dataDoc
             });
 
@@ -1050,51 +1069,50 @@ async function cargarServiciosDesdeFirebase() {
         const contenedor = document.getElementById("contenedor-servicios");
         const listaPrecios = document.getElementById("lista-precios");
         const btnEditar = document.getElementById("btnEditarPrecios");
-                if (!adminAutenticado) {
-                btnEditar.style.display = "none";
+
+        if (!adminAutenticado) {
+            btnEditar.style.display = "none";
         }
-      
+
         contenedor.innerHTML = "";
         listaPrecios.innerHTML = "";
 
-     // 🔥 CARGAR LOCALSTORAGE (SIN PERDER ID)
-let dataGuardada = localStorage.getItem("serviciosEditados");
-if (dataGuardada) {
-    try {
-        const dataLocal = JSON.parse(dataGuardada);
+        let dataGuardada = localStorage.getItem("serviciosEditados");
+        if (dataGuardada) {
+            try {
+                const dataLocal = JSON.parse(dataGuardada);
 
-        if (dataLocal && dataLocal.categorias) {
+                if (dataLocal && dataLocal.categorias) {
 
-            data.categorias.forEach(categoriaFirebase => {
+                    data.categorias.forEach(categoriaFirebase => {
 
-                const categoriaLocal = dataLocal.categorias.find(c => c.nombre === categoriaFirebase.nombre);
-                if (!categoriaLocal) return;
+                        const categoriaLocal = dataLocal.categorias.find(c => c.nombre === categoriaFirebase.nombre);
+                        if (!categoriaLocal) return;
 
-                categoriaFirebase.servicios.forEach(servicioFirebase => {
+                        categoriaFirebase.servicios.forEach(servicioFirebase => {
 
-                    const servicioLocal = categoriaLocal.servicios.find(s => s.titulo === servicioFirebase.titulo);
-                    if (!servicioLocal) return;
+                            const servicioLocal = categoriaLocal.servicios.find(s => s.titulo === servicioFirebase.titulo);
+                            if (!servicioLocal) return;
 
-                    // 🔥 SOLO COPIAMOS VALORES, NO EL ID
-                    servicioFirebase.corto = servicioLocal.corto;
-                    servicioFirebase.medio = servicioLocal.medio;
-                    servicioFirebase.largo = servicioLocal.largo;
-                    servicioFirebase.titulo = servicioLocal.titulo;
+                            servicioFirebase.corto = servicioLocal.corto;
+                            servicioFirebase.medio = servicioLocal.medio;
+                            servicioFirebase.largo = servicioLocal.largo;
+                            servicioFirebase.titulo = servicioLocal.titulo;
 
-                });
+                        });
 
-            });
+                    });
 
+                }
+
+            } catch (e) {
+                console.error("Error leyendo datos guardados:", e);
+            }
         }
 
-    } catch (e) {
-        console.error("Error leyendo datos guardados:", e);
-    }
-}
+        let modoEdicion = esAdmin ? true : false;
 
-   let modoEdicion = esAdmin ? true : false;
-
-      renderPrecios(data, adminAutenticado ? modoEdicion : false);
+        renderPrecios(data, adminAutenticado ? modoEdicion : false);
 
         btnEditar.onclick = () => {
             modoEdicion = !modoEdicion;
@@ -1105,6 +1123,7 @@ if (dataGuardada) {
         console.error("Error cargando desde Firebase:", error);
     }
 }
+  
 async function cargarTituloWeb() {
     try {
 
