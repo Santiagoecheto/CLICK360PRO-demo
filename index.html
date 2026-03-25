@@ -1076,7 +1076,14 @@ if (dataGuardada) {
 function renderPrecios(data, modoEdicion = false){
 
     const listaPrecios = document.getElementById("lista-precios");
-    const btnEditar = document.getElementById("btnEditarPrecios");
+   const btnEditar = document.getElementById("btnEditarPrecios");
+
+if (!adminAutenticado) {
+    btnEditar.style.display = "none";
+} else {
+    btnEditar.style.display = "inline-block";
+}
+  
 
     listaPrecios.innerHTML = "";
 
