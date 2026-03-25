@@ -1016,7 +1016,10 @@ async function cargarServiciosDesdeFirebase() {
         const contenedor = document.getElementById("contenedor-servicios");
         const listaPrecios = document.getElementById("lista-precios");
         const btnEditar = document.getElementById("btnEditarPrecios");
-
+                if (!adminAutenticado) {
+                btnEditar.style.display = "none";
+        }
+      
         contenedor.innerHTML = "";
         listaPrecios.innerHTML = "";
 
