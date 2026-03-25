@@ -1120,64 +1120,103 @@ if (!adminAutenticado) {
             btnEditar.insertAdjacentElement("afterend", btnGuardar);
         }
 
-        btnGuardar.onclick = async () => {
+     btnGuardar.onclick = async () => {
 
-            let titulos = new Set();
+    let titulos = new Set();
 
-            for (const categoria of data.categorias) {
-                for (const servicio of categoria.servicios) {
+    for (const categoria of data.categorias) {
+        for (const servicio of categoria.servicios) {
 
-                    const nombre = (servicio.titulo || "").trim().toLowerCase();
+            const nombre = (servicio.titulo || "").trim().toLowerCase();
 
-                    if (!nombre) continue;
+            if (!nombre) continue;
 
-                    if (titulos.has(nombre)) {
-                        alert("⚠️ Hay servicios duplicados: " + servicio.titulo);
-                        return;
-                    }
-
-                    titulos.add(nombre);
-                }
+            if (titulos.has(nombre)) {
+                alert("⚠️ Hay servicios duplicados: " + servicio.titulo);
+                return;
             }
 
-            try {
-                btnGuardar.disabled = true;
-                btnGuardar.textContent = "Guardando...";
+            titulos.add(nombre);
+        }
+    }
 
-                for (const categoria of data.categorias) {
-                    for (const servicio of categoria.servicios) {
+    try {
+        btnGuardar.disabled = true;
+        btnGuardar.textContent = "Guardando...";
 
-                        if (!servicio.id || servicio.id.startsWith("temp_")) continue;
+        // 🔴 1. TRAER TODO DESDE FIREBASE
+        const snapshot = await getDocs(collection(db, "servicios"));
+        const idsFirebase = snapshot.docs.map(doc => doc.id);
 
-                        await setDoc(
-                            doc(db, "servicios", servicio.id),
-                            {
-                                categoria: servicio.categoria,
-                                titulo: servicio.titulo,
-                                corto: Number(servicio.corto) || 0,
-                                medio: Number(servicio.medio) || 0,
-                                largo: Number(servicio.largo) || 0
-                            },
-                            { merge: true }
-                        );
-                    }
+        // 🟡 2. ARMAR IDS ACTUALES (UI)
+        const idsActuales = [];
+
+        for (const categoria of data.categorias) {
+            for (const servicio of categoria.servicios) {
+                if (servicio.id && !servicio.id.startsWith("temp_")) {
+                    idsActuales.push(servicio.id);
                 }
-
-                localStorage.setItem("serviciosEditados", JSON.stringify(data));
-
-                btnGuardar.textContent = "Guardado ✔";
-
-                setTimeout(() => {
-                    btnGuardar.textContent = "Guardar cambios";
-                    btnGuardar.disabled = false;
-                }, 1500);
-
-            } catch (error) {
-                console.error("❌ Error guardando:", error);
-                btnGuardar.disabled = false;
-                btnGuardar.textContent = "Guardar cambios";
             }
-        };
+        }
+
+        // 🔴 3. ELIMINAR LOS QUE YA NO EXISTEN
+        for (const id of idsFirebase) {
+            if (!idsActuales.includes(id)) {
+                await deleteDoc(doc(db, "servicios", id));
+            }
+        }
+
+        // 🟢 4. GUARDAR TODOS (NUEVOS Y EXISTENTES)
+        for (const categoria of data.categorias) {
+            for (const servicio of categoria.servicios) {
+
+                let idFinal = servicio.id;
+
+                // 🆕 Si es nuevo → generar ID real
+                if (!idFinal || idFinal.startsWith("temp_")) {
+                    const docRef = await addDoc(collection(db, "servicios"), {
+                        categoria: servicio.categoria,
+                        titulo: servicio.titulo,
+                        corto: Number(servicio.corto) || 0,
+                        medio: Number(servicio.medio) || 0,
+                        largo: Number(servicio.largo) || 0
+                    });
+
+                    idFinal = docRef.id;
+                    servicio.id = idFinal; // actualizar en memoria
+                } else {
+                    // 🔄 actualizar existente
+                    await setDoc(
+                        doc(db, "servicios", idFinal),
+                        {
+                            categoria: servicio.categoria,
+                            titulo: servicio.titulo,
+                            corto: Number(servicio.corto) || 0,
+                            medio: Number(servicio.medio) || 0,
+                            largo: Number(servicio.largo) || 0
+                        },
+                        { merge: true }
+                    );
+                }
+            }
+        }
+
+        // 💾 guardar en local
+        localStorage.setItem("serviciosEditados", JSON.stringify(data));
+
+        btnGuardar.textContent = "Guardado ✔";
+
+        setTimeout(() => {
+            btnGuardar.textContent = "Guardar cambios";
+            btnGuardar.disabled = false;
+        }, 1500);
+
+    } catch (error) {
+        console.error("❌ Error guardando:", error);
+        btnGuardar.disabled = false;
+        btnGuardar.textContent = "Guardar cambios";
+    }
+};
 
     } else {
         const btnGuardar = document.getElementById("btnGuardarPrecios");
