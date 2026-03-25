@@ -973,26 +973,32 @@ if (panelTitulo) {
 const inputColor = document.getElementById("inputColorTitulo");
 const inputTamano = document.getElementById("inputTamanoTitulo");
 
-if (titulo && inputColor) {
-  // 🔵 GUARDAR CAMBIOS EN FIREBASE
 
 async function guardarEstiloTitulo(color, tamano) {
     try {
+        const data = {};
+
+        if (color) {
+            data.colorTitulo = color;
+        }
+
+        if (tamano) {
+            data.tamanoTitulo = tamano;
+        }
+
         await setDoc(
             doc(db, "configuracion", "web"),
-            {
-                colorTitulo: color,
-                tamanoTitulo: tamano
-            },
+            data,
             { merge: true }
         );
+
         console.log("Estilo guardado en Firebase");
     } catch (error) {
         console.error("Error guardando estilo:", error);
     }
 }
 
-// 🎨 GUARDAR COLOR
+ // 🔵 GUARDAR CAMBIOS EN FIREBASE
 if (titulo && inputColor) {
     inputColor.addEventListener("input", function () {
         titulo.style.color = inputColor.value;
