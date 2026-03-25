@@ -1190,7 +1190,7 @@ btnPassword.onclick = async () => {
     }
 };
       
-     btnGuardar.onclick = async () => {
+   btnGuardar.onclick = async () => {
 
     let titulos = new Set();
 
@@ -1213,6 +1213,16 @@ btnPassword.onclick = async () => {
     try {
         btnGuardar.disabled = true;
         btnGuardar.textContent = "Guardando...";
+
+        // 🔵 GUARDAR TÍTULO WEB
+        const tituloInput = document.getElementById("tituloWeb");
+        if (tituloInput) {
+            await setDoc(
+                doc(db, "configuracion", "web"),
+                { titulo: tituloInput.textContent || "Jenny Estilista Profesional" },
+                { merge: true }
+            );
+        }
 
         // 🔴 1. TRAER TODO DESDE FIREBASE
         const snapshot = await getDocs(collection(db, "servicios"));
@@ -1242,7 +1252,6 @@ btnPassword.onclick = async () => {
 
                 let idFinal = servicio.id;
 
-                // 🆕 Si es nuevo → generar ID real
                 if (!idFinal || idFinal.startsWith("temp_")) {
                     const docRef = await addDoc(collection(db, "servicios"), {
                         categoria: servicio.categoria,
@@ -1253,9 +1262,8 @@ btnPassword.onclick = async () => {
                     });
 
                     idFinal = docRef.id;
-                    servicio.id = idFinal; // actualizar en memoria
+                    servicio.id = idFinal;
                 } else {
-                    // 🔄 actualizar existente
                     await setDoc(
                         doc(db, "servicios", idFinal),
                         {
@@ -1271,7 +1279,6 @@ btnPassword.onclick = async () => {
             }
         }
 
-        // 💾 guardar en local
         localStorage.setItem("serviciosEditados", JSON.stringify(data));
 
         btnGuardar.textContent = "Guardado ✔";
