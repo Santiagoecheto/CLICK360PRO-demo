@@ -908,29 +908,44 @@ let adminAutenticado = false;
 
 if (esAdmin) {
 
-    const CLAVE_ADMIN = "1234";
     let claveCorrecta = false;
 
-    while (!claveCorrecta) {
+    try {
 
-        const clave = prompt("🔐 Ingresar clave de administrador:");
+        // 🔹 Traer contraseña desde Firebase
+        const docRef = doc(db, "configuracion", "admin");
+        const docSnap = await getDoc(docRef);
 
-        // Si cancela → lo sacamos del modo admin
-        if (clave === null) {
-            window.location.href = window.location.origin + window.location.pathname;
-            break;
+        let CLAVE_ADMIN = "1234"; // fallback por si no existe aún
+
+        if (docSnap.exists()) {
+            CLAVE_ADMIN = docSnap.data().password || "1234";
         }
 
-        if (clave === CLAVE_ADMIN) {
-            adminAutenticado = true;
-            claveCorrecta = true;
-            console.log("Modo admin activado");
-        } else {
-            alert("Clave incorrecta");
+        while (!claveCorrecta) {
+
+            const clave = prompt("🔐 Ingresar clave de administrador:");
+
+            // Si cancela → salir del modo admin
+            if (clave === null) {
+                window.location.href = window.location.origin + window.location.pathname;
+                break;
+            }
+
+            if (clave === CLAVE_ADMIN) {
+                adminAutenticado = true;
+                claveCorrecta = true;
+                console.log("Modo admin activado");
+            } else {
+                alert("Clave incorrecta");
+            }
         }
+
+    } catch (error) {
+        console.error("Error obteniendo contraseña:", error);
+        alert("Error verificando acceso");
     }
 }
-  
   
   async function cargarServiciosDefinitivos() {
     try {
