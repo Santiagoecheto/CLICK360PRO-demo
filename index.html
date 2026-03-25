@@ -1037,7 +1037,15 @@ async function cargarServiciosDesdeFirebase() {
                     titulo.textContent = "Jenny Estilista Profesional";
                 }
             }
+const subtitulo = document.getElementById("subtituloWeb");
 
+// 🔵 SUBTÍTULO
+if (subtitulo) {
+    if (docSnap.exists()) {
+        subtitulo.textContent = docSnap.data().subtitulo || "Estilo, belleza y cuidado profesional para tu cabello";
+    }
+}
+          
         } catch (e) {
             console.error("Error cargando título:", e);
         }
