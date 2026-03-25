@@ -1058,7 +1058,7 @@ if (dataGuardada) {
     }
 }
 
-        let modoEdicion = false;
+      let modoEdicion = adminAutenticado ? true : false;
 
       renderPrecios(data, adminAutenticado ? modoEdicion : false);
 
