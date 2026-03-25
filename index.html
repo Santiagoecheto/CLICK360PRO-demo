@@ -1067,7 +1067,6 @@ function renderPrecios(data, modoEdicion = false){
         return ordenCategorias.indexOf(a.nombre) - ordenCategorias.indexOf(b.nombre);
     });
 
-    // 🔥 BOTÓN GUARDAR
     if (modoEdicion) {
 
         let btnGuardar = document.getElementById("btnGuardarPrecios");
@@ -1076,42 +1075,37 @@ function renderPrecios(data, modoEdicion = false){
             btnGuardar = document.createElement("button");
             btnGuardar.id = "btnGuardarPrecios";
             btnGuardar.textContent = "Guardar cambios";
-            btnGuardar.style.marginLeft = "10px";
             btnEditar.insertAdjacentElement("afterend", btnGuardar);
         }
 
         btnGuardar.onclick = async () => {
-          // 🔥 VALIDAR DUPLICADOS POR TÍTULO
-          let titulos = new Set();
 
-          for (const categoria of data.categorias) {
-          for (const servicio of categoria.servicios) {
+            let titulos = new Set();
 
-        const nombre = (servicio.titulo || "").trim().toLowerCase();
+            for (const categoria of data.categorias) {
+                for (const servicio of categoria.servicios) {
 
-        if (!nombre) continue;
+                    const nombre = (servicio.titulo || "").trim().toLowerCase();
 
-        if (titulos.has(nombre)) {
-            alert("⚠️ Hay servicios duplicados: " + servicio.titulo);
-            console.warn("Duplicado detectado:", servicio);
-            return;
-        }
+                    if (!nombre) continue;
 
-        titulos.add(nombre);
-    }
-}
+                    if (titulos.has(nombre)) {
+                        alert("⚠️ Hay servicios duplicados: " + servicio.titulo);
+                        return;
+                    }
+
+                    titulos.add(nombre);
+                }
+            }
+
             try {
                 btnGuardar.disabled = true;
                 btnGuardar.textContent = "Guardando...";
 
                 for (const categoria of data.categorias) {
-
                     for (const servicio of categoria.servicios) {
 
-                     if (!servicio.id) {
-                        console.warn("⚠️ Servicio sin ID, se omite:", servicio);
-                        continue;
-                            }
+                        if (!servicio.id) continue;
 
                         await setDoc(
                             doc(db, "servicios", servicio.id),
@@ -1124,8 +1118,6 @@ function renderPrecios(data, modoEdicion = false){
                             },
                             { merge: true }
                         );
-
-                        console.log("🔥 Guardado en Firebase:", servicio.id);
                     }
                 }
 
@@ -1140,7 +1132,6 @@ function renderPrecios(data, modoEdicion = false){
 
             } catch (error) {
                 console.error("❌ Error guardando:", error);
-                btnGuardar.textContent = "Guardar cambios";
                 btnGuardar.disabled = false;
             }
         };
@@ -1158,45 +1149,68 @@ function renderPrecios(data, modoEdicion = false){
 
         listaPrecios.appendChild(tituloCat);
 
+        if (modoEdicion) {
+
+            const btnAgregar = document.createElement("button");
+            btnAgregar.textContent = "+ Agregar servicio";
+
+            btnAgregar.onclick = () => {
+
+                const nuevoServicio = {
+                    id: "temp_" + Date.now(),
+                    categoria: categoria.nombre,
+                    titulo: "Nuevo servicio",
+                    corto: 0,
+                    medio: 0,
+                    largo: 0
+                };
+
+                categoria.servicios.push(nuevoServicio);
+
+                renderPrecios(data, true);
+            };
+
+            listaPrecios.appendChild(btnAgregar);
+        }
+
         categoria.servicios.forEach((servicio, iServ) => {
 
             const item = document.createElement("div");
             item.classList.add("item-precio");
 
-            if(modoEdicion){
+            if (modoEdicion) {
 
                 item.innerHTML = `
-                <input class="nombre-servicio"
-                    data-cat="${categoria.nombre}"
-                    data-servicio="${iServ}"
-                    data-id="${servicio.id}"
-                    data-tipo="titulo"
-                />
+<input class="nombre-servicio"
+data-cat="${categoria.nombre}"
+data-servicio="${iServ}"
+data-id="${servicio.id}"
+data-tipo="titulo"
+/>
 
-                <div class="precios-grid">
-                    <div>
-                        <span>Corto</span>
-                        <input data-cat="${categoria.nombre}" data-servicio="${iServ}" data-id="${servicio.id}" data-tipo="corto" value="${servicio.corto || ''}">
-                    </div>
+<div class="precios-grid">
+    <div>
+        <span>Corto</span>
+        <input data-cat="${categoria.nombre}" data-servicio="${iServ}" data-id="${servicio.id}" data-tipo="corto" value="${servicio.corto || ''}">
+    </div>
 
-                    <div>
-                        <span>Medio</span>
-                        <input data-cat="${categoria.nombre}" data-servicio="${iServ}" data-id="${servicio.id}" data-tipo="medio" value="${servicio.medio || ''}">
-                    </div>
+    <div>
+        <span>Medio</span>
+        <input data-cat="${categoria.nombre}" data-servicio="${iServ}" data-id="${servicio.id}" data-tipo="medio" value="${servicio.medio || ''}">
+    </div>
 
-                    <div>
-                        <span>Largo</span>
-                        <input data-cat="${categoria.nombre}" data-servicio="${iServ}" data-id="${servicio.id}" data-tipo="largo" value="${servicio.largo || ''}">
-                    </div>
-                </div>
-                `;
+    <div>
+        <span>Largo</span>
+        <input data-cat="${categoria.nombre}" data-servicio="${iServ}" data-id="${servicio.id}" data-tipo="largo" value="${servicio.largo || ''}">
+    </div>
+</div>
+`;
 
                 const inputNombre = item.children[0];
-                if(inputNombre){
+                if (inputNombre) {
                     inputNombre.value = servicio.titulo || "";
                 }
 
-                // 🔥 SOLO LOCAL (SIN FIREBASE)
                 item.querySelectorAll("input").forEach(input => {
 
                     input.addEventListener("input", (e) => {
@@ -1212,7 +1226,7 @@ function renderPrecios(data, modoEdicion = false){
                         const servicioReal = categoriaReal.servicios[servIndex];
                         if (!servicioReal) return;
 
-                        if(tipo === "titulo"){
+                        if (tipo === "titulo") {
                             servicioReal.titulo = valor;
                         } else {
                             servicioReal[tipo] = Number(valor) || 0;
@@ -1232,14 +1246,14 @@ function renderPrecios(data, modoEdicion = false){
             } else {
 
                 item.innerHTML = `
-                <div class="nombre-servicio">${servicio.titulo}</div>
+<div class="nombre-servicio">${servicio.titulo}</div>
 
-                <div class="precios-grid">
-                    <div><span>Corto</span><strong>${servicio.corto}</strong></div>
-                    <div><span>Medio</span><strong>${servicio.medio}</strong></div>
-                    <div><span>Largo</span><strong>${servicio.largo}</strong></div>
-                </div>
-                `;
+<div class="precios-grid">
+    <div><span>Corto</span><strong>${servicio.corto}</strong></div>
+    <div><span>Medio</span><strong>${servicio.medio}</strong></div>
+    <div><span>Largo</span><strong>${servicio.largo}</strong></div>
+</div>
+`;
             }
 
             listaPrecios.appendChild(item);
