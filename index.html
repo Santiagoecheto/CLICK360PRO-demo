@@ -1105,7 +1105,7 @@ function renderPrecios(data, modoEdicion = false){
                 for (const categoria of data.categorias) {
                     for (const servicio of categoria.servicios) {
 
-                        if (!servicio.id) continue;
+                        if (!servicio.id || servicio.id.startsWith("temp_")) continue;
 
                         await setDoc(
                             doc(db, "servicios", servicio.id),
@@ -1178,9 +1178,41 @@ function renderPrecios(data, modoEdicion = false){
             const item = document.createElement("div");
             item.classList.add("item-precio");
 
+            // 🔥 BOTÓN ELIMINAR
             if (modoEdicion) {
 
-                item.innerHTML = `
+                const btnEliminar = document.createElement("button");
+                btnEliminar.textContent = "🗑️";
+                btnEliminar.style.marginBottom = "5px";
+
+                btnEliminar.onclick = async () => {
+
+                    const confirmar = confirm("¿Eliminar este servicio?");
+                    if (!confirmar) return;
+
+                    try {
+
+                        // 🔴 SI ES REAL → BORRAR FIREBASE
+                        if (servicio.id && !servicio.id.startsWith("temp_")) {
+                            await deleteDoc(doc(db, "servicios", servicio.id));
+                        }
+
+                        // 🟡 BORRAR DE DATA
+                        categoria.servicios.splice(iServ, 1);
+
+                        renderPrecios(data, true);
+
+                    } catch (error) {
+                        console.error("❌ Error eliminando:", error);
+                    }
+                };
+
+                item.appendChild(btnEliminar);
+            }
+
+            if (modoEdicion) {
+
+                item.innerHTML += `
 <input class="nombre-servicio"
 data-cat="${categoria.nombre}"
 data-servicio="${iServ}"
@@ -1206,7 +1238,7 @@ data-tipo="titulo"
 </div>
 `;
 
-                const inputNombre = item.children[0];
+                const inputNombre = item.querySelector(".nombre-servicio");
                 if (inputNombre) {
                     inputNombre.value = servicio.titulo || "";
                 }
