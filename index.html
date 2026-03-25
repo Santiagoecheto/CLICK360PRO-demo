@@ -900,7 +900,26 @@ const firebaseConfig = {
 // Inicializar Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const params = new URLSearchParams(window.location.search);
+const esAdmin = params.get("admin") === "1";
+  
+let adminAutenticado = false;
 
+if (esAdmin) {
+
+    const clave = prompt("🔐 Ingresar clave de administrador:");
+
+    const CLAVE_ADMIN = "1234";
+
+    if (clave === CLAVE_ADMIN) {
+        adminAutenticado = true;
+        console.log("Modo admin activado");
+    } else {
+        alert("Clave incorrecta");
+    }
+}
+  
+  
   async function cargarServiciosDefinitivos() {
     try {
 
