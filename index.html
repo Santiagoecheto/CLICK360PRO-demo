@@ -1057,7 +1057,7 @@ if (dataGuardada) {
 
         let modoEdicion = false;
 
-        renderPrecios(data, modoEdicion);
+      renderPrecios(data, adminAutenticado ? modoEdicion : false);
 
         btnEditar.onclick = () => {
             modoEdicion = !modoEdicion;
