@@ -974,14 +974,45 @@ const inputColor = document.getElementById("inputColorTitulo");
 const inputTamano = document.getElementById("inputTamanoTitulo");
 
 if (titulo && inputColor) {
+  // 🔵 GUARDAR CAMBIOS EN FIREBASE
+
+async function guardarEstiloTitulo(color, tamano) {
+    try {
+        await setDoc(
+            doc(db, "configuracion", "web"),
+            {
+                colorTitulo: color,
+                tamanoTitulo: tamano
+            },
+            { merge: true }
+        );
+        console.log("Estilo guardado en Firebase");
+    } catch (error) {
+        console.error("Error guardando estilo:", error);
+    }
+}
+
+// 🎨 GUARDAR COLOR
+if (titulo && inputColor) {
     inputColor.addEventListener("input", function () {
         titulo.style.color = inputColor.value;
+
+        guardarEstiloTitulo(
+            inputColor.value,
+            inputTamano ? inputTamano.value : null
+        );
     });
 }
 
+// 📏 GUARDAR TAMAÑO
 if (titulo && inputTamano) {
     inputTamano.addEventListener("input", function () {
         titulo.style.fontSize = inputTamano.value + "px";
+
+        guardarEstiloTitulo(
+            inputColor ? inputColor.value : null,
+            inputTamano.value
+        );
     });
 }
             } else {
