@@ -1185,27 +1185,25 @@ function renderPrecios(data, modoEdicion = false){
                 btnEliminar.textContent = "🗑️";
                 btnEliminar.style.marginBottom = "5px";
 
-                btnEliminar.onclick = async () => {
+              btnEliminar.onclick = async () => {
 
-                    const confirmar = confirm("¿Eliminar este servicio?");
-                    if (!confirmar) return;
+    const confirmar = confirm("¿Eliminar este servicio?");
+    if (!confirmar) return;
 
-                    try {
+    try {
 
-                        // 🔴 SI ES REAL → BORRAR FIREBASE
-                        if (servicio.id && !servicio.id.startsWith("temp_")) {
-                            await deleteDoc(doc(db, "servicios", servicio.id));
-                        }
+        if (servicio.id && !servicio.id.startsWith("temp_")) {
+            await deleteDoc(doc(db, "servicios", servicio.id));
+        }
 
-                        // 🟡 BORRAR DE DATA
-                        categoria.servicios.splice(iServ, 1);
+        categoria.servicios.splice(iServ, 1);
 
-                        renderPrecios(data, true);
+        renderPrecios(data, true);
 
-                    } catch (error) {
-                        console.error("❌ Error eliminando:", error);
-                    }
-                };
+    } catch (error) {
+        console.error("❌ Error eliminando:", error);
+    }
+};
 
                 item.appendChild(btnEliminar);
             }
