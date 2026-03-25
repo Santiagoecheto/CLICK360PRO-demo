@@ -1133,6 +1133,7 @@ function renderPrecios(data, modoEdicion = false){
             } catch (error) {
                 console.error("❌ Error guardando:", error);
                 btnGuardar.disabled = false;
+                btnGuardar.textContent = "Guardar cambios";
             }
         };
 
@@ -1150,12 +1151,10 @@ function renderPrecios(data, modoEdicion = false){
         listaPrecios.appendChild(tituloCat);
 
         if (modoEdicion) {
-
             const btnAgregar = document.createElement("button");
             btnAgregar.textContent = "+ Agregar servicio";
 
             btnAgregar.onclick = () => {
-
                 const nuevoServicio = {
                     id: "temp_" + Date.now(),
                     categoria: categoria.nombre,
@@ -1166,7 +1165,7 @@ function renderPrecios(data, modoEdicion = false){
                 };
 
                 categoria.servicios.push(nuevoServicio);
-
+                localStorage.setItem("serviciosEditados", JSON.stringify(data));
                 renderPrecios(data, true);
             };
 
@@ -1178,39 +1177,13 @@ function renderPrecios(data, modoEdicion = false){
             const item = document.createElement("div");
             item.classList.add("item-precio");
 
-            // 🔥 BOTÓN ELIMINAR
             if (modoEdicion) {
 
-                const btnEliminar = document.createElement("button");
-                btnEliminar.textContent = "🗑️";
-                btnEliminar.style.marginBottom = "5px";
+                item.innerHTML = `
+<div style="margin-bottom: 5px;">
+    <button type="button" class="btn-eliminar-servicio">🗑️</button>
+</div>
 
-              btnEliminar.onclick = async () => {
-
-    const confirmar = confirm("¿Eliminar este servicio?");
-    if (!confirmar) return;
-
-    try {
-
-        if (servicio.id && !servicio.id.startsWith("temp_")) {
-            await deleteDoc(doc(db, "servicios", servicio.id));
-        }
-
-        categoria.servicios.splice(iServ, 1);
-
-        renderPrecios(data, true);
-
-    } catch (error) {
-        console.error("❌ Error eliminando:", error);
-    }
-};
-
-                item.appendChild(btnEliminar);
-            }
-
-            if (modoEdicion) {
-
-                item.innerHTML += `
 <input class="nombre-servicio"
 data-cat="${categoria.nombre}"
 data-servicio="${iServ}"
@@ -1236,13 +1209,36 @@ data-tipo="titulo"
 </div>
 `;
 
+                const btnEliminar = item.querySelector(".btn-eliminar-servicio");
+
+                if (btnEliminar) {
+                    btnEliminar.onclick = async () => {
+
+                        const confirmar = confirm("¿Eliminar este servicio?");
+                        if (!confirmar) return;
+
+                        try {
+                            if (servicio.id && !servicio.id.startsWith("temp_")) {
+                                await deleteDoc(doc(db, "servicios", servicio.id));
+                            }
+
+                            categoria.servicios = categoria.servicios.filter(s => s.id !== servicio.id);
+
+                            localStorage.setItem("serviciosEditados", JSON.stringify(data));
+                            renderPrecios(data, true);
+
+                        } catch (error) {
+                            console.error("❌ Error eliminando:", error);
+                        }
+                    };
+                }
+
                 const inputNombre = item.querySelector(".nombre-servicio");
                 if (inputNombre) {
                     inputNombre.value = servicio.titulo || "";
                 }
 
                 item.querySelectorAll("input").forEach(input => {
-
                     input.addEventListener("input", (e) => {
 
                         const catNombre = e.target.dataset.cat;
@@ -1268,9 +1264,7 @@ data-tipo="titulo"
                         if (btnGuardar) {
                             btnGuardar.textContent = "Guardar cambios *";
                         }
-
                     });
-
                 });
 
             } else {
