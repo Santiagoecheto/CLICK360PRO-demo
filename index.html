@@ -1023,29 +1023,36 @@ async function cargarServiciosDesdeFirebase() {
     try {
         const snapshot = await getDocs(collection(db, "servicios"));
 
-        // 🔵 CARGAR TÍTULO DESDE FIREBASE
+        // 🔵 CARGAR TÍTULO Y SUBTÍTULO DESDE FIREBASE
         try {
             const docRef = doc(db, "configuracion", "web");
             const docSnap = await getDoc(docRef);
 
             const titulo = document.getElementById("tituloWeb");
+            const subtitulo = document.getElementById("subtituloWeb");
 
             if (titulo) {
                 if (docSnap.exists()) {
-                    titulo.textContent = docSnap.data().titulo || "Jenny Estilista Profesional";
+                    const dataWeb = docSnap.data();
+
+                    titulo.textContent = dataWeb.titulo || "Jenny Estilista Profesional";
+                    titulo.style.color = dataWeb.colorTitulo || "#ffffff";
+                    titulo.style.fontSize = dataWeb.tamanoTitulo || "48px";
                 } else {
                     titulo.textContent = "Jenny Estilista Profesional";
+                    titulo.style.color = "#ffffff";
+                    titulo.style.fontSize = "48px";
                 }
             }
-const subtitulo = document.getElementById("subtituloWeb");
 
-// 🔵 SUBTÍTULO
-if (subtitulo) {
-    if (docSnap.exists()) {
-        subtitulo.textContent = docSnap.data().subtitulo || "Estilo, belleza y cuidado profesional para tu cabello";
-    }
-}
-          
+            if (subtitulo) {
+                if (docSnap.exists()) {
+                    subtitulo.textContent = docSnap.data().subtitulo || "Estilo, belleza y cuidado profesional para tu cabello";
+                } else {
+                    subtitulo.textContent = "Estilo, belleza y cuidado profesional para tu cabello";
+                }
+            }
+
         } catch (e) {
             console.error("Error cargando título:", e);
         }
