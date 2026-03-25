@@ -55,7 +55,17 @@
 <h1 id="tituloWeb">Cargando...</h1>
 
 <p id="subtituloWeb">Estilo, belleza y cuidado profesional para tu cabello</p>
+  
+<div id="panelTituloAdmin" style="display:none; margin-top:10px;">
+    
+    <label style="color:white;">Color:</label>
+    <input type="color" id="inputColorTitulo">
 
+    <label style="color:white; margin-left:10px;">Tamaño:</label>
+    <input type="number" id="inputTamanoTitulo" min="10" max="100" style="width:60px;"> px
+
+</div>
+  
 <a class="boton-whatsapp"
 href="https://wa.me/5491157611231?text=Hola%20estoy%20visitando%20la%20pagina%20web%20y%20quisiera%20mas%20informacion"
 target="_blank">
@@ -936,20 +946,43 @@ if (esAdmin) {
                 adminAutenticado = true;
                 claveCorrecta = true;
                 console.log("Modo admin activado");
-              const titulo = document.getElementById("tituloWeb");
-              const subtitulo = document.getElementById("subtituloWeb");
+          const titulo = document.getElementById("tituloWeb");
+const subtitulo = document.getElementById("subtituloWeb");
 
+// 🔵 ACTIVAR EDICIÓN
 if (titulo) {
     titulo.contentEditable = true;
     titulo.style.border = "1px dashed #ff4d6d";
     titulo.style.padding = "5px";
 }
-         
 
 if (subtitulo) {
     subtitulo.contentEditable = true;
     subtitulo.style.border = "1px dashed #4dd0e1";
     subtitulo.style.padding = "5px";
+}
+
+// 🔵 MOSTRAR PANEL
+const panelTitulo = document.getElementById("panelTituloAdmin");
+
+if (panelTitulo) {
+    panelTitulo.style.display = "block";
+}
+
+// 🔵 CONTROLES EN VIVO
+const inputColor = document.getElementById("inputColorTitulo");
+const inputTamano = document.getElementById("inputTamanoTitulo");
+
+if (titulo && inputColor) {
+    inputColor.addEventListener("input", function () {
+        titulo.style.color = inputColor.value;
+    });
+}
+
+if (titulo && inputTamano) {
+    inputTamano.addEventListener("input", function () {
+        titulo.style.fontSize = inputTamano.value + "px";
+    });
 }
             } else {
                 alert("Clave incorrecta");
