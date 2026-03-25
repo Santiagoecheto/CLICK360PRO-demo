@@ -903,20 +903,31 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const params = new URLSearchParams(window.location.search);
 const esAdmin = params.get("admin") === "1";
-  
+
 let adminAutenticado = false;
 
 if (esAdmin) {
 
-    const clave = prompt("🔐 Ingresar clave de administrador:");
-
     const CLAVE_ADMIN = "1234";
+    let claveCorrecta = false;
 
-    if (clave === CLAVE_ADMIN) {
-        adminAutenticado = true;
-        console.log("Modo admin activado");
-    } else {
-        alert("Clave incorrecta");
+    while (!claveCorrecta) {
+
+        const clave = prompt("🔐 Ingresar clave de administrador:");
+
+        // Si cancela → lo sacamos del modo admin
+        if (clave === null) {
+            window.location.href = window.location.origin + window.location.pathname;
+            break;
+        }
+
+        if (clave === CLAVE_ADMIN) {
+            adminAutenticado = true;
+            claveCorrecta = true;
+            console.log("Modo admin activado");
+        } else {
+            alert("Clave incorrecta");
+        }
     }
 }
   
