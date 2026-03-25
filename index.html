@@ -1135,6 +1135,41 @@ if (!adminAutenticado) {
             btnEditar.insertAdjacentElement("afterend", btnGuardar);
         }
 
+      let btnPassword = document.getElementById("btnCambiarPassword");
+
+if (!btnPassword) {
+    btnPassword = document.createElement("button");
+    btnPassword.id = "btnCambiarPassword";
+    btnPassword.textContent = "Cambiar contraseña";
+
+    btnGuardar.insertAdjacentElement("afterend", btnPassword);
+}
+
+btnPassword.onclick = async () => {
+
+    const nueva = prompt("🔐 Nueva contraseña:");
+
+    if (!nueva || nueva.trim().length < 4) {
+        alert("La contraseña debe tener al menos 4 caracteres");
+        return;
+    }
+
+    try {
+
+        await setDoc(
+            doc(db, "configuracion", "admin"),
+            { password: nueva.trim() },
+            { merge: true }
+        );
+
+        alert("✅ Contraseña actualizada correctamente");
+
+    } catch (error) {
+        console.error("Error actualizando contraseña:", error);
+        alert("❌ Error al actualizar contraseña");
+    }
+};
+      
      btnGuardar.onclick = async () => {
 
     let titulos = new Set();
