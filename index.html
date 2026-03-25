@@ -936,6 +936,13 @@ if (esAdmin) {
                 adminAutenticado = true;
                 claveCorrecta = true;
                 console.log("Modo admin activado");
+              const titulo = document.getElementById("tituloWeb");
+
+if (titulo) {
+    titulo.contentEditable = true;
+    titulo.style.border = "1px dashed #ff4d6d";
+    titulo.style.padding = "5px";
+}
             } else {
                 alert("Clave incorrecta");
             }
