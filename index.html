@@ -990,10 +990,11 @@ const inputColor = document.getElementById("inputColorTitulo");
 const inputTamano = document.getElementById("inputTamanoTitulo");
 
 
-async function guardarEstiloTitulo(color, tamano, subtituloTexto) {
+async function guardarEstiloTitulo(color, tamano, subtituloTexto, colorSubtitulo, tamanoSubtitulo) {
     try {
         const data = {};
 
+        // 🔵 TÍTULO
         if (color) {
             data.colorTitulo = color;
         }
@@ -1008,9 +1009,25 @@ async function guardarEstiloTitulo(color, tamano, subtituloTexto) {
             data.tamanoTitulo = tamanoFinal;
         }
 
-        // 🔥 NUEVO: guardar subtítulo
+        // 🔵 SUBTÍTULO TEXTO
         if (subtituloTexto !== undefined && subtituloTexto !== null) {
             data.subtitulo = subtituloTexto;
+        }
+
+        // 🔵 COLOR SUBTÍTULO
+        if (colorSubtitulo) {
+            data.colorSubtitulo = colorSubtitulo;
+        }
+
+        // 🔵 TAMAÑO SUBTÍTULO
+        if (tamanoSubtitulo) {
+            let tamanoSubFinal = tamanoSubtitulo.toString().trim();
+
+            if (!tamanoSubFinal.endsWith("px")) {
+                tamanoSubFinal = tamanoSubFinal + "px";
+            }
+
+            data.tamanoSubtitulo = tamanoSubFinal;
         }
 
         await setDoc(
