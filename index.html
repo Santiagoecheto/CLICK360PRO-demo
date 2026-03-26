@@ -1109,19 +1109,41 @@ async function cargarServiciosDesdeFirebase() {
             const titulo = document.getElementById("tituloWeb");
             const subtitulo = document.getElementById("subtituloWeb");
 
-            if (titulo) {
-                if (docSnap.exists()) {
-                    const dataWeb = docSnap.data();
+          if (titulo) {
+    if (docSnap.exists()) {
+        const dataWeb = docSnap.data();
 
-                    titulo.textContent = dataWeb.titulo || "Jenny Estilista Profesional";
-                    titulo.style.color = dataWeb.colorTitulo || "#ffffff";
-                    titulo.style.fontSize = dataWeb.tamanoTitulo || "48px";
-                } else {
-                    titulo.textContent = "Jenny Estilista Profesional";
-                    titulo.style.color = "#ffffff";
-                    titulo.style.fontSize = "48px";
-                }
-            }
+        const color = dataWeb.colorTitulo || "#ffffff";
+        const tamano = dataWeb.tamanoTitulo || "48px";
+
+        titulo.textContent = dataWeb.titulo || "Jenny Estilista Profesional";
+        titulo.style.color = color;
+        titulo.style.fontSize = tamano;
+
+        // 🔥 SINCRONIZAR INPUTS
+        if (inputColor) {
+            inputColor.value = color;
+        }
+
+        if (inputTamano) {
+            // quitar "px" para mostrar solo número
+            inputTamano.value = tamano.replace("px", "");
+        }
+
+    } else {
+        titulo.textContent = "Jenny Estilista Profesional";
+        titulo.style.color = "#ffffff";
+        titulo.style.fontSize = "48px";
+
+        if (inputColor) {
+            inputColor.value = "#ffffff";
+        }
+
+        if (inputTamano) {
+            inputTamano.value = "48";
+        }
+    }
+}
 
             if (subtitulo) {
                 if (docSnap.exists()) {
