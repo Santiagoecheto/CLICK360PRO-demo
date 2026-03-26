@@ -1233,7 +1233,18 @@ async function cargarServiciosDesdeFirebase() {
         } catch (e) {
             console.error("Error cargando título/subtítulo:", e);
         }
+// 🔥 FORZAR ACTUALIZACIÓN FINAL DEL TÍTULO
+setTimeout(() => {
+    const titulo = document.getElementById("tituloWeb");
 
+    if (titulo && docSnap.exists()) {
+        const dataWeb = docSnap.data();
+        if (dataWeb.titulo) {
+            titulo.textContent = dataWeb.titulo;
+        }
+    }
+}, 0);
+     
         // 🔵 PROCESAR SERVICIOS
         let servicios = [];
 
