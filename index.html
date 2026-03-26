@@ -955,7 +955,8 @@ if (esAdmin) {
                 console.log("Modo admin activado");
           const titulo = document.getElementById("tituloWeb");
           const subtitulo = document.getElementById("subtituloWeb");
-
+              
+            
 // 🔵 ACTIVAR EDICIÓN
 if (titulo) {
     titulo.contentEditable = true;
@@ -1173,7 +1174,10 @@ async function cargarServiciosDesdeFirebase() {
             const docSnap = await getDoc(docRef);
 
         const titulo = document.getElementById("tituloWeb");
-const subtitulo = document.getElementById("subtituloWeb");
+        const subtitulo = document.getElementById("subtituloWeb");
+
+          const inputColorSubtitulo = document.getElementById("inputColorSubtitulo");
+          const inputTamanoSubtitulo = document.getElementById("inputTamanoSubtitulo");
 
 if (titulo) {
     if (docSnap.exists()) {
