@@ -1022,8 +1022,9 @@ if (titulo && inputTamano) {
     inputTamano.addEventListener("input", function () {
         titulo.style.fontSize = inputTamano.value + "px";
 
+        // 🔥 NO tocar color acá
         guardarEstiloTitulo(
-            inputColor ? inputColor.value : null,
+            null,
             inputTamano.value
         );
     });
