@@ -1066,6 +1066,35 @@ if (titulo && inputTamano) {
         );
     });
 }
+              // 🔵 COLOR SUBTÍTULO
+if (subtitulo && inputColorSubtitulo) {
+    inputColorSubtitulo.addEventListener("input", function () {
+        subtitulo.style.color = inputColorSubtitulo.value;
+
+        guardarEstiloTitulo(
+            null,
+            null,
+            null,
+            inputColorSubtitulo.value,
+            inputTamanoSubtitulo ? inputTamanoSubtitulo.value : null
+        );
+    });
+}
+
+// 📏 TAMAÑO SUBTÍTULO
+if (subtitulo && inputTamanoSubtitulo) {
+    inputTamanoSubtitulo.addEventListener("input", function () {
+        subtitulo.style.fontSize = inputTamanoSubtitulo.value + "px";
+
+        guardarEstiloTitulo(
+            null,
+            null,
+            null,
+            inputColorSubtitulo ? inputColorSubtitulo.value : null,
+            inputTamanoSubtitulo.value
+        );
+    });
+}
             } else {
                 alert("Clave incorrecta");
             }
