@@ -1126,10 +1126,10 @@ async function cargarServiciosDesdeFirebase() {
             const docRef = doc(db, "configuracion", "web");
             const docSnap = await getDoc(docRef);
 
-            const titulo = document.getElementById("tituloWeb");
-            const subtitulo = document.getElementById("subtituloWeb");
+        const titulo = document.getElementById("tituloWeb");
+const subtitulo = document.getElementById("subtituloWeb");
 
-          if (titulo) {
+if (titulo) {
     if (docSnap.exists()) {
         const dataWeb = docSnap.data();
 
@@ -1140,13 +1140,12 @@ async function cargarServiciosDesdeFirebase() {
         titulo.style.color = color;
         titulo.style.fontSize = tamano;
 
-        // 🔥 SINCRONIZAR INPUTS
+        // 🔥 SINCRONIZAR INPUTS TÍTULO
         if (inputColor) {
             inputColor.value = color;
         }
 
         if (inputTamano) {
-            // quitar "px" para mostrar solo número
             inputTamano.value = tamano.replace("px", "");
         }
 
@@ -1165,13 +1164,40 @@ async function cargarServiciosDesdeFirebase() {
     }
 }
 
-            if (subtitulo) {
-                if (docSnap.exists()) {
-                    subtitulo.textContent = docSnap.data().subtitulo || "Estilo, belleza y cuidado profesional para tu cabello";
-                } else {
-                    subtitulo.textContent = "Estilo, belleza y cuidado profesional para tu cabello";
-                }
-            }
+if (subtitulo) {
+    if (docSnap.exists()) {
+        const dataWeb = docSnap.data();
+
+        const colorSub = dataWeb.colorSubtitulo || "#ffffff";
+        const tamanoSub = dataWeb.tamanoSubtitulo || "20px";
+
+        subtitulo.textContent = dataWeb.subtitulo || "Estilo, belleza y cuidado profesional para tu cabello";
+        subtitulo.style.color = colorSub;
+        subtitulo.style.fontSize = tamanoSub;
+
+        // 🔥 SINCRONIZAR INPUTS SUBTÍTULO
+        if (inputColorSubtitulo) {
+            inputColorSubtitulo.value = colorSub;
+        }
+
+        if (inputTamanoSubtitulo) {
+            inputTamanoSubtitulo.value = tamanoSub.replace("px", "");
+        }
+
+    } else {
+        subtitulo.textContent = "Estilo, belleza y cuidado profesional para tu cabello";
+        subtitulo.style.color = "#ffffff";
+        subtitulo.style.fontSize = "20px";
+
+        if (inputColorSubtitulo) {
+            inputColorSubtitulo.value = "#ffffff";
+        }
+
+        if (inputTamanoSubtitulo) {
+            inputTamanoSubtitulo.value = "20";
+        }
+    }
+}
 
         } catch (e) {
             console.error("Error cargando título:", e);
