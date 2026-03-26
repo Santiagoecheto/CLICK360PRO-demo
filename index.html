@@ -965,6 +965,15 @@ if (subtitulo) {
     subtitulo.contentEditable = true;
     subtitulo.style.border = "1px dashed #4dd0e1";
     subtitulo.style.padding = "5px";
+
+    // 🔥 GUARDAR AUTOMÁTICAMENTE
+    subtitulo.addEventListener("input", function () {
+        guardarEstiloTitulo(
+            null,
+            null,
+            subtitulo.textContent
+        );
+    });
 }
 
 // 🔵 MOSTRAR PANEL
