@@ -63,6 +63,11 @@
 
     <label style="color:white; margin-left:10px;">Tamaño:</label>
     <input type="number" id="inputTamanoTitulo" min="10" max="100" style="width:60px;"> px
+  
+  <div style="margin-top:10px;">
+    <label>Subtítulo:</label>
+    <input type="text" id="inputSubtitulo" style="width:100%;">
+</div>
 
 </div>
   
@@ -947,7 +952,7 @@ if (esAdmin) {
                 claveCorrecta = true;
                 console.log("Modo admin activado");
           const titulo = document.getElementById("tituloWeb");
-const subtitulo = document.getElementById("subtituloWeb");
+          const subtitulo = document.getElementById("subtituloWeb");
 
 // 🔵 ACTIVAR EDICIÓN
 if (titulo) {
@@ -974,7 +979,7 @@ const inputColor = document.getElementById("inputColorTitulo");
 const inputTamano = document.getElementById("inputTamanoTitulo");
 
 
-async function guardarEstiloTitulo(color, tamano) {
+async function guardarEstiloTitulo(color, tamano, subtituloTexto) {
     try {
         const data = {};
 
@@ -983,7 +988,6 @@ async function guardarEstiloTitulo(color, tamano) {
         }
 
         if (tamano) {
-            // 🔥 Asegurar formato correcto (siempre px)
             let tamanoFinal = tamano.toString().trim();
 
             if (!tamanoFinal.endsWith("px")) {
@@ -991,6 +995,11 @@ async function guardarEstiloTitulo(color, tamano) {
             }
 
             data.tamanoTitulo = tamanoFinal;
+        }
+
+        // 🔥 NUEVO: guardar subtítulo
+        if (subtituloTexto !== undefined && subtituloTexto !== null) {
+            data.subtitulo = subtituloTexto;
         }
 
         await setDoc(
