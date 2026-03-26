@@ -989,6 +989,18 @@ if (panelTitulo) {
 // 🔵 CONTROLES EN VIVO
 const inputColor = document.getElementById("inputColorTitulo");
 const inputTamano = document.getElementById("inputTamanoTitulo");
+  // 🔵 EVENTOS TÍTULO
+if (inputColor) {
+    inputColor.addEventListener("input", () => {
+        guardarEstiloTitulo(inputColor.value, inputTamano.value);
+    });
+}
+
+if (inputTamano) {
+    inputTamano.addEventListener("input", () => {
+        guardarEstiloTitulo(inputColor.value, inputTamano.value);
+    });
+}           
 
 
 async function guardarEstiloTitulo(color, tamano, subtituloTexto, colorSubtitulo, tamanoSubtitulo) {
@@ -1183,7 +1195,31 @@ async function cargarServiciosDesdeFirebase() {
             // 🔹 INPUTS SUBTÍTULO
             const inputColorSubtitulo = document.getElementById("inputColorSubtitulo");
             const inputTamanoSubtitulo = document.getElementById("inputTamanoSubtitulo");
+         
+// 🔵 EVENTOS SUBTÍTULO
+if (inputColorSubtitulo) {
+    inputColorSubtitulo.addEventListener("input", () => {
+        guardarEstiloTitulo(
+            inputColor.value,
+            inputTamano.value,
+            null,
+            inputColorSubtitulo.value,
+            inputTamanoSubtitulo.value
+        );
+    });
+}
 
+if (inputTamanoSubtitulo) {
+    inputTamanoSubtitulo.addEventListener("input", () => {
+        guardarEstiloTitulo(
+            inputColor.value,
+            inputTamano.value,
+            null,
+            inputColorSubtitulo.value,
+            inputTamanoSubtitulo.value
+        );
+    });
+}
             if (titulo) {
                 if (docSnap.exists()) {
                     const dataWeb = docSnap.data();
