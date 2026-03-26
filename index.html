@@ -983,7 +983,14 @@ async function guardarEstiloTitulo(color, tamano) {
         }
 
         if (tamano) {
-            data.tamanoTitulo = tamano;
+            // 🔥 Asegurar formato correcto (siempre px)
+            let tamanoFinal = tamano.toString().trim();
+
+            if (!tamanoFinal.endsWith("px")) {
+                tamanoFinal = tamanoFinal + "px";
+            }
+
+            data.tamanoTitulo = tamanoFinal;
         }
 
         await setDoc(
