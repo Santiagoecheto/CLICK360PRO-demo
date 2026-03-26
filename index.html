@@ -1763,7 +1763,9 @@ async function guardarPrueba() {
         console.error("❌ Error guardando:", e);
     }
 }
-cargarServiciosDesdeFirebase();
+document.addEventListener("DOMContentLoaded", function () {
+    cargarServiciosDesdeFirebase();
+});
 </script>
 
 </body>
