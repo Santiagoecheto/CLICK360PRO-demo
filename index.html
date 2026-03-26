@@ -1176,11 +1176,9 @@ async function cargarServiciosDesdeFirebase() {
             const titulo = document.getElementById("tituloWeb");
             const subtitulo = document.getElementById("subtituloWeb");
 
-            // 🔹 INPUTS TÍTULO
             const inputColor = document.getElementById("inputColor");
             const inputTamano = document.getElementById("inputTamano");
 
-            // 🔹 INPUTS SUBTÍTULO
             const inputColorSubtitulo = document.getElementById("inputColorSubtitulo");
             const inputTamanoSubtitulo = document.getElementById("inputTamanoSubtitulo");
 
@@ -1195,26 +1193,16 @@ async function cargarServiciosDesdeFirebase() {
                     titulo.style.color = color;
                     titulo.style.fontSize = tamano;
 
-                    if (inputColor) {
-                        inputColor.value = color;
-                    }
-
-                    if (inputTamano) {
-                        inputTamano.value = tamano.replace("px", "");
-                    }
+                    if (inputColor) inputColor.value = color;
+                    if (inputTamano) inputTamano.value = tamano.replace("px", "");
 
                 } else {
                     titulo.textContent = "Jenny Estilista Profesional";
                     titulo.style.color = "#ffffff";
                     titulo.style.fontSize = "48px";
 
-                    if (inputColor) {
-                        inputColor.value = "#ffffff";
-                    }
-
-                    if (inputTamano) {
-                        inputTamano.value = "48";
-                    }
+                    if (inputColor) inputColor.value = "#ffffff";
+                    if (inputTamano) inputTamano.value = "48";
                 }
             }
 
@@ -1229,26 +1217,16 @@ async function cargarServiciosDesdeFirebase() {
                     subtitulo.style.color = colorSub;
                     subtitulo.style.fontSize = tamanoSub;
 
-                    if (inputColorSubtitulo) {
-                        inputColorSubtitulo.value = colorSub;
-                    }
-
-                    if (inputTamanoSubtitulo) {
-                        inputTamanoSubtitulo.value = tamanoSub.replace("px", "");
-                    }
+                    if (inputColorSubtitulo) inputColorSubtitulo.value = colorSub;
+                    if (inputTamanoSubtitulo) inputTamanoSubtitulo.value = tamanoSub.replace("px", "");
 
                 } else {
                     subtitulo.textContent = "Estilo, belleza y cuidado profesional para tu cabello";
                     subtitulo.style.color = "#ffffff";
                     subtitulo.style.fontSize = "20px";
 
-                    if (inputColorSubtitulo) {
-                        inputColorSubtitulo.value = "#ffffff";
-                    }
-
-                    if (inputTamanoSubtitulo) {
-                        inputTamanoSubtitulo.value = "20";
-                    }
+                    if (inputColorSubtitulo) inputColorSubtitulo.value = "#ffffff";
+                    if (inputTamanoSubtitulo) inputTamanoSubtitulo.value = "20";
                 }
             }
 
@@ -1256,22 +1234,16 @@ async function cargarServiciosDesdeFirebase() {
             console.error("Error cargando título/subtítulo:", e);
         }
 
-    } catch (error) {
-        console.error("Error general:", error);
-    }
-
-
+        // 🔵 PROCESAR SERVICIOS
         let servicios = [];
 
         snapshot.forEach(docSnap => {
-
             const dataDoc = docSnap.data();
 
             servicios.push({
                 id: docSnap.id,
                 ...dataDoc
             });
-
         });
 
         console.log("Datos desde Firebase:", servicios);
@@ -1282,7 +1254,6 @@ async function cargarServiciosDesdeFirebase() {
             if (!categoriasMap[servicio.categoria]) {
                 categoriasMap[servicio.categoria] = [];
             }
-
             categoriasMap[servicio.categoria].push(servicio);
         });
 
@@ -1305,6 +1276,7 @@ async function cargarServiciosDesdeFirebase() {
         listaPrecios.innerHTML = "";
 
         let dataGuardada = localStorage.getItem("serviciosEditados");
+
         if (dataGuardada) {
             try {
                 const dataLocal = JSON.parse(dataGuardada);
