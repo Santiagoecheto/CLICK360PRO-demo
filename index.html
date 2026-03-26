@@ -1176,9 +1176,11 @@ async function cargarServiciosDesdeFirebase() {
             const titulo = document.getElementById("tituloWeb");
             const subtitulo = document.getElementById("subtituloWeb");
 
-            const inputColor = document.getElementById("inputColor");
-            const inputTamano = document.getElementById("inputTamano");
+            // 🔹 INPUTS TÍTULO
+            const inputColor = document.getElementById("inputColorTitulo");
+            const inputTamano = document.getElementById("inputTamanoTitulo");
 
+            // 🔹 INPUTS SUBTÍTULO
             const inputColorSubtitulo = document.getElementById("inputColorSubtitulo");
             const inputTamanoSubtitulo = document.getElementById("inputTamanoSubtitulo");
 
@@ -1186,23 +1188,33 @@ async function cargarServiciosDesdeFirebase() {
                 if (docSnap.exists()) {
                     const dataWeb = docSnap.data();
 
+                    const tituloTexto = (dataWeb.titulo || "").trim();
                     const color = dataWeb.colorTitulo || "#ffffff";
                     const tamano = dataWeb.tamanoTitulo || "48px";
 
-                    titulo.textContent = dataWeb.titulo || "Jenny Estilista Profesional";
+                    titulo.textContent = tituloTexto !== "" ? tituloTexto : "Jenny Estilista Profesional";
                     titulo.style.color = color;
                     titulo.style.fontSize = tamano;
 
-                    if (inputColor) inputColor.value = color;
-                    if (inputTamano) inputTamano.value = tamano.replace("px", "");
+                    if (inputColor) {
+                        inputColor.value = color;
+                    }
 
+                    if (inputTamano) {
+                        inputTamano.value = tamano.replace("px", "");
+                    }
                 } else {
                     titulo.textContent = "Jenny Estilista Profesional";
                     titulo.style.color = "#ffffff";
                     titulo.style.fontSize = "48px";
 
-                    if (inputColor) inputColor.value = "#ffffff";
-                    if (inputTamano) inputTamano.value = "48";
+                    if (inputColor) {
+                        inputColor.value = "#ffffff";
+                    }
+
+                    if (inputTamano) {
+                        inputTamano.value = "48";
+                    }
                 }
             }
 
@@ -1210,41 +1222,40 @@ async function cargarServiciosDesdeFirebase() {
                 if (docSnap.exists()) {
                     const dataWeb = docSnap.data();
 
+                    const subtituloTexto = (dataWeb.subtitulo || "").trim();
                     const colorSub = dataWeb.colorSubtitulo || "#ffffff";
                     const tamanoSub = dataWeb.tamanoSubtitulo || "20px";
 
-                    subtitulo.textContent = dataWeb.subtitulo || "Estilo, belleza y cuidado profesional para tu cabello";
+                    subtitulo.textContent = subtituloTexto !== "" ? subtituloTexto : "Estilo, belleza y cuidado profesional para tu cabello";
                     subtitulo.style.color = colorSub;
                     subtitulo.style.fontSize = tamanoSub;
 
-                    if (inputColorSubtitulo) inputColorSubtitulo.value = colorSub;
-                    if (inputTamanoSubtitulo) inputTamanoSubtitulo.value = tamanoSub.replace("px", "");
+                    if (inputColorSubtitulo) {
+                        inputColorSubtitulo.value = colorSub;
+                    }
 
+                    if (inputTamanoSubtitulo) {
+                        inputTamanoSubtitulo.value = tamanoSub.replace("px", "");
+                    }
                 } else {
                     subtitulo.textContent = "Estilo, belleza y cuidado profesional para tu cabello";
                     subtitulo.style.color = "#ffffff";
                     subtitulo.style.fontSize = "20px";
 
-                    if (inputColorSubtitulo) inputColorSubtitulo.value = "#ffffff";
-                    if (inputTamanoSubtitulo) inputTamanoSubtitulo.value = "20";
+                    if (inputColorSubtitulo) {
+                        inputColorSubtitulo.value = "#ffffff";
+                    }
+
+                    if (inputTamanoSubtitulo) {
+                        inputTamanoSubtitulo.value = "20";
+                    }
                 }
             }
 
         } catch (e) {
             console.error("Error cargando título/subtítulo:", e);
         }
-// 🔥 FORZAR ACTUALIZACIÓN FINAL DEL TÍTULO
-setTimeout(() => {
-    const titulo = document.getElementById("tituloWeb");
 
-    if (titulo && docSnap.exists()) {
-        const dataWeb = docSnap.data();
-        if (dataWeb.titulo) {
-            titulo.textContent = dataWeb.titulo;
-        }
-    }
-}, 0);
-     
         // 🔵 PROCESAR SERVICIOS
         let servicios = [];
 
@@ -1265,6 +1276,7 @@ setTimeout(() => {
             if (!categoriasMap[servicio.categoria]) {
                 categoriasMap[servicio.categoria] = [];
             }
+
             categoriasMap[servicio.categoria].push(servicio);
         });
 
@@ -1293,14 +1305,11 @@ setTimeout(() => {
                 const dataLocal = JSON.parse(dataGuardada);
 
                 if (dataLocal && dataLocal.categorias) {
-
                     data.categorias.forEach(categoriaFirebase => {
-
                         const categoriaLocal = dataLocal.categorias.find(c => c.nombre === categoriaFirebase.nombre);
                         if (!categoriaLocal) return;
 
                         categoriaFirebase.servicios.forEach(servicioFirebase => {
-
                             const servicioLocal = categoriaLocal.servicios.find(s => s.titulo === servicioFirebase.titulo);
                             if (!servicioLocal) return;
 
@@ -1308,11 +1317,8 @@ setTimeout(() => {
                             servicioFirebase.medio = servicioLocal.medio;
                             servicioFirebase.largo = servicioLocal.largo;
                             servicioFirebase.titulo = servicioLocal.titulo;
-
                         });
-
                     });
-
                 }
 
             } catch (e) {
