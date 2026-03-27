@@ -1693,7 +1693,7 @@ async function guardarPrueba() {
         console.error("❌ Error guardando:", e);
     }
 }
- async function cargarTituloWeb() {
+async function cargarTituloWeb() {
     try {
 
         const docRef = doc(db, "configuracion", "web");
@@ -1704,9 +1704,22 @@ async function guardarPrueba() {
         if (!titulo) return;
 
         if (docSnap.exists()) {
-            titulo.textContent = docSnap.data().titulo || "Jenny Estilista Profesional";
+
+            const data = docSnap.data();
+
+            const texto = (data.titulo || "").trim();
+            const color = data.colorTitulo || "#ffffff";
+            const tamano = data.tamanoTitulo || "48px";
+
+            titulo.textContent = texto !== "" ? texto : "Jenny Estilista Profesional";
+            titulo.style.color = color;
+            titulo.style.fontSize = tamano;
+
         } else {
+
             titulo.textContent = "Jenny Estilista Profesional";
+            titulo.style.color = "#ffffff";
+            titulo.style.fontSize = "48px";
         }
 
     } catch (error) {
