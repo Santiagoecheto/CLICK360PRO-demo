@@ -1393,28 +1393,7 @@ if (inputTamanoSubtitulo) {
     }
 }
   
-async function cargarTituloWeb() {
-    try {
-
-        const docRef = doc(db, "configuracion", "web");
-        const docSnap = await getDoc(docRef);
-
-        const titulo = document.getElementById("tituloWeb");
-
-        if (!titulo) return;
-
-        if (docSnap.exists()) {
-            titulo.textContent = docSnap.data().titulo || "Jenny Estilista Profesional";
-        } else {
-            titulo.textContent = "Jenny Estilista Profesional";
-        }
-
-    } catch (error) {
-        console.error("Error cargando título:", error);
-    }
-}
- cargarTituloWeb();
-  
+ 
 function renderPrecios(data, modoEdicion = false){
 
     const listaPrecios = document.getElementById("lista-precios");
