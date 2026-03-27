@@ -1713,11 +1713,11 @@ async function guardarPrueba() {
         console.error("Error cargando título:", error);
     }
 }
-document.addEventListener("DOMContentLoaded", function () {
-   cargarTituloWeb(); 
+window.onload = function () {
+    cargarTituloWeb();
     cargarServiciosDesdeFirebase();
-   
-});
+};
+ 
 </script>
 
 </body>
