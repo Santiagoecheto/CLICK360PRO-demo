@@ -1213,30 +1213,7 @@ async function cargarServiciosDesdeFirebase() {
             const inputColorSubtitulo = document.getElementById("inputColorSubtitulo");
             const inputTamanoSubtitulo = document.getElementById("inputTamanoSubtitulo");
          
-// 🔵 EVENTOS SUBTÍTULO
-if (inputColorSubtitulo) {
-    inputColorSubtitulo.addEventListener("input", () => {
-        guardarEstiloTitulo(
-            null,
-            null,
-            null,
-            inputColorSubtitulo.value,
-            inputTamanoSubtitulo ? inputTamanoSubtitulo.value : null
-        );
-    });
-}
 
-if (inputTamanoSubtitulo) {
-    inputTamanoSubtitulo.addEventListener("input", () => {
-        guardarEstiloTitulo(
-            null,
-            null,
-            null,
-            inputColorSubtitulo ? inputColorSubtitulo.value : null,
-            inputTamanoSubtitulo.value
-        );
-    });
-}
             if (titulo) {
                 if (docSnap.exists()) {
                     const dataWeb = docSnap.data();
