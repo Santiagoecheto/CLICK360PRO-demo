@@ -953,15 +953,32 @@ if (esAdmin) {
                 adminAutenticado = true;
                 claveCorrecta = true;
                 console.log("Modo admin activado");
-          const titulo = document.getElementById("tituloWeb");
-          const subtitulo = document.getElementById("subtituloWeb");
-              
-            
+       const titulo = document.getElementById("tituloWeb");
+const subtitulo = document.getElementById("subtituloWeb");
+
 // 🔵 ACTIVAR EDICIÓN
 if (titulo) {
     titulo.contentEditable = true;
     titulo.style.border = "1px dashed #ff4d6d";
     titulo.style.padding = "5px";
+
+    // 🔥 GUARDAR AUTOMÁTICAMENTE TÍTULO
+    titulo.addEventListener("input", function () {
+        guardarEstiloTitulo(
+            null,
+            null,
+            null, // subtítulo no lo tocamos acá
+            null,
+            null
+        );
+
+        // 🔥 GUARDAR TEXTO DEL TÍTULO
+        setDoc(
+            doc(db, "configuracion", "web"),
+            { titulo: titulo.textContent || "Jenny Estilista Profesional" },
+            { merge: true }
+        );
+    });
 }
 
 if (subtitulo) {
@@ -969,6 +986,15 @@ if (subtitulo) {
     subtitulo.style.border = "1px dashed #4dd0e1";
     subtitulo.style.padding = "5px";
 
+    // 🔥 GUARDAR AUTOMÁTICAMENTE SUBTÍTULO
+    subtitulo.addEventListener("input", function () {
+        guardarEstiloTitulo(
+            null,
+            null,
+            subtitulo.textContent
+        );
+    });
+}
     // 🔥 GUARDAR AUTOMÁTICAMENTE
     subtitulo.addEventListener("input", function () {
         guardarEstiloTitulo(
