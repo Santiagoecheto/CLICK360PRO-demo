@@ -922,104 +922,6 @@ const params = new URLSearchParams(window.location.search);
 const esAdmin = params.get("admin") === "1";
 
 let adminAutenticado = false;
-
-if (esAdmin) {
-
-    let claveCorrecta = false;
-
-    try {
-
-        // 🔹 Traer contraseña desde Firebase
-        const docRef = doc(db, "configuracion", "admin");
-        const docSnap = await getDoc(docRef);
-
-        let CLAVE_ADMIN = "1234"; // fallback por si no existe aún
-
-        if (docSnap.exists()) {
-            CLAVE_ADMIN = docSnap.data().password || "1234";
-        }
-
-        while (!claveCorrecta) {
-
-            const clave = prompt("🔐 Ingresar clave de administrador:");
-
-            // Si cancela → salir del modo admin
-            if (clave === null) {
-                window.location.href = window.location.origin + window.location.pathname;
-                break;
-            }
-
-            if (clave === CLAVE_ADMIN) {
-                adminAutenticado = true;
-                claveCorrecta = true;
-                console.log("Modo admin activado");
-       const titulo = document.getElementById("tituloWeb");
-const subtitulo = document.getElementById("subtituloWeb");
-
-// 🔵 ACTIVAR EDICIÓN
-if (titulo) {
-    titulo.contentEditable = true;
-    titulo.style.border = "1px dashed #ff4d6d";
-    titulo.style.padding = "5px";
-
-    // 🔥 GUARDAR AUTOMÁTICAMENTE TÍTULO
-    titulo.addEventListener("input", function () {
-        guardarEstiloTitulo(
-            null,
-            null,
-            null, // subtítulo no lo tocamos acá
-            null,
-            null
-        );
-
-        // 🔥 GUARDAR TEXTO DEL TÍTULO
-        setDoc(
-            doc(db, "configuracion", "web"),
-            { titulo: titulo.textContent || "Jenny Estilista Profesional" },
-            { merge: true }
-        );
-    });
-}
-
-if (subtitulo) {
-    subtitulo.contentEditable = true;
-    subtitulo.style.border = "1px dashed #4dd0e1";
-    subtitulo.style.padding = "5px";
-
-    // 🔥 GUARDAR AUTOMÁTICAMENTE SUBTÍTULO
-    subtitulo.addEventListener("input", function () {
-        guardarEstiloTitulo(
-            null,
-            null,
-            subtitulo.textContent
-        );
-    });
-}
- 
-// 🔵 MOSTRAR PANEL
-const panelTitulo = document.getElementById("panelTituloAdmin");
-
-if (panelTitulo) {
-    panelTitulo.style.display = "block";
-}
-
-// 🔵 CONTROLES EN VIVO
-const inputColor = document.getElementById("inputColorTitulo");
-const inputTamano = document.getElementById("inputTamanoTitulo");
-  // 🔵 EVENTOS TÍTULO
-if (inputColor) {
-    inputColor.addEventListener("input", () => {
-        guardarEstiloTitulo(inputColor.value, inputTamano.value);
-    });
-}
-
-if (inputTamano) {
-    inputTamano.addEventListener("input", () => {
-        guardarEstiloTitulo(inputColor.value, inputTamano.value);
-    });
-}           
-
-
 async function guardarEstiloTitulo(color, tamano, subtituloTexto, colorSubtitulo, tamanoSubtitulo) {
     try {
         const data = {};
@@ -1071,60 +973,37 @@ async function guardarEstiloTitulo(color, tamano, subtituloTexto, colorSubtitulo
         console.error("Error guardando estilo:", error);
     }
 }
+ 
+if (esAdmin) {
 
- // 🔵 GUARDAR CAMBIOS EN FIREBASE
-if (titulo && inputColor) {
-    inputColor.addEventListener("input", function () {
-        titulo.style.color = inputColor.value;
+    let claveCorrecta = false;
 
-        guardarEstiloTitulo(
-            inputColor.value,
-            inputTamano ? inputTamano.value : null
-        );
-    });
-}
+    try {
 
-// 📏 GUARDAR TAMAÑO
-if (titulo && inputTamano) {
-    inputTamano.addEventListener("input", function () {
-        titulo.style.fontSize = inputTamano.value + "px";
+        // 🔹 Traer contraseña desde Firebase
+        const docRef = doc(db, "configuracion", "admin");
+        const docSnap = await getDoc(docRef);
 
-        // 🔥 NO tocar color acá
-        guardarEstiloTitulo(
-            null,
-            inputTamano.value
-        );
-    });
-}
-              // 🔵 COLOR SUBTÍTULO
-if (subtitulo && inputColorSubtitulo) {
-    inputColorSubtitulo.addEventListener("input", function () {
-        subtitulo.style.color = inputColorSubtitulo.value;
+        let CLAVE_ADMIN = "1234"; // fallback
 
-        guardarEstiloTitulo(
-            null,
-            null,
-            null,
-            inputColorSubtitulo.value,
-            inputTamanoSubtitulo ? inputTamanoSubtitulo.value : null
-        );
-    });
-}
+        if (docSnap.exists()) {
+            CLAVE_ADMIN = docSnap.data().password || "1234";
+        }
 
-// 📏 TAMAÑO SUBTÍTULO
-if (subtitulo && inputTamanoSubtitulo) {
-    inputTamanoSubtitulo.addEventListener("input", function () {
-        subtitulo.style.fontSize = inputTamanoSubtitulo.value + "px";
+        while (!claveCorrecta) {
 
-        guardarEstiloTitulo(
-            null,
-            null,
-            null,
-            inputColorSubtitulo ? inputColorSubtitulo.value : null,
-            inputTamanoSubtitulo.value
-        );
-    });
-}
+            const clave = prompt("🔐 Ingresar clave de administrador:");
+
+            // Si cancela → salir del modo admin
+            if (clave === null) {
+                window.location.href = window.location.origin + window.location.pathname;
+                break;
+            }
+
+            if (clave === CLAVE_ADMIN) {
+                adminAutenticado = true;
+                claveCorrecta = true;
+                console.log("Modo admin activado");
             } else {
                 alert("Clave incorrecta");
             }
@@ -1135,7 +1014,6 @@ if (subtitulo && inputTamanoSubtitulo) {
         alert("Error verificando acceso");
     }
 }
-  
   async function cargarServiciosDefinitivos() {
     try {
 
@@ -1767,6 +1645,91 @@ window.onload = function () {
     cargarSubtituloWeb();
     cargarServiciosDesdeFirebase();
 };
+ setTimeout(() => {
+
+    if (!adminAutenticado) return;
+
+    const titulo = document.getElementById("tituloWeb");
+    const subtitulo = document.getElementById("subtituloWeb");
+
+    // 🔵 ACTIVAR EDICIÓN TÍTULO
+    if (titulo) {
+        titulo.contentEditable = true;
+        titulo.style.border = "1px dashed #ff4d6d";
+        titulo.style.padding = "5px";
+
+        titulo.addEventListener("input", function () {
+            setDoc(
+                doc(db, "configuracion", "web"),
+                { titulo: titulo.textContent || "Jenny Estilista Profesional" },
+                { merge: true }
+            );
+        });
+    }
+
+    // 🔵 ACTIVAR EDICIÓN SUBTÍTULO
+    if (subtitulo) {
+        subtitulo.contentEditable = true;
+        subtitulo.style.border = "1px dashed #4dd0e1";
+        subtitulo.style.padding = "5px";
+
+        subtitulo.addEventListener("input", function () {
+            guardarEstiloTitulo(
+                null,
+                null,
+                subtitulo.textContent
+            );
+        });
+    }
+
+    // 🔵 MOSTRAR PANEL
+    const panelTitulo = document.getElementById("panelTituloAdmin");
+    if (panelTitulo) {
+        panelTitulo.style.display = "block";
+    }
+
+    // 🔵 INPUTS
+    const inputColor = document.getElementById("inputColorTitulo");
+    const inputTamano = document.getElementById("inputTamanoTitulo");
+
+    const inputColorSubtitulo = document.getElementById("inputColorSubtitulo");
+    const inputTamanoSubtitulo = document.getElementById("inputTamanoSubtitulo");
+
+    // 🔵 EVENTOS TÍTULO
+    if (inputColor && inputTamano) {
+        inputColor.addEventListener("input", () => {
+            guardarEstiloTitulo(inputColor.value, inputTamano.value);
+        });
+
+        inputTamano.addEventListener("input", () => {
+            guardarEstiloTitulo(inputColor.value, inputTamano.value);
+        });
+    }
+
+    // 🔵 EVENTOS SUBTÍTULO
+    if (inputColorSubtitulo && inputTamanoSubtitulo) {
+        inputColorSubtitulo.addEventListener("input", () => {
+            guardarEstiloTitulo(
+                null,
+                null,
+                null,
+                inputColorSubtitulo.value,
+                inputTamanoSubtitulo.value
+            );
+        });
+
+        inputTamanoSubtitulo.addEventListener("input", () => {
+            guardarEstiloTitulo(
+                null,
+                null,
+                null,
+                inputColorSubtitulo.value,
+                inputTamanoSubtitulo.value
+            );
+        });
+    }
+
+}, 300);
  
 </script>
 
