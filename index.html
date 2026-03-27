@@ -1604,7 +1604,7 @@ async function cargarTituloWeb() {
         console.error("Error cargando título:", error);
     }
 }
- async function cargarSubtituloWeb() {
+async function cargarSubtituloWeb() {
     try {
 
         const docRef = doc(db, "configuracion", "web");
@@ -1618,14 +1618,17 @@ async function cargarTituloWeb() {
 
             const data = docSnap.data();
 
-            const texto = (data.subtitulo || "").trim();
+            let texto = (data.subtitulo || "").trim();
+
+            // 🔥 SI ESTÁ VACÍO → usar default
+            if (!texto) {
+                texto = "Estilo, belleza y cuidado profesional para tu cabello";
+            }
+
             const color = data.colorSubtitulo || "#ffffff";
             const tamano = data.tamanoSubtitulo || "20px";
 
-            subtitulo.textContent = texto !== "" 
-                ? texto 
-                : "Estilo, belleza y cuidado profesional para tu cabello";
-
+            subtitulo.textContent = texto;
             subtitulo.style.color = color;
             subtitulo.style.fontSize = tamano;
 
