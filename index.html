@@ -1726,8 +1726,45 @@ async function cargarTituloWeb() {
         console.error("Error cargando título:", error);
     }
 }
+ async function cargarSubtituloWeb() {
+    try {
+
+        const docRef = doc(db, "configuracion", "web");
+        const docSnap = await getDoc(docRef);
+
+        const subtitulo = document.getElementById("subtituloWeb");
+
+        if (!subtitulo) return;
+
+        if (docSnap.exists()) {
+
+            const data = docSnap.data();
+
+            const texto = (data.subtitulo || "").trim();
+            const color = data.colorSubtitulo || "#ffffff";
+            const tamano = data.tamanoSubtitulo || "20px";
+
+            subtitulo.textContent = texto !== "" 
+                ? texto 
+                : "Estilo, belleza y cuidado profesional para tu cabello";
+
+            subtitulo.style.color = color;
+            subtitulo.style.fontSize = tamano;
+
+        } else {
+
+            subtitulo.textContent = "Estilo, belleza y cuidado profesional para tu cabello";
+            subtitulo.style.color = "#ffffff";
+            subtitulo.style.fontSize = "20px";
+        }
+
+    } catch (error) {
+        console.error("Error cargando subtítulo:", error);
+    }
+}
 window.onload = function () {
     cargarTituloWeb();
+    cargarSubtituloWeb();
     cargarServiciosDesdeFirebase();
 };
  
