@@ -1217,11 +1217,11 @@ async function cargarServiciosDesdeFirebase() {
 if (inputColorSubtitulo) {
     inputColorSubtitulo.addEventListener("input", () => {
         guardarEstiloTitulo(
-            inputColor.value,
-            inputTamano.value,
+            null,
+            null,
             null,
             inputColorSubtitulo.value,
-            inputTamanoSubtitulo.value
+            inputTamanoSubtitulo ? inputTamanoSubtitulo.value : null
         );
     });
 }
@@ -1229,10 +1229,10 @@ if (inputColorSubtitulo) {
 if (inputTamanoSubtitulo) {
     inputTamanoSubtitulo.addEventListener("input", () => {
         guardarEstiloTitulo(
-            inputColor.value,
-            inputTamano.value,
             null,
-            inputColorSubtitulo.value,
+            null,
+            null,
+            inputColorSubtitulo ? inputColorSubtitulo.value : null,
             inputTamanoSubtitulo.value
         );
     });
