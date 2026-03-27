@@ -1710,28 +1710,31 @@ window.onload = function () {
     }
 
     // 🔵 EVENTOS SUBTÍTULO
-    if (inputColorSubtitulo && inputTamanoSubtitulo) {
-        inputColorSubtitulo.addEventListener("input", () => {
-            guardarEstiloTitulo(
-                null,
-                null,
-                null,
-                inputColorSubtitulo.value,
-                inputTamanoSubtitulo.value
-            );
-        });
+ // 🔵 EVENTO COLOR SUBTÍTULO
+if (inputColorSubtitulo) {
+    inputColorSubtitulo.addEventListener("input", () => {
+        guardarEstiloTitulo(
+            null,
+            null,
+            null,
+            inputColorSubtitulo.value,
+            inputTamanoSubtitulo ? inputTamanoSubtitulo.value : null
+        );
+    });
+}
 
-        inputTamanoSubtitulo.addEventListener("input", () => {
-            guardarEstiloTitulo(
-                null,
-                null,
-                null,
-                inputColorSubtitulo.value,
-                inputTamanoSubtitulo.value
-            );
-        });
-    }
-
+// 🔵 EVENTO TAMAÑO SUBTÍTULO
+if (inputTamanoSubtitulo) {
+    inputTamanoSubtitulo.addEventListener("input", () => {
+        guardarEstiloTitulo(
+            null,
+            null,
+            null,
+            inputColorSubtitulo ? inputColorSubtitulo.value : null,
+            inputTamanoSubtitulo.value
+        );
+    });
+}
 }, 300);
  
 </script>
