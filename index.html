@@ -1047,7 +1047,14 @@ async function subirImagenFirebase() {
 
         console.log("✅ Imagen subida:", url);
 
-        // 👉 MOSTRAR IMAGEN EN PANTALLA
+        // 🔥 GUARDAR EN FIRESTORE (NUEVO)
+        await addDoc(collection(db, "servicios"), {
+            imagen: url,
+            descripcion: "Nuevo servicio", // después lo mejoramos
+            fecha: new Date()
+        });
+
+        // 👉 MOSTRAR PREVIEW
         if (preview) {
             preview.src = url;
         }
@@ -1204,7 +1211,7 @@ async function cargarServiciosDesdeFirebase() {
         }
 
         let modoEdicion = esAdmin ? true : false;
-
+        renderServicios(data);
         renderPrecios(data, adminAutenticado ? modoEdicion : false);
 
         btnEditar.onclick = () => {
@@ -1541,7 +1548,38 @@ data-tipo="titulo"
         });
     });
 }
-  
+
+ function renderServicios(data) {
+
+    const contenedor = document.getElementById("contenedor-servicios");
+
+    if (!contenedor) return;
+
+    contenedor.innerHTML = "";
+
+    data.categorias.forEach(categoria => {
+
+        categoria.servicios.forEach(servicio => {
+
+            const card = document.createElement("div");
+            card.classList.add("servicio-card");
+
+            const img = document.createElement("img");
+            img.src = servicio.imagen || "";
+            img.alt = servicio.titulo || "Servicio";
+
+            const texto = document.createElement("p");
+            texto.textContent = servicio.descripcion || servicio.titulo || "";
+
+            card.appendChild(img);
+            card.appendChild(texto);
+
+            contenedor.appendChild(card);
+        });
+
+    });
+}
+ 
 async function cargarPreciosFirebase() {
     try {
         const querySnapshot = await getDocs(collection(db, "servicios"));
