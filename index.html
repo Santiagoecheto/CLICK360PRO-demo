@@ -1578,6 +1578,13 @@ async function cargarTituloWeb() {
 
         const titulo = document.getElementById("tituloWeb");
 
+        // 🔵 INPUTS
+        const inputColor = document.getElementById("inputColorTitulo");
+        const inputTamano = document.getElementById("inputTamanoTitulo");
+
+        const inputColorSubtitulo = document.getElementById("inputColorSubtitulo");
+        const inputTamanoSubtitulo = document.getElementById("inputTamanoSubtitulo");
+
         if (!titulo) return;
 
         if (docSnap.exists()) {
@@ -1588,21 +1595,51 @@ async function cargarTituloWeb() {
             const color = data.colorTitulo || "#ffffff";
             const tamano = data.tamanoTitulo || "48px";
 
+            const colorSub = data.colorSubtitulo || "#ffffff";
+            const tamanoSub = data.tamanoSubtitulo || "20px";
+
+            // 🔵 APLICAR AL DOM
             titulo.textContent = texto !== "" ? texto : "Jenny Estilista Profesional";
             titulo.style.color = color;
             titulo.style.fontSize = tamano;
+
+            // 🔵 PRECARGAR INPUTS TÍTULO
+            if (inputColor) {
+                inputColor.value = color;
+            }
+
+            if (inputTamano) {
+                inputTamano.value = parseInt(tamano);
+            }
+
+            // 🔵 PRECARGAR INPUTS SUBTÍTULO
+            if (inputColorSubtitulo) {
+                inputColorSubtitulo.value = colorSub;
+            }
+
+            if (inputTamanoSubtitulo) {
+                inputTamanoSubtitulo.value = parseInt(tamanoSub);
+            }
 
         } else {
 
             titulo.textContent = "Jenny Estilista Profesional";
             titulo.style.color = "#ffffff";
             titulo.style.fontSize = "48px";
+
+            // 🔵 DEFAULT INPUTS
+            if (inputColor) inputColor.value = "#ffffff";
+            if (inputTamano) inputTamano.value = 48;
+
+            if (inputColorSubtitulo) inputColorSubtitulo.value = "#ffffff";
+            if (inputTamanoSubtitulo) inputTamanoSubtitulo.value = 20;
         }
 
     } catch (error) {
         console.error("Error cargando título:", error);
     }
 }
+ 
 async function cargarSubtituloWeb() {
     try {
 
