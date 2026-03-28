@@ -1146,3 +1146,27 @@ flex-shrink: 0;
     border-radius: 10px;
     margin-bottom: 10px;
 }
+/* ===== GALERÍA ===== */
+
+#contenedor-galeria {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    padding: 20px;
+}
+
+.galeria-card {
+    text-align: center;
+}
+
+.galeria-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.galeria-card p {
+    margin-top: 10px;
+    color: white;
+}
