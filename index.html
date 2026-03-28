@@ -1583,6 +1583,33 @@ data-tipo="titulo"
 
     });
 }
+
+ function renderGaleria(data) {
+
+    const contenedor = document.getElementById("contenedor-galeria");
+
+    if (!contenedor) return;
+
+    contenedor.innerHTML = "";
+
+    data.forEach(item => {
+
+        const card = document.createElement("div");
+        card.classList.add("galeria-card");
+
+        const img = document.createElement("img");
+        img.src = item.imagen || "";
+        img.alt = item.descripcion || "Imagen";
+
+        const texto = document.createElement("p");
+        texto.textContent = item.descripcion || "";
+
+        card.appendChild(img);
+        card.appendChild(texto);
+
+        contenedor.appendChild(card);
+    });
+}
  
 async function cargarPreciosFirebase() {
     try {
