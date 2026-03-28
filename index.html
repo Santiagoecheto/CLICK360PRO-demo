@@ -1020,6 +1020,39 @@ if (esAdmin) {
         alert("Error verificando acceso");
     }
 }
+ async function subirImagenFirebase() {
+    try {
+
+        const input = document.getElementById("inputImagen");
+
+        if (!input || !input.files.length) {
+            alert("Seleccioná una imagen");
+            return;
+        }
+
+        const archivo = input.files[0];
+
+        // nombre único
+        const nombreArchivo = "imagenes/" + Date.now() + "_" + archivo.name;
+
+        const storageRef = ref(storage, nombreArchivo);
+
+        // subir archivo
+        await uploadBytes(storageRef, archivo);
+
+        // obtener URL
+        const url = await getDownloadURL(storageRef);
+
+        console.log("✅ Imagen subida:", url);
+
+        alert("Imagen subida correctamente");
+
+    } catch (error) {
+        console.error("❌ Error subiendo imagen:", error);
+        alert("Error subiendo imagen");
+    }
+}
+ 
   async function cargarServiciosDefinitivos() {
     try {
 
@@ -1741,6 +1774,12 @@ window.onload = function () {
     const inputColorSubtitulo = document.getElementById("inputColorSubtitulo");
     const inputTamanoSubtitulo = document.getElementById("inputTamanoSubtitulo");
 
+    // 🔥 BOTÓN SUBIR IMAGEN
+    const btnSubir = document.getElementById("btnSubirImagen");
+
+    if (btnSubir) {
+        btnSubir.addEventListener("click", subirImagenFirebase);
+}
     // 🔵 EVENTOS TÍTULO
   if (inputColor && inputTamano) {
 
