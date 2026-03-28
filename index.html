@@ -1699,15 +1699,30 @@ window.onload = function () {
     const inputTamanoSubtitulo = document.getElementById("inputTamanoSubtitulo");
 
     // 🔵 EVENTOS TÍTULO
-    if (inputColor && inputTamano) {
-        inputColor.addEventListener("input", () => {
-            guardarEstiloTitulo(inputColor.value, inputTamano.value);
-        });
+  if (inputColor && inputTamano) {
 
-        inputTamano.addEventListener("input", () => {
-            guardarEstiloTitulo(inputColor.value, inputTamano.value);
-        });
-    }
+    inputColor.addEventListener("input", () => {
+
+        // 🔵 ACTUALIZAR UI EN VIVO
+        if (titulo) {
+            titulo.style.color = inputColor.value;
+        }
+
+        // 🔵 GUARDAR EN FIREBASE
+        guardarEstiloTitulo(inputColor.value, inputTamano.value);
+    });
+
+    inputTamano.addEventListener("input", () => {
+
+        let tamano = inputTamano.value;
+
+        if (titulo && tamano) {
+            titulo.style.fontSize = tamano + "px";
+        }
+
+        guardarEstiloTitulo(inputColor.value, tamano);
+    });
+}
 
     // 🔵 EVENTOS SUBTÍTULO
  // 🔵 EVENTO COLOR SUBTÍTULO
