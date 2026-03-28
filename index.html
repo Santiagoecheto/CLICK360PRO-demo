@@ -1048,7 +1048,7 @@ async function subirImagenFirebase() {
         console.log("✅ Imagen subida:", url);
 
         // 🔥 GUARDAR EN FIRESTORE (NUEVO)
-        await addDoc(collection(db, "servicios"), {
+            await addDoc(collection(db, "galeria"), {
             imagen: url,
             descripcion: "Nuevo servicio", // después lo mejoramos
             fecha: new Date()
