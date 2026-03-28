@@ -1126,6 +1126,7 @@ console.log("🔥 Firebase + Firestore listo");
 
 async function cargarServiciosDesdeFirebase() {
     try {
+        console.log("1 - Entró a cargarServicios");
         const snapshot = await getDocs(collection(db, "servicios"));
              
 
@@ -1211,7 +1212,10 @@ async function cargarServiciosDesdeFirebase() {
         }
 
         let modoEdicion = esAdmin ? true : false;
+        console.log("2 - Datos traídos");
+        console.log("3 - Antes de renderServicios");
         renderServicios(data);
+        console.log("4 - Después de renderServicios");
         renderPrecios(data, adminAutenticado ? modoEdicion : false);
 
         btnEditar.onclick = () => {
