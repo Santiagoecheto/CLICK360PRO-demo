@@ -74,6 +74,7 @@
 <label style="color:white;">Subir Imagen:</label>
 <input type="file" id="inputImagen">
 <button id="btnSubirImagen">Subir imagen</button>
+ <img id="previewImagen" style="max-width:300px; display:block; margin-top:10px;">
  
 </div>
   
@@ -1020,10 +1021,11 @@ if (esAdmin) {
         alert("Error verificando acceso");
     }
 }
- async function subirImagenFirebase() {
+async function subirImagenFirebase() {
     try {
 
         const input = document.getElementById("inputImagen");
+        const preview = document.getElementById("previewImagen");
 
         if (!input || !input.files.length) {
             alert("Seleccioná una imagen");
@@ -1044,6 +1046,11 @@ if (esAdmin) {
         const url = await getDownloadURL(storageRef);
 
         console.log("✅ Imagen subida:", url);
+
+        // 👉 MOSTRAR IMAGEN EN PANTALLA
+        if (preview) {
+            preview.src = url;
+        }
 
         alert("Imagen subida correctamente");
 
