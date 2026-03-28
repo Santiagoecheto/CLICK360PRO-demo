@@ -1726,8 +1726,16 @@ window.onload = function () {
 
     // 🔵 EVENTOS SUBTÍTULO
  // 🔵 EVENTO COLOR SUBTÍTULO
+// 🔵 EVENTO COLOR SUBTÍTULO
 if (inputColorSubtitulo) {
     inputColorSubtitulo.addEventListener("input", () => {
+
+        // 🔵 ACTUALIZAR UI EN VIVO
+        if (subtitulo) {
+            subtitulo.style.color = inputColorSubtitulo.value;
+        }
+
+        // 🔵 GUARDAR EN FIREBASE
         guardarEstiloTitulo(
             null,
             null,
@@ -1741,12 +1749,21 @@ if (inputColorSubtitulo) {
 // 🔵 EVENTO TAMAÑO SUBTÍTULO
 if (inputTamanoSubtitulo) {
     inputTamanoSubtitulo.addEventListener("input", () => {
+
+        let tamano = inputTamanoSubtitulo.value;
+
+        // 🔵 ACTUALIZAR UI EN VIVO
+        if (subtitulo && tamano) {
+            subtitulo.style.fontSize = tamano + "px";
+        }
+
+        // 🔵 GUARDAR EN FIREBASE
         guardarEstiloTitulo(
             null,
             null,
             null,
             inputColorSubtitulo ? inputColorSubtitulo.value : null,
-            inputTamanoSubtitulo.value
+            tamano
         );
     });
 }
