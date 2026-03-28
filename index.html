@@ -1229,6 +1229,25 @@ async function cargarServiciosDesdeFirebase() {
     }
 }
   
+ async function cargarGaleriaDesdeFirebase() {
+    try {
+
+        const snapshot = await getDocs(collection(db, "galeria"));
+
+        const data = [];
+
+        snapshot.forEach(doc => {
+            data.push(doc.data());
+        });
+
+        console.log("📸 Galería cargada:", data);
+
+        renderGaleria(data);
+
+    } catch (error) {
+        console.error("❌ Error cargando galería:", error);
+    }
+}
  
 function renderPrecios(data, modoEdicion = false){
 
@@ -1800,6 +1819,7 @@ window.onload = function () {
     cargarTituloWeb();
     cargarSubtituloWeb();
     cargarServiciosDesdeFirebase();
+    cargarGaleriaDesdeFirebase();
 };
  setTimeout(() => {
 
