@@ -1634,23 +1634,32 @@ function renderServicios(data) {
 
             // 🔹 IMAGEN
             const img = document.createElement("img");
-            img.src = servicio.imagen && servicio.imagen.trim() !== ""
-                ? servicio.imagen
-                : "https://via.placeholder.com/300x200?text=Servicio";
-            img.alt = servicio.titulo || "Servicio";
 
-            // 🔹 SOLO TÍTULO (SIN DUPLICACIÓN)
+            if (servicio.imagen && servicio.imagen.trim() !== "") {
+                img.src = servicio.imagen;
+            } else {
+                img.src = "";
+                img.style.display = "none"; // 🔥 CLAVE
+            }
+
+            img.alt = "";
+
+            // 🔹 SI FALLA LA IMAGEN → OCULTAR
+            img.onerror = function () {
+                this.style.display = "none";
+            };
+
+            // 🔹 TÍTULO
             const titulo = document.createElement("h3");
             titulo.textContent = servicio.titulo || "Servicio";
 
-            // 🔹 ARMADO
             card.appendChild(img);
             card.appendChild(titulo);
 
             contenedor.appendChild(card);
         });
 
-     });
+    });
 }
  
 function renderGaleria(data) {
