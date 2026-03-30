@@ -1613,7 +1613,7 @@ data-tipo="titulo"
     });
 }
 
- function renderGaleria(data) {
+function renderGaleria(data) {
 
     const contenedor = document.getElementById("contenedor-galeria");
 
@@ -1635,6 +1635,44 @@ data-tipo="titulo"
 
         card.appendChild(img);
         card.appendChild(texto);
+
+        // 🔥 MODO ADMIN → BOTÓN ELIMINAR
+        if (adminAutenticado) {
+
+            const btnEliminar = document.createElement("button");
+            btnEliminar.textContent = "🗑️";
+            btnEliminar.classList.add("btn-eliminar-galeria");
+
+            btnEliminar.onclick = async () => {
+
+                // 🔒 VALIDACIÓN ID
+                if (!item.id) {
+                    console.error("❌ No hay ID para eliminar");
+                    alert("Error: no se puede eliminar esta imagen");
+                    return;
+                }
+
+                const confirmar = confirm("¿Eliminar esta imagen?");
+                if (!confirmar) return;
+
+                try {
+
+                    // 🔴 ELIMINAR DE FIRESTORE
+                    await deleteDoc(doc(db, "galeria", item.id));
+
+                    console.log("🗑️ Imagen eliminada:", item.id);
+
+                    // 🔄 REFRESCAR GALERÍA
+                    await cargarGaleriaDesdeFirebase();
+
+                } catch (error) {
+                    console.error("❌ Error eliminando imagen:", error);
+                    alert("Error eliminando imagen");
+                }
+            };
+
+            card.appendChild(btnEliminar);
+        }
 
         contenedor.appendChild(card);
     });
