@@ -1184,34 +1184,31 @@ flex-shrink: 0;
 }
 
 .servicio-card {
-    background-color: #111;
+    background: #111; /* gris oscuro elegante */
     border-radius: 12px;
-    overflow: hidden;
+    padding: 14px 18px;
     text-align: center;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-    cursor: pointer;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+
+    transition: all 0.25s ease;
+
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
+/* 🔥 HOVER */
 .servicio-card:hover {
-    transform: translateY(-5px) scale(1.02);
-    box-shadow: 0 10px 25px rgba(255, 0, 100, 0.3);
+    background: #1a1a1a;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(255, 0, 100, 0.15);
+    border: 1px solid rgba(255, 0, 100, 0.2);
 }
 
-.servicio-card img {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-    display: block;
-}
-
+/* TEXTO */
 .servicio-card h3 {
-    color: white;
-    font-size: 16px;
-    margin: 10px 0 5px 0;
-}
-
-.servicio-card p {
-    color: #aaa;
-    font-size: 13px;
-    padding: 0 10px 10px;
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
 }
