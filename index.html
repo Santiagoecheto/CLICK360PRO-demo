@@ -1632,19 +1632,17 @@ function renderServicios(data) {
             const card = document.createElement("div");
             card.classList.add("servicio-card");
 
-            // 🔹 IMAGEN
+            // 🔹 IMAGEN (por ahora oculta si no hay)
             const img = document.createElement("img");
 
             if (servicio.imagen && servicio.imagen.trim() !== "") {
                 img.src = servicio.imagen;
             } else {
-                img.src = "";
-                img.style.display = "none"; // 🔥 CLAVE
+                img.style.display = "none";
             }
 
             img.alt = "";
 
-            // 🔹 SI FALLA LA IMAGEN → OCULTAR
             img.onerror = function () {
                 this.style.display = "none";
             };
@@ -1655,6 +1653,47 @@ function renderServicios(data) {
 
             card.appendChild(img);
             card.appendChild(titulo);
+
+            // 🔥 MODO ADMIN
+            if (esAdmin) {
+
+                const controles = document.createElement("div");
+                controles.style.marginTop = "8px";
+
+                // ✏️ EDITAR
+                const btnEditar = document.createElement("button");
+                btnEditar.textContent = "✏️";
+                btnEditar.style.margin = "0 4px";
+
+                btnEditar.onclick = () => {
+                    const nuevoTitulo = prompt("Editar servicio:", servicio.titulo);
+                    if (!nuevoTitulo) return;
+
+                    servicio.titulo = nuevoTitulo;
+
+                    // ⚠️ por ahora solo visual
+                    renderServicios(data);
+                };
+
+                // ❌ ELIMINAR
+                const btnEliminar = document.createElement("button");
+                btnEliminar.textContent = "🗑";
+                btnEliminar.style.margin = "0 4px";
+
+                btnEliminar.onclick = () => {
+                    const confirmar = confirm("¿Eliminar servicio?");
+                    if (!confirmar) return;
+
+                    categoria.servicios = categoria.servicios.filter(s => s !== servicio);
+
+                    renderServicios(data);
+                };
+
+                controles.appendChild(btnEditar);
+                controles.appendChild(btnEliminar);
+
+                card.appendChild(controles);
+            }
 
             contenedor.appendChild(card);
         });
