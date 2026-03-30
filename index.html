@@ -1583,7 +1583,7 @@ data-tipo="titulo"
     });
 }
 
- function renderServicios(data) {
+function renderServicios(data) {
 
     const contenedor = document.getElementById("contenedor-servicios");
 
@@ -1598,15 +1598,34 @@ data-tipo="titulo"
             const card = document.createElement("div");
             card.classList.add("servicio-card");
 
+            // 🔹 IMAGEN (con fallback defensivo)
             const img = document.createElement("img");
-            img.src = servicio.imagen || "";
+            img.src = servicio.imagen && servicio.imagen.trim() !== ""
+                ? servicio.imagen
+                : "https://via.placeholder.com/300x200?text=Servicio";
             img.alt = servicio.titulo || "Servicio";
 
-            const texto = document.createElement("p");
-            texto.textContent = servicio.descripcion || servicio.titulo || "";
+            // 🔹 TÍTULO (único, sin duplicación)
+            const titulo = document.createElement("h3");
+            titulo.textContent = servicio.titulo || "Servicio";
 
+            // 🔹 OPCIONAL: descripción solo si existe y es distinta
+            let descripcion = null;
+            if (servicio.descripcion &&
+                servicio.descripcion.trim() !== "" &&
+                servicio.descripcion !== servicio.titulo) {
+
+                descripcion = document.createElement("p");
+                descripcion.textContent = servicio.descripcion;
+            }
+
+            // 🔹 ARMADO CARD
             card.appendChild(img);
-            card.appendChild(texto);
+            card.appendChild(titulo);
+
+            if (descripcion) {
+                card.appendChild(descripcion);
+            }
 
             contenedor.appendChild(card);
         });
