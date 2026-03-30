@@ -1615,41 +1615,27 @@ function renderServicios(data) {
             const card = document.createElement("div");
             card.classList.add("servicio-card");
 
-            // 🔹 IMAGEN (con fallback defensivo)
+            // 🔹 IMAGEN
             const img = document.createElement("img");
             img.src = servicio.imagen && servicio.imagen.trim() !== ""
                 ? servicio.imagen
                 : "https://via.placeholder.com/300x200?text=Servicio";
             img.alt = servicio.titulo || "Servicio";
 
-            // 🔹 TÍTULO (único, sin duplicación)
+            // 🔹 SOLO TÍTULO (SIN DUPLICACIÓN)
             const titulo = document.createElement("h3");
             titulo.textContent = servicio.titulo || "Servicio";
 
-            // 🔹 OPCIONAL: descripción solo si existe y es distinta
-            let descripcion = null;
-            if (servicio.descripcion &&
-                servicio.descripcion.trim() !== "" &&
-                servicio.descripcion !== servicio.titulo) {
-
-                descripcion = document.createElement("p");
-                descripcion.textContent = servicio.descripcion;
-            }
-
-            // 🔹 ARMADO CARD
+            // 🔹 ARMADO
             card.appendChild(img);
             card.appendChild(titulo);
-
-            if (descripcion) {
-                card.appendChild(descripcion);
-            }
 
             contenedor.appendChild(card);
         });
 
     });
 }
-
+ 
 function renderGaleria(data) {
 
     const contenedor = document.getElementById("contenedor-galeria");
