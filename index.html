@@ -1656,16 +1656,16 @@ function renderServicios(data) {
             if (!categoria) return;
 
             try {
-               console.log("INTENTANDO GUARDAR...");
-                // 🔥 GUARDAR EN FIREBASE
-               await addDoc(collection(db, "servicios"), {
+                console.log("INTENTANDO GUARDAR...");
+
+                await addDoc(collection(db, "servicios"), {
                     titulo: titulo,
                     categoria: categoria,
                     imagen: ""
                 });
-               console.log("GUARDADO OK");
 
-                // 🔥 RECARGAR DESDE FIREBASE (fuente real)
+                console.log("GUARDADO OK");
+
                 await cargarServiciosDesdeFirebase();
 
             } catch (error) {
@@ -1685,7 +1685,7 @@ function renderServicios(data) {
             const card = document.createElement("div");
             card.classList.add("servicio-card");
 
-            // 🔹 IMAGEN (por ahora oculta si no hay)
+            // 🔹 IMAGEN
             const img = document.createElement("img");
 
             if (servicio.imagen && servicio.imagen.trim() !== "") {
@@ -1713,32 +1713,56 @@ function renderServicios(data) {
                 const controles = document.createElement("div");
                 controles.style.marginTop = "8px";
 
-                // ✏️ EDITAR
+                // ✏️ EDITAR (FIREBASE REAL)
                 const btnEditar = document.createElement("button");
                 btnEditar.textContent = "✏️";
                 btnEditar.style.margin = "0 4px";
 
-                btnEditar.onclick = () => {
+                btnEditar.onclick = async () => {
+
                     const nuevoTitulo = prompt("Editar servicio:", servicio.titulo);
                     if (!nuevoTitulo) return;
 
-                    servicio.titulo = nuevoTitulo;
+                    try {
+                        console.log("EDITANDO EN FIREBASE...");
 
-                    renderServicios(data);
+                        await updateDoc(doc(db, "servicios", servicio.id), {
+                            titulo: nuevoTitulo
+                        });
+
+                        console.log("EDITADO OK");
+
+                        await cargarServiciosDesdeFirebase();
+
+                    } catch (error) {
+                        console.error("Error al editar:", error);
+                        alert("Error al editar en Firebase");
+                    }
                 };
 
-                // ❌ ELIMINAR
+                // ❌ ELIMINAR (FIREBASE REAL)
                 const btnEliminar = document.createElement("button");
                 btnEliminar.textContent = "🗑";
                 btnEliminar.style.margin = "0 4px";
 
-                btnEliminar.onclick = () => {
+                btnEliminar.onclick = async () => {
+
                     const confirmar = confirm("¿Eliminar servicio?");
                     if (!confirmar) return;
 
-                    categoria.servicios = categoria.servicios.filter(s => s !== servicio);
+                    try {
+                        console.log("ELIMINANDO EN FIREBASE...");
 
-                    renderServicios(data);
+                        await deleteDoc(doc(db, "servicios", servicio.id));
+
+                        console.log("ELIMINADO OK");
+
+                        await cargarServiciosDesdeFirebase();
+
+                    } catch (error) {
+                        console.error("Error al eliminar:", error);
+                        alert("Error al eliminar en Firebase");
+                    }
                 };
 
                 controles.appendChild(btnEditar);
@@ -1752,6 +1776,7 @@ function renderServicios(data) {
 
     });
 }
+ 
  
 function renderGaleria(data) {
 
