@@ -1643,19 +1643,21 @@ function renderServicios(data) {
             if (!categoria) return;
 
             try {
-
+               console.log("INTENTANDO GUARDAR...");
                 // 🔥 GUARDAR EN FIREBASE
-                await addDoc(collection(db, "servicios"), {
+               await addDoc(collection(db, "servicios"), {
                     titulo: titulo,
                     categoria: categoria,
                     imagen: ""
                 });
+               console.log("GUARDADO OK");
 
                 // 🔥 RECARGAR DESDE FIREBASE (fuente real)
                 await cargarServiciosDesdeFirebase();
 
             } catch (error) {
                 console.error("Error al guardar servicio:", error);
+                console.error("ERROR FIREBASE:", error);
                 alert("Error al guardar en Firebase");
             }
         };
