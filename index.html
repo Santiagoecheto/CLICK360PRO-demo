@@ -1658,12 +1658,25 @@ function renderGaleria(data) {
 
                 try {
 
-                    // 🔴 ELIMINAR DE FIRESTORE
+                    // 🔥 1. ELIMINAR DEL STORAGE (SI EXISTE RUTA)
+                    if (item.ruta) {
+                        try {
+                            const storageRef = ref(storage, item.ruta);
+                            await deleteObject(storageRef);
+                            console.log("🗑️ Imagen eliminada del storage:", item.ruta);
+                        } catch (errorStorage) {
+                            console.warn("⚠️ No se pudo eliminar del storage:", errorStorage);
+                        }
+                    } else {
+                        console.log("ℹ️ Imagen sin ruta (vieja), no se elimina del storage");
+                    }
+
+                    // 🔴 2. ELIMINAR DE FIRESTORE
                     await deleteDoc(doc(db, "galeria", item.id));
 
-                    console.log("🗑️ Imagen eliminada:", item.id);
+                    console.log("🗑️ Documento eliminado:", item.id);
 
-                    // 🔄 REFRESCAR GALERÍA
+                    // 🔄 3. REFRESCAR GALERÍA
                     await cargarGaleriaDesdeFirebase();
 
                 } catch (error) {
