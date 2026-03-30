@@ -1230,15 +1230,23 @@ async function cargarServiciosDesdeFirebase() {
     }
 }
   
- async function cargarGaleriaDesdeFirebase() {
+async function cargarGaleriaDesdeFirebase() {
     try {
 
         const snapshot = await getDocs(collection(db, "galeria"));
 
         const data = [];
 
-        snapshot.forEach(doc => {
-            data.push(doc.data());
+        snapshot.forEach(docSnap => {
+
+            const datos = docSnap.data();
+
+            // 🔥 IMPORTANTE: incluir ID del documento
+            data.push({
+                id: docSnap.id,
+                ...datos
+            });
+
         });
 
         console.log("📸 Galería cargada:", data);
