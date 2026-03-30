@@ -1034,35 +1034,52 @@ async function subirImagenFirebase() {
             return;
         }
 
+        // 🔥 PREGUNTA DE DESTINO
+        const destino = prompt("¿Dónde querés guardar la imagen?\n\n1 = Galería\n2 = Servicio");
+
+        if (destino !== "1" && destino !== "2") {
+            alert("Operación cancelada");
+            return;
+        }
+
         const archivo = input.files[0];
 
-        // 🔥 nombre único + ruta (CLAVE PARA ELIMINAR DESPUÉS)
         const nombreArchivo = "imagenes/" + Date.now() + "_" + archivo.name;
 
         const storageRef = ref(storage, nombreArchivo);
 
-        // subir archivo
         await uploadBytes(storageRef, archivo);
 
-        // obtener URL
         const url = await getDownloadURL(storageRef);
 
         console.log("✅ Imagen subida:", url);
 
-        // 🔥 GUARDAR EN FIRESTORE (AHORA CON RUTA)
-        await addDoc(collection(db, "galeria"), {
-            imagen: url,
-            ruta: nombreArchivo, // 🔥 NUEVO CAMPO CLAVE
-            descripcion: "Nuevo servicio",
-            fecha: new Date()
-        });
+        // 🔵 GALERÍA (COMO YA FUNCIONA)
+        if (destino === "1") {
 
-        // 👉 MOSTRAR PREVIEW
+            await addDoc(collection(db, "galeria"), {
+                imagen: url,
+                ruta: nombreArchivo,
+                descripcion: "Nuevo servicio",
+                fecha: new Date()
+            });
+
+            alert("Imagen guardada en GALERÍA");
+
+        }
+
+        // 🟣 SERVICIO (PREPARADO PARA EL PRÓXIMO PASO)
+        if (destino === "2") {
+
+            console.log("📌 Imagen lista para asignar a servicio:", url);
+
+            alert("Imagen subida. Falta asignarla a un servicio (siguiente paso)");
+        }
+
+        // PREVIEW
         if (preview) {
             preview.src = url;
         }
-
-        alert("Imagen subida correctamente");
 
     } catch (error) {
         console.error("❌ Error subiendo imagen:", error);
@@ -1633,7 +1650,7 @@ function renderServicios(data) {
             contenedor.appendChild(card);
         });
 
-    });
+     });
 }
  
 function renderGaleria(data) {
