@@ -1130,19 +1130,16 @@ console.log("🔥 Firebase + Firestore listo");
 async function cargarServiciosDesdeFirebase() {
     try {
         console.log("1 - Entró a cargarServicios");
+
         const snapshot = await getDocs(collection(db, "servicios"));
-             
 
-            // 🔹 INPUTS TÍTULO
-            const inputColor = document.getElementById("inputColorTitulo");
-            const inputTamano = document.getElementById("inputTamanoTitulo");
+        // 🔹 INPUTS TÍTULO
+        const inputColor = document.getElementById("inputColorTitulo");
+        const inputTamano = document.getElementById("inputTamanoTitulo");
 
-            // 🔹 INPUTS SUBTÍTULO
-            const inputColorSubtitulo = document.getElementById("inputColorSubtitulo");
-            const inputTamanoSubtitulo = document.getElementById("inputTamanoSubtitulo");
-         
-
-          
+        // 🔹 INPUTS SUBTÍTULO
+        const inputColorSubtitulo = document.getElementById("inputColorSubtitulo");
+        const inputTamanoSubtitulo = document.getElementById("inputTamanoSubtitulo");
 
         // 🔵 PROCESAR SERVICIOS
         let servicios = [];
@@ -1158,9 +1155,25 @@ async function cargarServiciosDesdeFirebase() {
 
         console.log("Datos desde Firebase:", servicios);
 
-        let categoriasMap = {};
+        // 🔥 ELIMINAR DUPLICADOS (CLAVE)
+        const serviciosUnicos = [];
+        const clavesVistas = new Set();
 
         servicios.forEach(servicio => {
+            const clave = (servicio.categoria || "") + "_" + (servicio.titulo || "");
+
+            if (!clavesVistas.has(clave)) {
+                clavesVistas.add(clave);
+                serviciosUnicos.push(servicio);
+            }
+        });
+
+        console.log("Servicios únicos:", serviciosUnicos);
+
+        // 🔵 AGRUPAR POR CATEGORÍA
+        let categoriasMap = {};
+
+        serviciosUnicos.forEach(servicio => {
             if (!categoriasMap[servicio.categoria]) {
                 categoriasMap[servicio.categoria] = [];
             }
@@ -1215,10 +1228,14 @@ async function cargarServiciosDesdeFirebase() {
         }
 
         let modoEdicion = esAdmin ? true : false;
+
         console.log("2 - Datos traídos");
         console.log("3 - Antes de renderServicios");
+
         renderServicios(data);
+
         console.log("4 - Después de renderServicios");
+
         renderPrecios(data, adminAutenticado ? modoEdicion : false);
 
         btnEditar.onclick = () => {
