@@ -1184,26 +1184,27 @@ flex-shrink: 0;
 }
 
 .servicio-card {
-    background: #111; /* gris oscuro elegante */
-    border-radius: 12px;
+    background: #151515; /* gris oscuro real, no negro plano */
+    border-radius: 14px;
     padding: 14px 18px;
     text-align: center;
     color: #fff;
     font-size: 15px;
     font-weight: 500;
-    letter-spacing: 0.3px;
+
+    border: 1px solid rgba(199, 26, 234, 0.15); /* lila suave */
 
     transition: all 0.25s ease;
-
-    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* 🔥 HOVER */
+/* 🔥 HOVER PRO */
 .servicio-card:hover {
-    background: #1a1a1a;
-    transform: translateY(-3px);
-    box-shadow: 0 6px 18px rgba(255, 0, 100, 0.15);
-    border: 1px solid rgba(255, 0, 100, 0.2);
+    background: #1f1f1f;
+    transform: translateY(-4px);
+
+    box-shadow: 0 8px 25px rgba(199, 26, 234, 0.25);
+
+    border: 1px solid rgba(199, 26, 234, 0.5);
 }
 
 /* TEXTO */
@@ -1211,4 +1212,19 @@ flex-shrink: 0;
     margin: 0;
     font-size: 14px;
     font-weight: 500;
+}
+
+/* OPCIONAL: efecto tipo "activo visual" */
+.servicio-card::after {
+    content: "";
+    display: block;
+    height: 2px;
+    width: 0%;
+    background: #c71aea;
+    margin: 8px auto 0;
+    transition: width 0.3s ease;
+}
+
+.servicio-card:hover::after {
+    width: 60%;
 }
