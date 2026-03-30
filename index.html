@@ -1228,7 +1228,19 @@ async function cargarServiciosDesdeFirebase() {
                         if (!categoriaLocal) return;
 
                         categoriaFirebase.servicios.forEach(servicioFirebase => {
-                            const servicioLocal = categoriaLocal.servicios.find(s => s.titulo === servicioFirebase.titulo);
+
+                            // 🔥 CAMBIO IMPORTANTE: usar ID si existe
+                            let servicioLocal = null;
+
+                            if (servicioFirebase.id) {
+                                servicioLocal = categoriaLocal.servicios.find(s => s.id === servicioFirebase.id);
+                            }
+
+                            // 🔁 fallback por título (compatibilidad)
+                            if (!servicioLocal) {
+                                servicioLocal = categoriaLocal.servicios.find(s => s.titulo === servicioFirebase.titulo);
+                            }
+
                             if (!servicioLocal) return;
 
                             servicioFirebase.corto = servicioLocal.corto;
@@ -1264,7 +1276,8 @@ async function cargarServiciosDesdeFirebase() {
         console.error("Error cargando desde Firebase:", error);
     }
 }
-  
+
+ 
 async function cargarGaleriaDesdeFirebase() {
     try {
 
