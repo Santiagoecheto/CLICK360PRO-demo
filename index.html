@@ -1637,16 +1637,40 @@ function renderGaleria(data) {
         card.appendChild(img);
         card.appendChild(texto);
 
-        // 🔥 MODO ADMIN → BOTÓN ELIMINAR
+        // 🔥 MODO ADMIN → EDICIÓN + ELIMINAR
         if (adminAutenticado) {
 
+            // ✏️ EDITABLE
+            texto.contentEditable = true;
+            texto.style.border = "1px dashed #4dd0e1";
+            texto.style.padding = "4px";
+
+            texto.addEventListener("input", async () => {
+
+                if (!item.id) return;
+
+                try {
+
+                    await setDoc(
+                        doc(db, "galeria", item.id),
+                        { descripcion: texto.textContent || "" },
+                        { merge: true }
+                    );
+
+                    console.log("✏️ Descripción actualizada:", item.id);
+
+                } catch (error) {
+                    console.error("❌ Error actualizando descripción:", error);
+                }
+            });
+
+            // 🗑️ BOTÓN ELIMINAR
             const btnEliminar = document.createElement("button");
             btnEliminar.textContent = "🗑️";
             btnEliminar.classList.add("btn-eliminar-galeria");
 
             btnEliminar.onclick = async () => {
 
-                // 🔒 VALIDACIÓN ID
                 if (!item.id) {
                     console.error("❌ No hay ID para eliminar");
                     alert("Error: no se puede eliminar esta imagen");
@@ -1658,7 +1682,7 @@ function renderGaleria(data) {
 
                 try {
 
-                    // 🔥 1. ELIMINAR DEL STORAGE (SI EXISTE RUTA)
+                    // 🔥 STORAGE
                     if (item.ruta) {
                         try {
                             const storageRef = ref(storage, item.ruta);
@@ -1668,15 +1692,14 @@ function renderGaleria(data) {
                             console.warn("⚠️ No se pudo eliminar del storage:", errorStorage);
                         }
                     } else {
-                        console.log("ℹ️ Imagen sin ruta (vieja), no se elimina del storage");
+                        console.log("ℹ️ Imagen sin ruta (vieja)");
                     }
 
-                    // 🔴 2. ELIMINAR DE FIRESTORE
+                    // 🔴 FIRESTORE
                     await deleteDoc(doc(db, "galeria", item.id));
 
                     console.log("🗑️ Documento eliminado:", item.id);
 
-                    // 🔄 3. REFRESCAR GALERÍA
                     await cargarGaleriaDesdeFirebase();
 
                 } catch (error) {
