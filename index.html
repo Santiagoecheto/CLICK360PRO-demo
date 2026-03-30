@@ -1624,6 +1624,45 @@ function renderServicios(data) {
     if (!contenedor) return;
 
     contenedor.innerHTML = "";
+ // 🔥 BOTÓN AGREGAR (MODO ADMIN)
+if (esAdmin) {
+
+    const btnAgregar = document.createElement("button");
+    btnAgregar.textContent = "➕ Agregar servicio";
+    btnAgregar.style.margin = "10px";
+    btnAgregar.style.padding = "8px 14px";
+    btnAgregar.style.cursor = "pointer";
+
+    btnAgregar.onclick = () => {
+
+        const titulo = prompt("Nombre del nuevo servicio:");
+        if (!titulo) return;
+
+        const categoria = prompt("Categoría del servicio:");
+        if (!categoria) return;
+
+        // 🔹 buscar o crear categoría
+        let categoriaObj = data.categorias.find(c => c.nombre === categoria);
+
+        if (!categoriaObj) {
+            categoriaObj = {
+                nombre: categoria,
+                servicios: []
+            };
+            data.categorias.push(categoriaObj);
+        }
+
+        // 🔹 agregar servicio
+        categoriaObj.servicios.push({
+            titulo: titulo,
+            imagen: ""
+        });
+
+        renderServicios(data);
+    };
+
+    contenedor.appendChild(btnAgregar);
+}
 
     data.categorias.forEach(categoria => {
 
