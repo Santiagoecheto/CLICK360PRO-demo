@@ -1288,6 +1288,46 @@ async function cargarGaleriaDesdeFirebase() {
         console.error("❌ Error cargando videos:", error);
     }
 }
+
+ 
+ async function agregarVideoFirebase() {
+    try {
+
+        const urlInput = document.getElementById("inputVideoUrl");
+        const tituloInput = document.getElementById("inputVideoTitulo");
+        const descInput = document.getElementById("inputVideoDescripcion");
+
+        const url = urlInput.value.trim();
+        const titulo = tituloInput.value.trim();
+        const descripcion = descInput.value.trim();
+
+        if (!url) {
+            alert("Ingresá una URL de YouTube");
+            return;
+        }
+
+        await addDoc(collection(db, "videos"), {
+            url: url,
+            titulo: titulo || "Sin título",
+            descripcion: descripcion || "",
+            fecha: new Date()
+        });
+
+        alert("Video agregado correctamente");
+
+        // 🔥 RECARGA EN VIVO
+        await cargarVideosDesdeFirebase();
+
+        // 🔥 LIMPIAR INPUTS
+        urlInput.value = "";
+        tituloInput.value = "";
+        descInput.value = "";
+
+    } catch (error) {
+        console.error("❌ Error agregando video:", error);
+        alert("Error agregando video");
+    }
+}
  
 function renderPrecios(data, modoEdicion = false){
 
@@ -2168,6 +2208,12 @@ window.onload = function () {
 
     if (btnSubir) {
         btnSubir.addEventListener("click", subirImagenFirebase);
+}
+    // 🔥 BOTÓN SUBIR VIDEO
+  const btnAgregarVideo = document.getElementById("btnAgregarVideo");
+
+if (btnAgregarVideo) {
+    btnAgregarVideo.addEventListener("click", agregarVideoFirebase);
 }
     // 🔵 EVENTOS TÍTULO
   if (inputColor && inputTamano) {
