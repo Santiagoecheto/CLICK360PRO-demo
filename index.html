@@ -1766,18 +1766,23 @@ function renderGaleria(data) {
                 modal.style.padding = "20px";
 
                 // ❌ BOTÓN CERRAR
-                const cerrar = document.createElement("span");
-                cerrar.innerHTML = "✕";
-                cerrar.style.position = "absolute";
-                cerrar.style.top = "20px";
-                cerrar.style.right = "30px";
-                cerrar.style.fontSize = "30px";
-                cerrar.style.color = "white";
-                cerrar.style.cursor = "pointer";
+              const cerrar = document.createElement("span");
+              cerrar.innerHTML = "✕";
 
-                cerrar.onclick = () => {
-                    modal.style.display = "none";
-                };
+              cerrar.style.position = "fixed"; // 🔥 CAMBIO CLAVE
+              cerrar.style.top = "20px";
+              cerrar.style.right = "25px";
+              cerrar.style.fontSize = "32px";
+              cerrar.style.color = "white";
+              cerrar.style.cursor = "pointer";
+              cerrar.style.zIndex = "10000"; // 🔥 SUPERIOR AL MODAL
+              cerrar.style.background = "rgba(0,0,0,0.5)";
+              cerrar.style.borderRadius = "50%";
+              cerrar.style.padding = "5px 10px";
+
+              cerrar.onclick = () => {
+                  modal.style.display = "none";
+               };
 
                 // 🖼️ IMAGEN GRANDE
                 const imgGrande = document.createElement("img");
