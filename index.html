@@ -2370,7 +2370,7 @@ const btnGuardarNuevoServicio = document.getElementById("btnGuardarNuevoServicio
 
 if (btnGuardarNuevoServicio) {
     btnGuardarNuevoServicio.onclick = async () => {
-  
+
         const inputTitulo = document.getElementById("inputNuevoTitulo");
         const inputCategoria = document.getElementById("inputNuevaCategoria");
         const modal = document.getElementById("modalServicio");
@@ -2419,11 +2419,12 @@ if (btnGuardarNuevoServicio) {
             }
 
             // 🔵 RECARGAR UI
-  
-      } catch (error) {
-    console.error("❌ Error guardando servicio:", error);
-    alert("Error guardando servicio");
-}
+            await cargarServiciosDesdeFirebase();
+
+        } catch (error) {
+            console.error("❌ Error guardando servicio:", error);
+            alert("Error guardando servicio");
+        }
 
     }; // cierre onclick
 } // cierre if
