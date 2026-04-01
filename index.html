@@ -2182,6 +2182,23 @@ if (inputTamanoSubtitulo) {
     });
 }
 }, 300);
+
+ // 🔥 CONTROL MODAL SERVICIO
+
+const modalServicio = document.getElementById("modalServicio");
+const cerrarModalServicio = document.getElementById("cerrarModalServicio");
+
+if (cerrarModalServicio && modalServicio) {
+    cerrarModalServicio.onclick = () => {
+        modalServicio.style.display = "none";
+    };
+
+    modalServicio.addEventListener("click", (e) => {
+        if (e.target === modalServicio) {
+            modalServicio.style.display = "none";
+        }
+    });
+}
  
 </script>
 
