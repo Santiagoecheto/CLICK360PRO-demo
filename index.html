@@ -45,7 +45,8 @@
 
 <!-- HERO -->
 
-<section class="hero" id="inicio">
+
+ <section class="hero" id="inicio">
 
 <video autoplay muted loop>
 <source src="" type="video/mp4">
@@ -77,7 +78,21 @@
 <input type="file" id="inputImagen">
 <button id="btnSubirImagen">Subir imagen</button>
  <img id="previewImagen" style="max-width:300px; display:block; margin-top:10px;">
- 
+ <hr style="margin:20px 0; border:1px solid #444;">
+ <!-- 🎬 ADMIN VIDEOS -->
+<div id="adminVideos" style="margin-top:20px;">
+
+<label style="color:white;">Agregar video (YouTube embed):</label><br>
+
+<input type="text" id="inputVideoUrl" placeholder="https://www.youtube.com/embed/XXXX" style="width:300px;"><br><br>
+
+<input type="text" id="inputVideoTitulo" placeholder="Título"><br><br>
+
+<input type="text" id="inputVideoDescripcion" placeholder="Descripción"><br><br>
+
+<button id="btnAgregarVideo">Agregar video</button>
+
+</div>
 </div>
   
 <a class="boton-whatsapp"
