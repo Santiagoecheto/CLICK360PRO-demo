@@ -1163,16 +1163,16 @@ flex-shrink: 0;
     break-inside: avoid;
     margin-bottom: 20px;
 }
-
 .galeria-card img {
     width: 100%;
-    height: 200px; /* 🔥 tamaño controlado */
+    height: 200px;
     object-fit: cover;
-    border-radius: 12px;
-}
+    border-radius: 10px;
 
-.galeria-card img {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    position: relative;
+    z-index: 2;
 }
 
 .galeria-card img:hover {
@@ -1199,9 +1199,6 @@ flex-shrink: 0;
     transform: translateY(-5px);
 }
 
-.galeria-card img {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
 .galeria-card {
     opacity: 0;
     transform: translateY(20px);
