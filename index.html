@@ -1201,7 +1201,7 @@ async function cargarServiciosDesdeFirebase() {
         contenedor.innerHTML = "";
         listaPrecios.innerHTML = "";
     
-        let modoEdicion = esAdmin ? true : false;
+      let modoEdicion = adminAutenticado ? true : false;
 
         console.log("2 - Datos traídos");
         console.log("3 - Antes de renderServicios");
