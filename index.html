@@ -1235,6 +1235,44 @@ async function cargarGaleriaDesdeFirebase() {
         console.error("❌ Error cargando galería:", error);
     }
 }
+
+ async function cargarVideosDesdeFirebase() {
+    try {
+
+        const snapshot = await getDocs(collection(db, "videos"));
+
+        const contenedor = document.getElementById("contenedor-videos");
+
+        if (!contenedor) return;
+
+        contenedor.innerHTML = "";
+
+        snapshot.forEach(docSnap => {
+
+            const data = docSnap.data();
+
+            const div = document.createElement("div");
+            div.className = "video-item";
+
+            div.innerHTML = `
+                <iframe 
+                    src="${data.url}?rel=0&modestbranding=1"
+                    frameborder="0"
+                    allow="autoplay; encrypted-media"
+                    allowfullscreen>
+                </iframe>
+            `;
+
+            contenedor.appendChild(div);
+
+        });
+
+        console.log("🎬 Videos cargados");
+
+    } catch (error) {
+        console.error("❌ Error cargando videos:", error);
+    }
+}
  
 function renderPrecios(data, modoEdicion = false){
 
@@ -1854,6 +1892,7 @@ function renderGaleria(data) {
                     await deleteDoc(doc(db, "galeria", item.id));
 
                     await cargarGaleriaDesdeFirebase();
+                 
 
                 } catch (error) {
                     console.error("❌ Error eliminando imagen:", error);
@@ -2057,6 +2096,7 @@ window.onload = function () {
     cargarSubtituloWeb();
     cargarServiciosDesdeFirebase();
     cargarGaleriaDesdeFirebase();
+    cargarVideosDesdeFirebase();
 };
  setTimeout(() => {
 
