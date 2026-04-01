@@ -2206,6 +2206,7 @@ async function cargarSubtituloWeb() {
 window.onload = async function () {
 
     console.log("🚀 INICIO CARGA APP");
+ await iniciarModoAdmin();
 
     try {
         await cargarTituloWeb();
