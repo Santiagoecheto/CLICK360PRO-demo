@@ -1156,9 +1156,10 @@ flex-shrink: 0;
 }
 
 .galeria-card {
+    position: relative;
+    overflow: hidden;
     text-align: center;
-}
-.galeria-card {
+
     break-inside: avoid;
     margin-bottom: 20px;
 }
