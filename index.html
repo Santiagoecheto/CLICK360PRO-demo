@@ -2158,13 +2158,48 @@ async function cargarSubtituloWeb() {
         console.error("Error cargando subtítulo:", error);
     }
 }
-window.onload = function () {
-    cargarTituloWeb();
-    cargarSubtituloWeb();
-    cargarServiciosDesdeFirebase();
-    cargarGaleriaDesdeFirebase();
-    cargarVideosDesdeFirebase();
+window.onload = async function () {
+
+    console.log("🚀 INICIO CARGA APP");
+
+    try {
+        await cargarTituloWeb();
+        console.log("✅ Título cargado");
+    } catch (e) {
+        console.error("❌ Error título:", e);
+    }
+
+    try {
+        await cargarSubtituloWeb();
+        console.log("✅ Subtítulo cargado");
+    } catch (e) {
+        console.error("❌ Error subtítulo:", e);
+    }
+
+    try {
+        await cargarServiciosDesdeFirebase();
+        console.log("✅ Servicios cargados");
+    } catch (e) {
+        console.error("❌ Error servicios:", e);
+    }
+
+    try {
+        await cargarGaleriaDesdeFirebase();
+        console.log("✅ Galería cargada");
+    } catch (e) {
+        console.error("❌ Error galería:", e);
+    }
+
+    try {
+        await cargarVideosDesdeFirebase();
+        console.log("✅ Videos cargados");
+    } catch (e) {
+        console.error("❌ Error videos:", e);
+    }
+
+    console.log("🏁 FIN CARGA APP");
 };
+ 
  setTimeout(() => {
 
     if (!adminAutenticado) return;
