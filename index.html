@@ -2217,7 +2217,7 @@ window.onload = async function () {
     console.log("🏁 FIN CARGA APP");
 };
  
- setTimeout(() => {
+setTimeout(() => {
 
     if (!adminAutenticado) return;
 
@@ -2246,110 +2246,83 @@ window.onload = async function () {
         subtitulo.style.padding = "5px";
 
         subtitulo.addEventListener("input", function () {
-            guardarEstiloTitulo(
-                null,
-                null,
-                subtitulo.textContent
-            );
+            guardarEstiloTitulo(null, null, subtitulo.textContent);
         });
     }
 
-    // 🔵 MOSTRAR PANEL
+    // 🔵 PANEL
     const panelTitulo = document.getElementById("panelTituloAdmin");
-    if (panelTitulo) {
-        panelTitulo.style.display = "block";
-    }
+    if (panelTitulo) panelTitulo.style.display = "block";
 
     // 🔵 INPUTS
     const inputColor = document.getElementById("inputColorTitulo");
     const inputTamano = document.getElementById("inputTamanoTitulo");
-
     const inputColorSubtitulo = document.getElementById("inputColorSubtitulo");
     const inputTamanoSubtitulo = document.getElementById("inputTamanoSubtitulo");
 
-    // 🔥 BOTÓN SUBIR IMAGEN
+    // 🔥 BOTÓN IMAGEN
     const btnSubir = document.getElementById("btnSubirImagen");
-
     if (btnSubir) {
         btnSubir.addEventListener("click", subirImagenFirebase);
-}
-    // 🔥 BOTÓN SUBIR VIDEO
-  const btnAgregarVideo = document.getElementById("btnAgregarVideo");
+    }
 
-if (btnAgregarVideo) {
-    btnAgregarVideo.addEventListener("click", agregarVideoFirebase);
-}
+    // 🔥 BOTÓN VIDEO
+    const btnAgregarVideo = document.getElementById("btnAgregarVideo");
+    if (btnAgregarVideo) {
+        btnAgregarVideo.addEventListener("click", agregarVideoFirebase);
+    }
+
     // 🔵 EVENTOS TÍTULO
-  if (inputColor && inputTamano) {
+    if (inputColor && inputTamano) {
 
-    inputColor.addEventListener("input", () => {
+        inputColor.addEventListener("input", () => {
+            if (titulo) titulo.style.color = inputColor.value;
+            guardarEstiloTitulo(inputColor.value, inputTamano.value);
+        });
 
-        // 🔵 ACTUALIZAR UI EN VIVO
-        if (titulo) {
-            titulo.style.color = inputColor.value;
-        }
-
-        // 🔵 GUARDAR EN FIREBASE
-        guardarEstiloTitulo(inputColor.value, inputTamano.value);
-    });
-
-    inputTamano.addEventListener("input", () => {
-
-        let tamano = inputTamano.value;
-
-        if (titulo && tamano) {
-            titulo.style.fontSize = tamano + "px";
-        }
-
-        guardarEstiloTitulo(inputColor.value, tamano);
-    });
-}
+        inputTamano.addEventListener("input", () => {
+            let tamano = inputTamano.value;
+            if (titulo && tamano) titulo.style.fontSize = tamano + "px";
+            guardarEstiloTitulo(inputColor.value, tamano);
+        });
+    }
 
     // 🔵 EVENTOS SUBTÍTULO
- // 🔵 EVENTO COLOR SUBTÍTULO
-// 🔵 EVENTO COLOR SUBTÍTULO
-if (inputColorSubtitulo) {
-    inputColorSubtitulo.addEventListener("input", () => {
+    if (inputColorSubtitulo) {
+        inputColorSubtitulo.addEventListener("input", () => {
+            if (subtitulo) subtitulo.style.color = inputColorSubtitulo.value;
 
-        // 🔵 ACTUALIZAR UI EN VIVO
-        if (subtitulo) {
-            subtitulo.style.color = inputColorSubtitulo.value;
-        }
+            guardarEstiloTitulo(
+                null,
+                null,
+                null,
+                inputColorSubtitulo.value,
+                inputTamanoSubtitulo ? inputTamanoSubtitulo.value : null
+            );
+        });
+    }
 
-        // 🔵 GUARDAR EN FIREBASE
-        guardarEstiloTitulo(
-            null,
-            null,
-            null,
-            inputColorSubtitulo.value,
-            inputTamanoSubtitulo ? inputTamanoSubtitulo.value : null
-        );
-    });
-}
+    if (inputTamanoSubtitulo) {
+        inputTamanoSubtitulo.addEventListener("input", () => {
 
-// 🔵 EVENTO TAMAÑO SUBTÍTULO
-if (inputTamanoSubtitulo) {
-    inputTamanoSubtitulo.addEventListener("input", () => {
+            let tamano = inputTamanoSubtitulo.value;
 
-        let tamano = inputTamanoSubtitulo.value;
+            if (subtitulo && tamano) {
+                subtitulo.style.fontSize = tamano + "px";
+            }
 
-        // 🔵 ACTUALIZAR UI EN VIVO
-        if (subtitulo && tamano) {
-            subtitulo.style.fontSize = tamano + "px";
-        }
+            guardarEstiloTitulo(
+                null,
+                null,
+                null,
+                inputColorSubtitulo ? inputColorSubtitulo.value : null,
+                tamano
+            );
+        });
+    }
 
-        // 🔵 GUARDAR EN FIREBASE
-        guardarEstiloTitulo(
-            null,
-            null,
-            null,
-            inputColorSubtitulo ? inputColorSubtitulo.value : null,
-            tamano
-        );
-    });
-}
 }, 300);
-
+     
  // 🔥 CONTROL MODAL SERVICIO
 
 const modalServicio = document.getElementById("modalServicio");
