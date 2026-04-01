@@ -1250,6 +1250,8 @@ flex-shrink: 0;
     background: rgba(0, 0, 0, 0.0);
     transition: background 0.3s ease;
     border-radius: 10px;
+
+    pointer-events: none; /* 🔥 CLAVE */
 }
 
 .galeria-card:hover::before {
