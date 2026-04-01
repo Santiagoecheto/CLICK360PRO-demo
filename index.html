@@ -1194,14 +1194,23 @@ async function cargarServiciosDesdeFirebase() {
         const listaPrecios = document.getElementById("lista-precios");
         const btnEditar = document.getElementById("btnEditarPrecios");
 
+        // 🔒 PROTECCIÓN BOTÓN
         if (!adminAutenticado) {
-            btnEditar.style.display = "none";
+            if (btnEditar) {
+                btnEditar.style.display = "none";
+            }
         }
 
-        contenedor.innerHTML = "";
-        listaPrecios.innerHTML = "";
-    
-      let modoEdicion = adminAutenticado ? true : false;
+        // 🔒 PROTECCIÓN CONTENEDORES
+        if (contenedor) {
+            contenedor.innerHTML = "";
+        }
+
+        if (listaPrecios) {
+            listaPrecios.innerHTML = "";
+        }
+
+        let modoEdicion = adminAutenticado ? true : false;
 
         console.log("2 - Datos traídos");
         console.log("3 - Antes de renderServicios");
@@ -1212,16 +1221,18 @@ async function cargarServiciosDesdeFirebase() {
 
         renderPrecios(data, adminAutenticado ? modoEdicion : false);
 
-        btnEditar.onclick = () => {
-            modoEdicion = !modoEdicion;
-            renderPrecios(data, modoEdicion);
-        };
+        // 🔒 PROTECCIÓN EVENTO
+        if (btnEditar) {
+            btnEditar.onclick = () => {
+                modoEdicion = !modoEdicion;
+                renderPrecios(data, modoEdicion);
+            };
+        }
 
     } catch (error) {
         console.error("Error cargando desde Firebase:", error);
     }
 }
-
  
  
 async function cargarGaleriaDesdeFirebase() {
