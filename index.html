@@ -980,6 +980,31 @@ if (esAdmin) {
             CLAVE_ADMIN = docSnap.data().password || "1234";
         }
 
+        while (!claveCorrecta) {
+
+            const clave = prompt("🔐 Ingresar clave de administrador:");
+
+            if (clave === null) {
+                // Canceló → salir del modo admin
+                esAdmin = false;
+                break;
+            }
+
+            if (clave === CLAVE_ADMIN) {
+                claveCorrecta = true;
+                console.log("✅ Acceso admin concedido");
+            } else {
+                alert("❌ Clave incorrecta");
+            }
+        }
+
+    } catch (error) {
+        console.error("Error obteniendo clave admin:", error);
+        alert("Error verificando acceso admin");
+        esAdmin = false;
+    }
+}
+
     async function iniciarModoAdmin() {
 
     if (!esAdmin) return;
