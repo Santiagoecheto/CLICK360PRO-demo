@@ -1740,14 +1740,15 @@ function renderGaleria(data) {
         img.src = item.imagen || "";
         img.alt = item.descripcion || "Imagen";
 
-        // 🔥 CLICK → ABRIR IMAGEN EN GRANDE
+        // 🔥 CLICK → ABRIR MODAL PRO
         img.style.cursor = "pointer";
         img.onclick = () => {
 
             let modal = document.getElementById("modalImagen");
 
-            // 🔹 CREAR MODAL SI NO EXISTE
+            // 🔹 CREAR MODAL SI NO EXISTE (UNA SOLA VEZ)
             if (!modal) {
+
                 modal = document.createElement("div");
                 modal.id = "modalImagen";
 
@@ -1756,30 +1757,64 @@ function renderGaleria(data) {
                 modal.style.left = "0";
                 modal.style.width = "100%";
                 modal.style.height = "100%";
-                modal.style.background = "rgba(0,0,0,0.9)";
+                modal.style.background = "rgba(0,0,0,0.95)";
                 modal.style.display = "flex";
+                modal.style.flexDirection = "column";
                 modal.style.alignItems = "center";
                 modal.style.justifyContent = "center";
                 modal.style.zIndex = "9999";
+                modal.style.padding = "20px";
 
+                // ❌ BOTÓN CERRAR
+                const cerrar = document.createElement("span");
+                cerrar.innerHTML = "✕";
+                cerrar.style.position = "absolute";
+                cerrar.style.top = "20px";
+                cerrar.style.right = "30px";
+                cerrar.style.fontSize = "30px";
+                cerrar.style.color = "white";
+                cerrar.style.cursor = "pointer";
+
+                cerrar.onclick = () => {
+                    modal.style.display = "none";
+                };
+
+                // 🖼️ IMAGEN GRANDE
                 const imgGrande = document.createElement("img");
                 imgGrande.id = "imgModalGrande";
                 imgGrande.style.maxWidth = "90%";
-                imgGrande.style.maxHeight = "90%";
-                imgGrande.style.borderRadius = "10px";
+                imgGrande.style.maxHeight = "80%";
+                imgGrande.style.borderRadius = "12px";
+                imgGrande.style.boxShadow = "0 0 20px rgba(0,0,0,0.8)";
 
+                // 📝 DESCRIPCIÓN
+                const descripcion = document.createElement("p");
+                descripcion.id = "textoModal";
+                descripcion.style.color = "white";
+                descripcion.style.marginTop = "15px";
+                descripcion.style.fontSize = "16px";
+                descripcion.style.textAlign = "center";
+                descripcion.style.maxWidth = "600px";
+
+                modal.appendChild(cerrar);
                 modal.appendChild(imgGrande);
+                modal.appendChild(descripcion);
 
-                // 🔹 CERRAR AL HACER CLICK
-                modal.onclick = () => {
-                    modal.style.display = "none";
-                };
+                // 🔹 CERRAR AL HACER CLICK EN FONDO
+                modal.addEventListener("click", (e) => {
+                    if (e.target === modal) {
+                        modal.style.display = "none";
+                    }
+                });
 
                 document.body.appendChild(modal);
             }
 
             const imgGrande = document.getElementById("imgModalGrande");
+            const textoModal = document.getElementById("textoModal");
+
             imgGrande.src = item.imagen;
+            textoModal.textContent = item.descripcion || "";
 
             modal.style.display = "flex";
         };
