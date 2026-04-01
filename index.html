@@ -2370,64 +2370,64 @@ if (cerrarModalServicio && modalServicio) {
 const btnGuardarNuevoServicio = document.getElementById("btnGuardarNuevoServicio");
 
 if (btnGuardarNuevoServicio) {
-    btnGuardarNuevoServicio.onclick = async () => {
+ btnGuardarNuevoServicio.onclick = async () => {
 
-        const inputTitulo = document.getElementById("inputNuevoTitulo");
-        const inputCategoria = document.getElementById("inputNuevaCategoria");
-        const modal = document.getElementById("modalServicio");
+    const inputTitulo = document.getElementById("inputNuevoTitulo");
+    const inputCategoria = document.getElementById("inputNuevaCategoria");
+    const modal = document.getElementById("modalServicio");
 
-        if (!inputTitulo || !inputCategoria) {
-            console.error("Inputs del modal no encontrados");
-            return;
+    if (!inputTitulo || !inputCategoria) {
+        console.error("Inputs del modal no encontrados");
+        return;
+    }
+
+    const titulo = inputTitulo.value.trim();
+    const categoria = inputCategoria.value.trim();
+
+    // 🔴 VALIDACIONES
+    if (!titulo) {
+        alert("Ingresá el nombre del servicio");
+        return;
+    }
+
+    if (!categoria) {
+        alert("Ingresá la categoría");
+        return;
+    }
+
+    try {
+
+        console.log("INTENTANDO GUARDAR SERVICIO...");
+
+        await addDoc(collection(db, "servicios"), {
+            titulo: titulo,
+            categoria: categoria,
+            corto: 0,
+            medio: 0,
+            largo: 0,
+            fecha: new Date()
+        });
+
+        console.log("✅ SERVICIO GUARDADO");
+
+        // 🔵 LIMPIAR INPUTS
+        inputTitulo.value = "";
+        inputCategoria.value = "";
+
+        // 🔵 CERRAR MODAL
+        if (modal) {
+            modal.style.display = "none";
         }
 
-        const titulo = inputTitulo.value.trim();
-        const categoria = inputCategoria.value.trim();
+        // 🔵 RECARGAR UI
+        await cargarServiciosDesdeFirebase();
 
-        // 🔴 VALIDACIONES
-        if (!titulo) {
-            alert("Ingresá el nombre del servicio");
-            return;
-        }
+    } catch (error) {
+        console.error("❌ Error guardando servicio:", error);
+        alert("Error guardando servicio");
+    }
 
-        if (!categoria) {
-            alert("Ingresá la categoría");
-            return;
-        }
-
-        try {
-
-            console.log("INTENTANDO GUARDAR SERVICIO...");
-
-            await addDoc(collection(db, "servicios"), {
-                titulo: titulo,
-                categoria: categoria,
-                corto: 0,
-                medio: 0,
-                largo: 0,
-                fecha: new Date()
-            });
-
-            console.log("✅ SERVICIO GUARDADO");
-
-            // 🔵 LIMPIAR INPUTS
-            inputTitulo.value = "";
-            inputCategoria.value = "";
-
-            // 🔵 CERRAR MODAL
-            if (modal) {
-                modal.style.display = "none";
-            }
-
-            // 🔵 RECARGAR UI
-            await cargarServiciosDesdeFirebase();
-
-        } catch (error) {
-            console.error("❌ Error guardando servicio:", error);
-            alert("Error guardando servicio");
-        }
-
-    }; 
+};
 
  console.log("SCRIPT OK");
 </script>
