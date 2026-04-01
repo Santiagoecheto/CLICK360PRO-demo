@@ -1650,31 +1650,17 @@ function renderServicios(data) {
 
         btnAgregar.onclick = async () => {
 
-            const titulo = prompt("Nombre del nuevo servicio:");
-            if (!titulo) return;
+           btnAgregar.onclick = () => {
 
-            const categoria = prompt("Categoría del servicio:");
-            if (!categoria) return;
+    const modal = document.getElementById("modalServicio");
 
-            try {
-                console.log("INTENTANDO GUARDAR...");
+    if (!modal) {
+        console.error("No se encontró el modalServicio");
+        return;
+    }
 
-                await addDoc(collection(db, "servicios"), {
-                    titulo: titulo,
-                    categoria: categoria,
-                    imagen: ""
-                });
-
-                console.log("GUARDADO OK");
-
-                await cargarServiciosDesdeFirebase();
-
-            } catch (error) {
-                console.error("Error al guardar servicio:", error);
-                console.error("ERROR FIREBASE:", error);
-                alert("Error al guardar en Firebase");
-            }
-        };
+    modal.style.display = "flex";
+};
 
         contenedor.appendChild(btnAgregar);
     }
