@@ -1149,21 +1149,23 @@ flex-shrink: 0;
 /* ===== GALERÍA ===== */
 
 #contenedor-galeria {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
+    column-count: 4;
+    column-gap: 20px;
     padding: 20px;
 }
 
 .galeria-card {
     text-align: center;
 }
+.galeria-card {
+    break-inside: avoid;
+    margin-bottom: 20px;
+}
 
 .galeria-card img {
     width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 10px;
+    height: auto;
+    border-radius: 12px;
 }
 
 .galeria-card p {
