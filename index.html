@@ -980,14 +980,30 @@ if (esAdmin) {
             CLAVE_ADMIN = docSnap.data().password || "1234";
         }
 
+    async function iniciarModoAdmin() {
+
+    if (!esAdmin) return;
+
+    let claveCorrecta = false;
+
+    try {
+
+        const docRef = doc(db, "configuracion", "admin");
+        const docSnap = await getDoc(docRef);
+
+        let CLAVE_ADMIN = "1234";
+
+        if (docSnap.exists()) {
+            CLAVE_ADMIN = docSnap.data().password || "1234";
+        }
+
         while (!claveCorrecta) {
 
             const clave = prompt("🔐 Ingresar clave de administrador:");
 
-            // Si cancela → salir del modo admin
             if (clave === null) {
                 window.location.href = window.location.origin + window.location.pathname;
-                break;
+                return;
             }
 
             if (clave === CLAVE_ADMIN) {
@@ -1004,6 +1020,7 @@ if (esAdmin) {
         alert("Error verificando acceso");
     }
 }
+     
 async function subirImagenFirebase() {
     try {
 
