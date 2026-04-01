@@ -1059,7 +1059,7 @@ async function subirImagenFirebase() {
 
         console.log("✅ Imagen subida:", url);
 
-        // 🔵 GALERÍA (COMO YA FUNCIONA)
+        // 🔵 GALERÍA
         if (destino === "1") {
 
             await addDoc(collection(db, "galeria"), {
@@ -1071,9 +1071,11 @@ async function subirImagenFirebase() {
 
             alert("Imagen guardada en GALERÍA");
 
+            // 🔥 CLAVE: RECARGAR GALERÍA EN VIVO
+            await cargarGaleriaDesdeFirebase();
         }
 
-        // 🟣 SERVICIO (PREPARADO PARA EL PRÓXIMO PASO)
+        // 🟣 SERVICIO
         if (destino === "2") {
 
             console.log("📌 Imagen lista para asignar a servicio:", url);
@@ -1081,9 +1083,11 @@ async function subirImagenFirebase() {
             alert("Imagen subida. Falta asignarla a un servicio (siguiente paso)");
         }
 
-        // PREVIEW
+        // 🔥 LIMPIEZA UI (IMPORTANTE)
+        input.value = "";
+
         if (preview) {
-            preview.src = url;
+            preview.src = "";
         }
 
     } catch (error) {
