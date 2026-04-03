@@ -2303,15 +2303,11 @@ setTimeout(() => {
     }
 
     // 🔥 BOTÓN VIDEO
-  document.addEventListener("DOMContentLoaded", () => {
+ const btnAgregarVideo = document.getElementById("btnAgregarVideo");
 
-    const btnAgregarVideo = document.getElementById("btnAgregarVideo");
-
-    if (btnAgregarVideo) {
-        btnAgregarVideo.addEventListener("click", agregarVideoFirebase);
-    }
-
-});
+if (btnAgregarVideo) {
+    btnAgregarVideo.onclick = agregarVideoFirebase;
+}
 
     // 🔵 EVENTOS TÍTULO
     if (inputColor && inputTamano) {
