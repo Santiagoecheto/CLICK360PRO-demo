@@ -838,56 +838,6 @@ modalTurnos.style.display = "none";
 
 </script>
 
-
-<script>
-
-document.addEventListener("DOMContentLoaded", () => {
-
-    const btnPrecios = document.getElementById("btnVerPrecios");
-    const modalPrecios = document.getElementById("modalPrecios");
-    const cerrarPrecios = document.getElementById("cerrarPrecios");
-
-    // 🔒 VALIDACIÓN
-    if (btnPrecios && modalPrecios) {
-
-        // ABRIR MODAL
-    btnPrecios.addEventListener("click", (e) => {
-     console.log("CLICK PRECIOS OK");
-    e.preventDefault();
-     modalPrecios.classList.add("activo");
-   });
-     
-// 🔥 FORZAR POSICIÓN CORRECTA (BLINDAJE TOTAL)
-modalPrecios.style.position = "fixed";
-modalPrecios.style.top = "0";
-modalPrecios.style.left = "0";
-modalPrecios.style.width = "100%";
-modalPrecios.style.height = "100%";
-modalPrecios.style.zIndex = "9999";
-modalPrecios.style.justifyContent = "center";
-modalPrecios.style.alignItems = "center";
-        });
-
-        // CERRAR CON X
-        if (cerrarPrecios) {
-            cerrarPrecios.addEventListener("click", () => {
-              modalPrecios.classList.remove("activo");
-            });
-        }
-
-        // CERRAR HACIENDO CLICK AFUERA
-        modalPrecios.addEventListener("click", (e) => {
-            if (e.target === modalPrecios) {
-          modalPrecios.classList.remove("activo");
-            }
-        });
-
-    }
-
-});
-
-</script>
-
  
 <script type="module">
 
@@ -2510,6 +2460,39 @@ Editar precios
 </div>
 
 </div>
+
+ <script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const btnPrecios = document.getElementById("btnVerPrecios");
+    const modalPrecios = document.getElementById("modalPrecios");
+    const cerrarPrecios = document.getElementById("cerrarPrecios");
+
+    if (btnPrecios && modalPrecios) {
+
+        btnPrecios.addEventListener("click", (e) => {
+            console.log("CLICK PRECIOS OK");
+            e.preventDefault();
+
+            modalPrecios.classList.add("activo");
+        });
+
+        if (cerrarPrecios) {
+            cerrarPrecios.addEventListener("click", () => {
+                modalPrecios.classList.remove("activo");
+            });
+        }
+
+        modalPrecios.addEventListener("click", (e) => {
+            if (e.target === modalPrecios) {
+                modalPrecios.classList.remove("activo");
+            }
+        });
+
+    }
+
+});
+</script>
  
 </body>
 </html>
