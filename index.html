@@ -1015,9 +1015,9 @@ if (esAdmin) {
 */
 
 
-    async function iniciarModoAdmin() {
+async function iniciarModoAdmin() {
 
-    if (!esAdmin) return;
+    if (!esAdmin) return true;
 
     let claveCorrecta = false;
 
@@ -1036,15 +1036,18 @@ if (esAdmin) {
 
             const clave = prompt("🔐 Ingresar clave de administrador:");
 
+            // ❌ CANCELA → SALIR TOTALMENTE DEL ADMIN
             if (clave === null) {
                 window.location.href = window.location.origin + window.location.pathname;
-                return;
+                return false;
             }
 
+            // ✅ CORRECTA
             if (clave === CLAVE_ADMIN) {
                 adminAutenticado = true;
                 claveCorrecta = true;
                 console.log("Modo admin activado");
+                return true;
             } else {
                 alert("Clave incorrecta");
             }
@@ -1053,9 +1056,12 @@ if (esAdmin) {
     } catch (error) {
         console.error("Error obteniendo contraseña:", error);
         alert("Error verificando acceso");
+
+        // 🚨 BLOQUEAR TODO SI FALLA
+        return false;
     }
 }
-     
+ 
 async function subirImagenFirebase() {
     try {
 
