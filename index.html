@@ -999,9 +999,16 @@ async function iniciarModoAdmin() {
                claveCorrecta = true;
                console.log("Modo admin activado");
 
-              // 🔥 RECARGAR UI CON ADMIN ACTIVO
+              // 🔥 RECARGAR UI COMPLETA CON ADMIN ACTIVO
                await cargarServiciosDesdeFirebase();
-              return true;
+               await cargarGaleriaDesdeFirebase();
+               await cargarVideosDesdeFirebase();
+
+            // 🔥 MOSTRAR PANEL ADMIN
+               const panel = document.getElementById("panelTituloAdmin");
+                if (panel) panel.style.display = "block";
+
+                   return true;
             } else {
                 alert("Clave incorrecta");
             }
