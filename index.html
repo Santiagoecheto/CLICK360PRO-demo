@@ -851,14 +851,10 @@ document.addEventListener("DOMContentLoaded", () => {
     if (btnPrecios && modalPrecios) {
 
         // ABRIR MODAL
-      btnPrecios.addEventListener("click", (e) => {
+    btnPrecios.addEventListener("click", (e) => {
     e.preventDefault();
-
-    // 🔥 FORZAR QUE EL MODAL VAYA AL BODY
-    document.body.appendChild(modalPrecios);
-
     modalPrecios.style.display = "flex";
-});
+   });
      
 // 🔥 FORZAR POSICIÓN CORRECTA (BLINDAJE TOTAL)
 modalPrecios.style.position = "fixed";
