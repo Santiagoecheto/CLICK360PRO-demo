@@ -2303,11 +2303,18 @@ setTimeout(() => {
     }
 
     // 🔥 BOTÓN VIDEO
- const btnAgregarVideo = document.getElementById("btnAgregarVideo");
+document.addEventListener("DOMContentLoaded", function () {
 
-if (btnAgregarVideo) {
-    btnAgregarVideo.onclick = agregarVideoFirebase;
-}
+    const btnAgregarVideo = document.getElementById("btnAgregarVideo");
+
+    if (btnAgregarVideo) {
+        btnAgregarVideo.onclick = agregarVideoFirebase;
+        console.log("✅ Botón Agregar Video conectado");
+    } else {
+        console.warn("⚠️ No se encontró btnAgregarVideo");
+    }
+
+});
 
     // 🔵 EVENTOS TÍTULO
     if (inputColor && inputTamano) {
