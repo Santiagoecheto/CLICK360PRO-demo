@@ -380,9 +380,14 @@ ANIMACIÓN SCROLL
 ========================= */
 
 section{
-opacity:0;
-transform:translateY(40px);
-transition:all 0.8s ease;
+    opacity:0;
+    transform:translateY(40px);
+    transition:all 0.8s ease;
+}
+
+/* 🔥 FIX MODAL (MUY IMPORTANTE) */
+.modal-precios{
+    transform: none !important;
 }
 
 section.visible{
