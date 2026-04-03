@@ -972,8 +972,8 @@ color:white;
 
 .modal-precios {
     display: none;
-    position: fixed !important;
 
+    position: fixed;
     top: 0;
     left: 0;
 
@@ -985,10 +985,12 @@ color:white;
     justify-content: center;
     align-items: center;
 
-    z-index: 999999 !important;
+    z-index: 999999;
 
     transform: none !important;
-    will-change: auto;
+}
+.modal-precios.activo {
+    display: flex;
 }
 
 .contenido-precios {
