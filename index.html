@@ -853,7 +853,17 @@ document.addEventListener("DOMContentLoaded", () => {
         // ABRIR MODAL
         btnPrecios.addEventListener("click", (e) => {
             e.preventDefault();
-            modalPrecios.style.display = "flex";
+         modalPrecios.style.display = "flex";
+
+// 🔥 FORZAR POSICIÓN CORRECTA (BLINDAJE TOTAL)
+modalPrecios.style.position = "fixed";
+modalPrecios.style.top = "0";
+modalPrecios.style.left = "0";
+modalPrecios.style.width = "100%";
+modalPrecios.style.height = "100%";
+modalPrecios.style.zIndex = "9999";
+modalPrecios.style.justifyContent = "center";
+modalPrecios.style.alignItems = "center";
         });
 
         // CERRAR CON X
