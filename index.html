@@ -865,11 +865,17 @@ const cerrarPrecios = document.getElementById("cerrarPrecios");
 if (btnPrecios && modalPrecios) {
 
     // ABRIR MODAL
-    btnPrecios.addEventListener("click", (e) => {
-        e.preventDefault();
-        modalPrecios.style.display = "flex";
+  btnPrecios.addEventListener("click", (e) => {
+    e.preventDefault();
+
+    // 🔥 FORZAR ARRIBA DE TODO
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
     });
 
+    modalPrecios.style.display = "flex";
+});
     // CERRAR CON X
     if (cerrarPrecios) {
         cerrarPrecios.addEventListener("click", () => {
