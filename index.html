@@ -1000,9 +1000,8 @@ async function iniciarModoAdmin() {
               console.log("Modo admin activado");
 
               // 🔥 RECARGAR UI CON ADMIN ACTIVO
-              await cargarServiciosDesdeFirebase();
-
-return true;
+             window.location.reload();
+              return true;
             } else {
                 alert("Clave incorrecta");
             }
