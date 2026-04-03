@@ -870,14 +870,14 @@ modalPrecios.style.alignItems = "center";
         // CERRAR CON X
         if (cerrarPrecios) {
             cerrarPrecios.addEventListener("click", () => {
-                modalPrecios.style.display = "none";
+              modalPrecios.classList.remove("activo");
             });
         }
 
         // CERRAR HACIENDO CLICK AFUERA
         modalPrecios.addEventListener("click", (e) => {
             if (e.target === modalPrecios) {
-                modalPrecios.style.display = "none";
+          modalPrecios.classList.remove("activo");
             }
         });
 
