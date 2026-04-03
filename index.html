@@ -2303,10 +2303,15 @@ setTimeout(() => {
     }
 
     // 🔥 BOTÓN VIDEO
+  document.addEventListener("DOMContentLoaded", () => {
+
     const btnAgregarVideo = document.getElementById("btnAgregarVideo");
+
     if (btnAgregarVideo) {
         btnAgregarVideo.addEventListener("click", agregarVideoFirebase);
     }
+
+});
 
     // 🔵 EVENTOS TÍTULO
     if (inputColor && inputTamano) {
