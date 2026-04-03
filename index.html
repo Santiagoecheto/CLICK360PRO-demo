@@ -861,23 +861,30 @@ const btnPrecios = document.getElementById("btnVerPrecios");
 const modalPrecios = document.getElementById("modalPrecios");
 const cerrarPrecios = document.getElementById("cerrarPrecios");
 
-// ABRIR MODAL
-btnPrecios.addEventListener("click", (e) => {
-e.preventDefault();
-modalPrecios.style.display = "flex";
-});
+// 🔒 VALIDACIÓN (CLAVE)
+if (btnPrecios && modalPrecios) {
 
-// CERRAR CON X
-cerrarPrecios.addEventListener("click", () => {
-modalPrecios.style.display = "none";
-});
+    // ABRIR MODAL
+    btnPrecios.addEventListener("click", (e) => {
+        e.preventDefault();
+        modalPrecios.style.display = "flex";
+    });
 
-// CERRAR HACIENDO CLICK AFUERA
-modalPrecios.addEventListener("click", (e) => {
-if(e.target === modalPrecios){
-modalPrecios.style.display = "none";
+    // CERRAR CON X
+    if (cerrarPrecios) {
+        cerrarPrecios.addEventListener("click", () => {
+            modalPrecios.style.display = "none";
+        });
+    }
+
+    // CERRAR HACIENDO CLICK AFUERA
+    modalPrecios.addEventListener("click", (e) => {
+        if (e.target === modalPrecios) {
+            modalPrecios.style.display = "none";
+        }
+    });
+
 }
-});
 
 </script>
   
