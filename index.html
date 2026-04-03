@@ -1291,6 +1291,7 @@ async function cargarGaleriaDesdeFirebase() {
 
         if (!contenedor) return;
 
+        // 🔥 LIMPIAR CONTENEDOR
         contenedor.innerHTML = "";
 
         snapshot.forEach(docSnap => {
@@ -1301,25 +1302,31 @@ async function cargarGaleriaDesdeFirebase() {
             div.className = "video-item";
 
             div.innerHTML = `
-                <iframe 
-                    src="${data.url}?rel=0&modestbranding=1"
-                    frameborder="0"
-                    allow="autoplay; encrypted-media"
-                    allowfullscreen>
-                </iframe>
+                <div class="video-wrapper">
+                    <iframe 
+                        src="${data.url}?rel=0&modestbranding=1"
+                        frameborder="0"
+                        allow="autoplay; encrypted-media"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+
+                <div class="video-info">
+                    <h4>${data.titulo || "Sin título"}</h4>
+                    <p>${data.descripcion || ""}</p>
+                </div>
             `;
 
             contenedor.appendChild(div);
 
         });
 
-        console.log("🎬 Videos cargados");
+        console.log("🎬 Videos cargados correctamente");
 
     } catch (error) {
         console.error("❌ Error cargando videos:", error);
     }
 }
-
  
  async function agregarVideoFirebase() {
     try {
