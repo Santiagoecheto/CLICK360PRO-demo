@@ -1343,6 +1343,7 @@ window.agregarVideoFirebase = async function() {
             alert("Ingresá una URL de YouTube");
             return;
         }
+            console.log("🔥 Voy a guardar video", url);
 
         await addDoc(collection(db, "videos"), {
             url: url,
@@ -1350,6 +1351,7 @@ window.agregarVideoFirebase = async function() {
             descripcion: descripcion || "",
             fecha: new Date()
         });
+             console.log("✅ Video guardado");
 
         alert("Video agregado correctamente");
 
