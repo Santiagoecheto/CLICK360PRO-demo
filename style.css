@@ -381,7 +381,7 @@ ANIMACIÓN SCROLL
 
 section{
     opacity:0;
-    transform:translateY(40px);
+    transform: none;
     transition:all 0.8s ease;
     will-change: auto;
 }
