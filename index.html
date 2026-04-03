@@ -1718,8 +1718,8 @@ function renderServicios(data) {
 
     contenedor.innerHTML = "";
 
-    // 🔥 BOTÓN AGREGAR (MODO ADMIN)
-    if (esAdmin) {
+    // 🔥 BOTÓN AGREGAR (SOLO SI ESTÁ AUTENTICADO)
+    if (adminAutenticado) {
 
         const btnAgregar = document.createElement("button");
         btnAgregar.textContent = "➕ Agregar servicio";
@@ -1727,17 +1727,17 @@ function renderServicios(data) {
         btnAgregar.style.padding = "8px 14px";
         btnAgregar.style.cursor = "pointer";
 
-      btnAgregar.onclick = () => {
+        btnAgregar.onclick = () => {
 
-    const modal = document.getElementById("modalServicio");
+            const modal = document.getElementById("modalServicio");
 
-    if (!modal) {
-        console.error("No se encontró el modalServicio");
-        return;
-    }
+            if (!modal) {
+                console.error("No se encontró el modalServicio");
+                return;
+            }
 
-    modal.style.display = "flex";
-};
+            modal.style.display = "flex";
+        };
 
         contenedor.appendChild(btnAgregar);
     }
@@ -1771,13 +1771,13 @@ function renderServicios(data) {
             card.appendChild(img);
             card.appendChild(titulo);
 
-            // 🔥 MODO ADMIN
-            if (esAdmin) {
+            // 🔒 MODO ADMIN SOLO AUTENTICADO
+            if (adminAutenticado) {
 
                 const controles = document.createElement("div");
                 controles.style.marginTop = "8px";
 
-                // ✏️ EDITAR (FIREBASE REAL)
+                // ✏️ EDITAR
                 const btnEditar = document.createElement("button");
                 btnEditar.textContent = "✏️";
                 btnEditar.style.margin = "0 4px";
@@ -1804,7 +1804,7 @@ function renderServicios(data) {
                     }
                 };
 
-                // ❌ ELIMINAR (FIREBASE REAL)
+                // ❌ ELIMINAR
                 const btnEliminar = document.createElement("button");
                 btnEliminar.textContent = "🗑";
                 btnEliminar.style.margin = "0 4px";
