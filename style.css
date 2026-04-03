@@ -1359,3 +1359,6 @@ flex-shrink: 0;
     margin-left: auto;
     margin-right: auto;
 }
+.modal-precios.activo {
+    display: flex !important;
+}
