@@ -2206,7 +2206,30 @@ async function cargarSubtituloWeb() {
 window.onload = async function () {
 
     console.log("🚀 INICIO CARGA APP");
- await iniciarModoAdmin();
+
+    // 🔥 CONTROL PARA NO EJECUTAR DOS VECES
+    let loginIntentado = false;
+
+    async function intentarLoginAdmin() {
+        if (loginIntentado) return;
+        loginIntentado = true;
+
+        try {
+            await iniciarModoAdmin();
+        } catch (e) {
+            console.error("❌ Error en login admin:", e);
+        }
+    }
+
+    // 🔵 INTENTO AUTOMÁTICO (DELAY)
+    setTimeout(() => {
+        intentarLoginAdmin();
+    }, 300);
+
+    // 🔵 FALLBACK: CLICK DEL USUARIO
+    document.addEventListener("click", () => {
+        intentarLoginAdmin();
+    }, { once: true });
 
     try {
         await cargarTituloWeb();
@@ -2245,6 +2268,7 @@ window.onload = async function () {
 
     console.log("🏁 FIN CARGA APP");
 };
+ 
  
 setTimeout(() => {
 
