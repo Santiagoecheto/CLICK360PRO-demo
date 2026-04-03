@@ -995,10 +995,14 @@ async function iniciarModoAdmin() {
 
             // ✅ CORRECTA
             if (clave === CLAVE_ADMIN) {
-                adminAutenticado = true;
-                claveCorrecta = true;
-                console.log("Modo admin activado");
-                return true;
+              adminAutenticado = true;
+              claveCorrecta = true;
+              console.log("Modo admin activado");
+
+              // 🔥 RECARGAR UI CON ADMIN ACTIVO
+              await cargarServiciosDesdeFirebase();
+
+return true;
             } else {
                 alert("Clave incorrecta");
             }
