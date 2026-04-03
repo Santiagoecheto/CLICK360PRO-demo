@@ -2461,7 +2461,7 @@ Editar precios
 
 </div>
 
- <script>
+<script>
 document.addEventListener("DOMContentLoaded", () => {
 
     const btnPrecios = document.getElementById("btnVerPrecios");
@@ -2474,6 +2474,7 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log("CLICK PRECIOS OK");
             e.preventDefault();
 
+            document.body.appendChild(modalPrecios);
             modalPrecios.classList.add("activo");
         });
 
@@ -2493,6 +2494,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 </script>
+ 
  
 </body>
 </html>
