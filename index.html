@@ -1282,7 +1282,7 @@ async function cargarGaleriaDesdeFirebase() {
     }
 }
 
- async function cargarVideosDesdeFirebase() {
+async function cargarVideosDesdeFirebase() {
     try {
 
         const snapshot = await getDocs(collection(db, "videos"));
@@ -1316,6 +1316,39 @@ async function cargarGaleriaDesdeFirebase() {
                     <p>${data.descripcion || ""}</p>
                 </div>
             `;
+
+            // 🔥 BOTÓN ELIMINAR (SOLO ADMIN)
+            if (adminAutenticado) {
+
+                const btnEliminar = document.createElement("button");
+                btnEliminar.textContent = "🗑 Eliminar video";
+                btnEliminar.style.marginTop = "10px";
+                btnEliminar.style.cursor = "pointer";
+
+                btnEliminar.onclick = async () => {
+
+                    const confirmar = confirm("¿Eliminar este video?");
+                    if (!confirmar) return;
+
+                    try {
+
+                        console.log("🗑 Eliminando video:", docSnap.id);
+
+                        await deleteDoc(doc(db, "videos", docSnap.id));
+
+                        console.log("✅ Video eliminado");
+
+                        // 🔥 RECARGA AUTOMÁTICA
+                        await cargarVideosDesdeFirebase();
+
+                    } catch (error) {
+                        console.error("❌ Error eliminando video:", error);
+                        alert("Error al eliminar video");
+                    }
+                };
+
+                div.appendChild(btnEliminar);
+            }
 
             contenedor.appendChild(div);
 
