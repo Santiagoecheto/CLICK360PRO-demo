@@ -1397,7 +1397,7 @@ window.agregarVideoFirebase = async function() {
         const tituloInput = document.getElementById("inputVideoTitulo");
         const descInput = document.getElementById("inputVideoDescripcion");
 
-        const url = urlInput.value.trim();
+        let url = urlInput.value.trim();
         const titulo = tituloInput.value.trim();
         const descripcion = descInput.value.trim();
 
@@ -1406,7 +1406,37 @@ window.agregarVideoFirebase = async function() {
             return;
         }
 
-        console.log("🔥 Voy a guardar video", url);
+        // 🔥 NORMALIZAR URL YOUTUBE (PRO)
+        let videoId = "";
+
+        try {
+            const urlObj = new URL(url);
+
+            // youtu.be/ID
+            if (urlObj.hostname.includes("youtu.be")) {
+                videoId = urlObj.pathname.replace("/", "");
+            }
+
+            // youtube.com/watch?v=ID
+            else if (urlObj.searchParams.get("v")) {
+                videoId = urlObj.searchParams.get("v");
+            }
+
+            // youtube.com/embed/ID
+            else if (urlObj.pathname.includes("/embed/")) {
+                videoId = urlObj.pathname.split("/embed/")[1];
+            }
+
+        } catch (e) {
+            console.warn("⚠ URL inválida, se guarda tal cual");
+        }
+
+        // Si pudimos obtener ID → armamos embed limpio
+        if (videoId) {
+            url = `https://www.youtube.com/embed/${videoId}`;
+        }
+
+        console.log("🔥 URL final a guardar:", url);
 
         await addDoc(collection(db, "videos"), {
             url: url,
