@@ -1405,7 +1405,8 @@ window.agregarVideoFirebase = async function() {
             alert("Ingresá una URL de YouTube");
             return;
         }
-            console.log("🔥 Voy a guardar video", url);
+
+        console.log("🔥 Voy a guardar video", url);
 
         await addDoc(collection(db, "videos"), {
             url: url,
@@ -1413,12 +1414,10 @@ window.agregarVideoFirebase = async function() {
             descripcion: descripcion || "",
             fecha: new Date()
         });
-             console.log("✅ Video guardado");
+
+        console.log("✅ Video guardado");
 
         alert("Video agregado correctamente");
-
-        // 🔥 RECARGA EN VIVO
-        await cargarVideosDesdeFirebase();
 
         // 🔥 LIMPIAR INPUTS
         urlInput.value = "";
@@ -1430,6 +1429,7 @@ window.agregarVideoFirebase = async function() {
         alert("Error agregando video");
     }
 }
+ 
  
 function renderPrecios(data, modoEdicion = false){
 
