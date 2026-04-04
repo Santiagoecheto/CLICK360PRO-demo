@@ -2395,11 +2395,30 @@ window.onload = async function () {
 
     console.log("🏁 FIN CARGA APP");
 };
- 
+ document.addEventListener("DOMContentLoaded", () => {
+
+    const btnSubir = document.getElementById("btnSubirImagen");
+
+    if (btnSubir) {
+        btnSubir.addEventListener("click", async () => {
+            try {
+                await subirImagenFirebase();
+            } catch (e) {
+                console.error("❌ Error en botón subir imagen:", e);
+            }
+        });
+
+        console.log("✅ Botón Subir Imagen conectado GLOBAL");
+    } else {
+        console.warn("⚠️ No se encontró btnSubirImagen");
+    }
+
+});
  
 setTimeout(() => {
 
-
+    if (!adminAutenticado) return;
+ 
     const titulo = document.getElementById("tituloWeb");
     const subtitulo = document.getElementById("subtituloWeb");
 
