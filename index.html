@@ -1285,115 +1285,105 @@ async function cargarGaleriaDesdeFirebase() {
 async function cargarVideosDesdeFirebase() {
     try {
 
-        const snapshot = await getDocs(collection(db, "videos"));
-
         const contenedor = document.getElementById("contenedor-videos");
 
         if (!contenedor) return;
 
-        // 🔥 LIMPIAR CONTENEDOR
-        contenedor.innerHTML = "";
+        // 🔥 ESCUCHA EN TIEMPO REAL
+        onSnapshot(collection(db, "videos"), (snapshot) => {
 
-        snapshot.forEach(docSnap => {
+            // 🔥 LIMPIAR CONTENEDOR
+            contenedor.innerHTML = "";
 
-            const data = docSnap.data();
+            snapshot.forEach(docSnap => {
 
-            const div = document.createElement("div");
-            div.className = "video-item";
+                const data = docSnap.data();
 
-            div.innerHTML = `
-                <div class="video-wrapper">
-                    <iframe 
-                        src="${data.url}?rel=0&modestbranding=1"
-                        frameborder="0"
-                        allow="autoplay; encrypted-media"
-                        allowfullscreen>
-                    </iframe>
-                </div>
+                const div = document.createElement("div");
+                div.className = "video-item";
 
-                <div class="video-info">
-                    <h4>${data.titulo || "Sin título"}</h4>
-                    <p>${data.descripcion || ""}</p>
-                </div>
-            `;
+                div.innerHTML = `
+                    <div class="video-wrapper">
+                        <iframe 
+                            src="${data.url}?rel=0&modestbranding=1"
+                            frameborder="0"
+                            allow="autoplay; encrypted-media"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
 
-            // 🔐 SOLO ADMIN
-            if (adminAutenticado) {
+                    <div class="video-info">
+                        <h4>${data.titulo || "Sin título"}</h4>
+                        <p>${data.descripcion || ""}</p>
+                    </div>
+                `;
 
-                const contenedorBotones = document.createElement("div");
-                contenedorBotones.style.marginTop = "10px";
+                // 🔐 SOLO ADMIN
+                if (adminAutenticado) {
 
-                // ✏️ EDITAR
-                const btnEditar = document.createElement("button");
-                btnEditar.textContent = "✏️ Editar";
-                btnEditar.style.marginRight = "8px";
-                btnEditar.style.cursor = "pointer";
+                    const contenedorBotones = document.createElement("div");
+                    contenedorBotones.style.marginTop = "10px";
 
-                btnEditar.onclick = async () => {
+                    // ✏️ EDITAR
+                    const btnEditar = document.createElement("button");
+                    btnEditar.textContent = "✏️ Editar";
+                    btnEditar.style.marginRight = "8px";
+                    btnEditar.style.cursor = "pointer";
 
-                    const nuevoTitulo = prompt("Editar título:", data.titulo || "");
-                    if (nuevoTitulo === null) return;
+                    btnEditar.onclick = async () => {
 
-                    const nuevaDesc = prompt("Editar descripción:", data.descripcion || "");
-                    if (nuevaDesc === null) return;
+                        const nuevoTitulo = prompt("Editar título:", data.titulo || "");
+                        if (nuevoTitulo === null) return;
 
-                    try {
+                        const nuevaDesc = prompt("Editar descripción:", data.descripcion || "");
+                        if (nuevaDesc === null) return;
 
-                        console.log("✏️ Editando video:", docSnap.id);
+                        try {
 
-                        await updateDoc(doc(db, "videos", docSnap.id), {
-                            titulo: nuevoTitulo.trim() || "Sin título",
-                            descripcion: nuevaDesc.trim() || ""
-                        });
+                            await updateDoc(doc(db, "videos", docSnap.id), {
+                                titulo: nuevoTitulo.trim() || "Sin título",
+                                descripcion: nuevaDesc.trim() || ""
+                            });
 
-                        console.log("✅ Video actualizado");
+                        } catch (error) {
+                            console.error("❌ Error editando video:", error);
+                            alert("Error al editar video");
+                        }
+                    };
 
-                        // 🔥 RECARGAR UI
-                        await cargarVideosDesdeFirebase();
+                    // 🗑️ ELIMINAR
+                    const btnEliminar = document.createElement("button");
+                    btnEliminar.textContent = "🗑 Eliminar";
+                    btnEliminar.style.cursor = "pointer";
 
-                    } catch (error) {
-                        console.error("❌ Error editando video:", error);
-                        alert("Error al editar video");
-                    }
-                };
+                    btnEliminar.onclick = async () => {
 
-                // 🗑️ ELIMINAR
-                const btnEliminar = document.createElement("button");
-                btnEliminar.textContent = "🗑 Eliminar";
-                btnEliminar.style.cursor = "pointer";
+                        const confirmar = confirm("¿Eliminar este video?");
+                        if (!confirmar) return;
 
-                btnEliminar.onclick = async () => {
+                        try {
 
-                    const confirmar = confirm("¿Eliminar este video?");
-                    if (!confirmar) return;
+                            await deleteDoc(doc(db, "videos", docSnap.id));
 
-                    try {
+                        } catch (error) {
+                            console.error("❌ Error eliminando video:", error);
+                            alert("Error al eliminar video");
+                        }
+                    };
 
-                        console.log("🗑 Eliminando video:", docSnap.id);
+                    contenedorBotones.appendChild(btnEditar);
+                    contenedorBotones.appendChild(btnEliminar);
 
-                        await deleteDoc(doc(db, "videos", docSnap.id));
+                    div.appendChild(contenedorBotones);
+                }
 
-                        console.log("✅ Video eliminado");
+                contenedor.appendChild(div);
 
-                        await cargarVideosDesdeFirebase();
+            });
 
-                    } catch (error) {
-                        console.error("❌ Error eliminando video:", error);
-                        alert("Error al eliminar video");
-                    }
-                };
-
-                contenedorBotones.appendChild(btnEditar);
-                contenedorBotones.appendChild(btnEliminar);
-
-                div.appendChild(contenedorBotones);
-            }
-
-            contenedor.appendChild(div);
+            console.log("🔄 Videos actualizados en tiempo real");
 
         });
-
-        console.log("🎬 Videos cargados correctamente");
 
     } catch (error) {
         console.error("❌ Error cargando videos:", error);
