@@ -871,6 +871,7 @@ const params = new URLSearchParams(window.location.search);
 const esAdmin = params.get("admin") === "1";
 
 let adminAutenticado = false;
+ 
 async function guardarEstiloTitulo(color, tamano, subtituloTexto, colorSubtitulo, tamanoSubtitulo) {
     try {
         const data = {};
@@ -2440,10 +2441,21 @@ setTimeout(() => {
     const inputTamanoSubtitulo = document.getElementById("inputTamanoSubtitulo");
 
     // 🔥 BOTÓN IMAGEN
-    const btnSubir = document.getElementById("btnSubirImagen");
-    if (btnSubir) {
-        btnSubir.addEventListener("click", subirImagenFirebase);
-    }
+ const btnSubir = document.getElementById("btnSubirImagen");
+
+if (btnSubir) {
+    btnSubir.addEventListener("click", async () => {
+        try {
+            await subirImagenFirebase();
+        } catch (e) {
+            console.error("❌ Error en botón subir imagen:", e);
+        }
+    });
+
+    console.log("✅ Botón Subir Imagen conectado");
+} else {
+    console.warn("⚠️ No se encontró btnSubirImagen");
+}
 
     // 🔥 BOTÓN VIDEO
 document.addEventListener("DOMContentLoaded", function () {
