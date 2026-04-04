@@ -1296,8 +1296,14 @@ async function cargarVideosDesdeFirebase() {
             unsubscribeVideos = null;
         }
 
+        // 🔥 QUERY ORDENADA (PRO)
+        const q = query(
+            collection(db, "videos"),
+            orderBy("fecha", "desc")
+        );
+
         // 🔥 NUEVA SUSCRIPCIÓN
-        unsubscribeVideos = onSnapshot(collection(db, "videos"), (snapshot) => {
+        unsubscribeVideos = onSnapshot(q, (snapshot) => {
 
             contenedor.innerHTML = "";
 
@@ -1380,7 +1386,7 @@ async function cargarVideosDesdeFirebase() {
 
             });
 
-            console.log("🔄 Videos en tiempo real (estable)");
+            console.log("🔄 Videos en tiempo real (ordenados)");
 
         });
 
