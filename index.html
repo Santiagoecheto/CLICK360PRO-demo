@@ -1317,12 +1317,49 @@ async function cargarVideosDesdeFirebase() {
                 </div>
             `;
 
-            // 🔥 BOTÓN ELIMINAR (SOLO ADMIN)
+            // 🔐 SOLO ADMIN
             if (adminAutenticado) {
 
+                const contenedorBotones = document.createElement("div");
+                contenedorBotones.style.marginTop = "10px";
+
+                // ✏️ EDITAR
+                const btnEditar = document.createElement("button");
+                btnEditar.textContent = "✏️ Editar";
+                btnEditar.style.marginRight = "8px";
+                btnEditar.style.cursor = "pointer";
+
+                btnEditar.onclick = async () => {
+
+                    const nuevoTitulo = prompt("Editar título:", data.titulo || "");
+                    if (nuevoTitulo === null) return;
+
+                    const nuevaDesc = prompt("Editar descripción:", data.descripcion || "");
+                    if (nuevaDesc === null) return;
+
+                    try {
+
+                        console.log("✏️ Editando video:", docSnap.id);
+
+                        await updateDoc(doc(db, "videos", docSnap.id), {
+                            titulo: nuevoTitulo.trim() || "Sin título",
+                            descripcion: nuevaDesc.trim() || ""
+                        });
+
+                        console.log("✅ Video actualizado");
+
+                        // 🔥 RECARGAR UI
+                        await cargarVideosDesdeFirebase();
+
+                    } catch (error) {
+                        console.error("❌ Error editando video:", error);
+                        alert("Error al editar video");
+                    }
+                };
+
+                // 🗑️ ELIMINAR
                 const btnEliminar = document.createElement("button");
-                btnEliminar.textContent = "🗑 Eliminar video";
-                btnEliminar.style.marginTop = "10px";
+                btnEliminar.textContent = "🗑 Eliminar";
                 btnEliminar.style.cursor = "pointer";
 
                 btnEliminar.onclick = async () => {
@@ -1338,7 +1375,6 @@ async function cargarVideosDesdeFirebase() {
 
                         console.log("✅ Video eliminado");
 
-                        // 🔥 RECARGA AUTOMÁTICA
                         await cargarVideosDesdeFirebase();
 
                     } catch (error) {
@@ -1347,7 +1383,10 @@ async function cargarVideosDesdeFirebase() {
                     }
                 };
 
-                div.appendChild(btnEliminar);
+                contenedorBotones.appendChild(btnEditar);
+                contenedorBotones.appendChild(btnEliminar);
+
+                div.appendChild(contenedorBotones);
             }
 
             contenedor.appendChild(div);
@@ -1360,6 +1399,7 @@ async function cargarVideosDesdeFirebase() {
         console.error("❌ Error cargando videos:", error);
     }
 }
+ 
  
 window.agregarVideoFirebase = async function() {
     try {
