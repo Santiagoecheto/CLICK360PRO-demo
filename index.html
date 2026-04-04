@@ -1406,23 +1406,18 @@ window.agregarVideoFirebase = async function() {
             return;
         }
 
-        // 🔥 NORMALIZAR URL YOUTUBE (PRO)
+        // 🔥 NORMALIZAR URL YOUTUBE
         let videoId = "";
 
         try {
             const urlObj = new URL(url);
 
-            // youtu.be/ID
             if (urlObj.hostname.includes("youtu.be")) {
                 videoId = urlObj.pathname.replace("/", "");
             }
-
-            // youtube.com/watch?v=ID
             else if (urlObj.searchParams.get("v")) {
                 videoId = urlObj.searchParams.get("v");
             }
-
-            // youtube.com/embed/ID
             else if (urlObj.pathname.includes("/embed/")) {
                 videoId = urlObj.pathname.split("/embed/")[1];
             }
@@ -1431,13 +1426,35 @@ window.agregarVideoFirebase = async function() {
             console.warn("⚠ URL inválida, se guarda tal cual");
         }
 
-        // Si pudimos obtener ID → armamos embed limpio
         if (videoId) {
             url = `https://www.youtube.com/embed/${videoId}`;
         }
 
-        console.log("🔥 URL final a guardar:", url);
+        console.log("🔥 URL final:", url);
+        console.log("🎯 Video ID:", videoId);
 
+        // 🔴 VALIDAR DUPLICADOS POR ID
+        if (videoId) {
+
+            const snapshot = await getDocs(collection(db, "videos"));
+
+            let existe = false;
+
+            snapshot.forEach(docSnap => {
+                const data = docSnap.data();
+
+                if (data.url && data.url.includes(videoId)) {
+                    existe = true;
+                }
+            });
+
+            if (existe) {
+                alert("⚠ Este video ya fue agregado");
+                return;
+            }
+        }
+
+        // ✅ GUARDAR
         await addDoc(collection(db, "videos"), {
             url: url,
             titulo: titulo || "Sin título",
