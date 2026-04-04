@@ -866,6 +866,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
+ let unsubscribeVideos = null;
 const params = new URLSearchParams(window.location.search);
 const esAdmin = params.get("admin") === "1";
 
