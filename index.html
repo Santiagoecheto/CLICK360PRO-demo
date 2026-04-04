@@ -2077,39 +2077,50 @@ function renderGaleria(data) {
             btnEliminar.textContent = "🗑️";
             btnEliminar.classList.add("btn-eliminar-galeria");
 
-            btnEliminar.onclick = async () => {
+        btnEliminar.onclick = async () => {
 
-                if (!item.id) {
-                    console.error("❌ No hay ID para eliminar");
-                    alert("Error: no se puede eliminar esta imagen");
-                    return;
-                }
+    if (!item.id) {
+        console.error("❌ No hay ID para eliminar");
+        alert("Error: no se puede eliminar esta imagen");
+        return;
+    }
 
-                const confirmar = confirm("¿Eliminar esta imagen?");
-                if (!confirmar) return;
+    const confirmar = confirm("¿Eliminar esta imagen?");
+    if (!confirmar) return;
 
-                try {
+    try {
 
-                    if (item.ruta) {
-                        try {
-                            const storageRef = ref(storage, item.ruta);
-                            await deleteObject(storageRef);
-                        } catch (errorStorage) {
-                            console.warn("⚠️ No se pudo eliminar del storage:", errorStorage);
-                        }
+        // 🔥 INTENTO 1: eliminar por ruta (rápido)
+        if (item.ruta) {
+            try {
+                const storageRef = ref(storage, item.ruta);
+                await deleteObject(storageRef);
+                console.log("🗑️ Eliminado por ruta OK");
+            } catch (errorStorage) {
+                console.warn("⚠️ Falló eliminar por ruta, intento con URL...", errorStorage);
+
+                // 🔥 INTENTO 2: eliminar por URL (fallback PRO)
+                if (item.imagen) {
+                    try {
+                        const storageRef = ref(storage, item.imagen);
+                        await deleteObject(storageRef);
+                        console.log("🗑️ Eliminado por URL OK");
+                    } catch (errorURL) {
+                        console.error("❌ Error eliminando por URL:", errorURL);
                     }
-
-                    await deleteDoc(doc(db, "galeria", item.id));
-
-                    await cargarGaleriaDesdeFirebase();
-                 
-
-                } catch (error) {
-                    console.error("❌ Error eliminando imagen:", error);
-                    alert("Error eliminando imagen");
                 }
-            };
+            }
+        }
 
+        await deleteDoc(doc(db, "galeria", item.id));
+
+        await cargarGaleriaDesdeFirebase();
+
+    } catch (error) {
+        console.error("❌ Error eliminando imagen:", error);
+        alert("Error eliminando imagen");
+    }
+};
             card.appendChild(btnEliminar);
         }
 
