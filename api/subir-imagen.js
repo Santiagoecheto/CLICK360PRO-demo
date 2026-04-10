@@ -38,7 +38,7 @@ export default async function handler(req, res) {
             });
         });
 
-        const archivo = files.file;
+       const archivo = files.imagen;
 
         if (!archivo) {
             return res.status(400).json({ error: "No se envió archivo" });
