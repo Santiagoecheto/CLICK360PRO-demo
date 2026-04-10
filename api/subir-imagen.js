@@ -13,15 +13,17 @@ export const config = {
 if (!admin.apps.length) {
     admin.initializeApp({
         credential: admin.credential.cert({
-           projectId: process.env.FIREBASE_PROJECT_ID,
-           clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-           privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+            projectId: process.env.FIREBASE_PROJECT_ID,
+            clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+            privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
         }),
-        storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+        // ⚠️ CORREGIDO: bucket correcto
+        storageBucket: "studio-hair-demo.firebasestorage.app",
     });
 }
 
-const bucket = admin.storage().bucket();
+// ⚠️ CORREGIDO: usamos explícitamente el bucket correcto
+const bucket = admin.storage().bucket("studio-hair-demo.firebasestorage.app");
 
 export default async function handler(req, res) {
     console.log("🚀 Entró al handler");
@@ -49,12 +51,11 @@ export default async function handler(req, res) {
 
         console.log("📦 Files recibidos:", files);
 
-        // ⚠️ IMPORTANTE: probamos ambas opciones
         let archivo = files.file || files.imagen;
 
-      if (Array.isArray(archivo)) {
-         archivo = archivo[0];
-    }
+        if (Array.isArray(archivo)) {
+            archivo = archivo[0];
+        }
 
         if (!archivo) {
             console.log("❌ No llegó archivo");
@@ -64,6 +65,12 @@ export default async function handler(req, res) {
         console.log("📄 Archivo detectado:", archivo);
 
         const filePath = archivo.filepath;
+
+        if (!filePath) {
+            console.log("❌ filePath undefined");
+            return res.status(400).json({ error: "Archivo inválido (sin filepath)" });
+        }
+
         const fileName = `imagenes/${Date.now()}_${archivo.originalFilename}`;
 
         console.log("☁️ Subiendo a Firebase:", fileName);
