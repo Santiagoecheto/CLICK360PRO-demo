@@ -67,11 +67,14 @@ export default async function handler(req, res) {
             url: url,
         });
 
-    } catch (error) {
-        console.error("🔥 ERROR REAL BACKEND:", error);
-        return res.status(500).json({
-            error: "Error interno",
-            detalle: error.message
-        });
-    }
+  } catch (error) {
+    console.error("🔥 ERROR BACKEND REAL:", error);
+
+    return res.status(500).json({
+        error: "Error interno",
+        detalle: error.message,
+        stack: error.stack
+    });
+}
+}
 }
