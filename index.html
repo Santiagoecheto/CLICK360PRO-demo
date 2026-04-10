@@ -1069,7 +1069,18 @@ async function subirImagenFirebase() {
         console.log("📤 Subiendo imagen...");
 
         // 🔥 SUBIDA
-        const snapshot = await uploadBytesResumable(storageRef, archivo);
+    const uploadTask = uploadBytesResumable(storageRef, archivo);
+
+await new Promise((resolve, reject) => {
+    uploadTask.on(
+        "state_changed",
+        null,
+        (error) => reject(error),
+        () => resolve()
+    );
+});
+
+const snapshot = uploadTask.snapshot;
 
         console.log("✅ Subida OK:", snapshot);
 
