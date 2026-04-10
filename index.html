@@ -849,6 +849,8 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebas
 import { getFirestore, collection, addDoc, getDocs, getDoc, doc, setDoc, deleteDoc, updateDoc, onSnapshot, query, orderBy }
  from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
  
+ import { uploadBytesResumable } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-storage.js";
+ 
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } 
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-storage.js";
   
@@ -1067,7 +1069,7 @@ async function subirImagenFirebase() {
         console.log("📤 Subiendo imagen...");
 
         // 🔥 SUBIDA
-        const snapshot = await uploadBytes(storageRef, archivo);
+        const snapshot = await uploadBytesResumable(storageRef, archivo);
 
         console.log("✅ Subida OK:", snapshot);
 
@@ -1109,6 +1111,7 @@ async function subirImagenFirebase() {
         alert("Error subiendo imagen: " + (error.message || ""));
     }
 }
+
  
   async function cargarServiciosDefinitivos() {
     try {
