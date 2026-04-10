@@ -1026,6 +1026,7 @@ async function iniciarModoAdmin() {
         return false;
     }
 }
+
  
 async function subirImagenFirebase() {
     try {
@@ -1047,7 +1048,7 @@ async function subirImagenFirebase() {
             return;
         }
 
-        // 🔥 VALIDAR TAMAÑO (opcional pero PRO)
+        // 🔥 VALIDAR TAMAÑO
         if (archivo.size > 5 * 1024 * 1024) {
             alert("La imagen es muy pesada (máx 5MB)");
             return;
@@ -1061,54 +1062,28 @@ async function subirImagenFirebase() {
             return;
         }
 
-        // 🔥 NOMBRE SEGURO
-        const nombreArchivo = "imagenes/" + Date.now() + "_" + archivo.name.replace(/\s/g, "_");
+        console.log("📤 Enviando imagen al backend...");
 
-        const storageRef = ref(storage, nombreArchivo);
+        // 🔥 ARMAR FORM DATA
+        const formData = new FormData();
+        formData.append("imagen", archivo);
+        formData.append("destino", destino);
 
-        console.log("📤 Subiendo imagen...");
+        // 🔥 LLAMADA AL BACKEND
+        const response = await fetch("/api/subir-imagen", {
+            method: "POST",
+            body: formData
+        });
 
-        // 🔥 SUBIDA
-    const uploadTask = uploadBytesResumable(storageRef, archivo);
+        const data = await response.json();
 
-await new Promise((resolve, reject) => {
-    uploadTask.on(
-        "state_changed",
-        null,
-        (error) => reject(error),
-        () => resolve()
-    );
-});
+        console.log("✅ Respuesta backend:", data);
 
-const snapshot = uploadTask.snapshot;
-
-        console.log("✅ Subida OK:", snapshot);
-
-        // 🔥 URL
-        const url = await getDownloadURL(snapshot.ref);
-
-        console.log("✅ URL obtenida:", url);
-
-        // 🔵 GALERÍA
-        if (destino === "1") {
-
-            await addDoc(collection(db, "galeria"), {
-                imagen: url,
-                ruta: nombreArchivo,
-                descripcion: "Nuevo servicio",
-                fecha: new Date()
-            });
-
-            alert("Imagen guardada en GALERÍA");
-
-            await cargarGaleriaDesdeFirebase();
+        if (!response.ok) {
+            throw new Error(data.error || "Error en backend");
         }
 
-        // 🟣 SERVICIO
-        if (destino === "2") {
-            console.log("📌 Imagen lista para servicio:", url);
-            alert("Imagen subida. Falta asignarla a un servicio");
-        }
+        alert("Imagen subida correctamente");
 
         // 🔥 LIMPIEZA
         input.value = "";
@@ -1117,11 +1092,17 @@ const snapshot = uploadTask.snapshot;
             preview.src = "";
         }
 
+        // 🔄 RECARGA GALERÍA
+        if (destino === "1") {
+            await cargarGaleriaDesdeFirebase();
+        }
+
     } catch (error) {
         console.error("❌ Error subiendo imagen:", error);
         alert("Error subiendo imagen: " + (error.message || ""));
     }
 }
+
 
  
   async function cargarServiciosDefinitivos() {
