@@ -1,0 +1,10 @@
+{
+  "name": "click360-pro-demo",
+  "version": "1.0.0",
+  "description": "Demo web con subida de imágenes",
+  "main": "index.js",
+  "dependencies": {
+    "formidable": "^3.5.0",
+    "firebase-admin": "^11.10.1"
+  }
+}
