@@ -1083,6 +1083,20 @@ async function subirImagenFirebase() {
             throw new Error(data.error || "Error en backend");
         }
 
+        // 🔥 🔥 🔥 NUEVO: GUARDAR EN FIRESTORE
+        if (destino === "1") {
+
+            console.log("💾 Guardando en Firestore...");
+
+            await addDoc(collection(db, "galeria"), {
+                imagen: data.url,
+                descripcion: "",
+                fecha: new Date()
+            });
+
+            console.log("✅ Guardado en Firestore OK");
+        }
+
         alert("Imagen subida correctamente");
 
         // 🔥 LIMPIEZA
@@ -1103,7 +1117,7 @@ async function subirImagenFirebase() {
     }
 }
 
-
+ 
  
   async function cargarServiciosDefinitivos() {
     try {
