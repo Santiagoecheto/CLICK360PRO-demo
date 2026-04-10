@@ -24,30 +24,46 @@ if (!admin.apps.length) {
 const bucket = admin.storage().bucket();
 
 export default async function handler(req, res) {
+    console.log("🚀 Entró al handler");
+
     if (req.method !== "POST") {
+        console.log("❌ Método incorrecto:", req.method);
         return res.status(405).json({ error: "Método no permitido" });
     }
 
     const form = formidable({ multiples: false });
 
     try {
+        console.log("📥 Parseando form...");
+
         const { fields, files } = await new Promise((resolve, reject) => {
             form.parse(req, (err, fields, files) => {
-                if (err) reject(err);
-                else resolve({ fields, files });
+                if (err) {
+                    console.error("❌ Error en form.parse:", err);
+                    reject(err);
+                } else {
+                    resolve({ fields, files });
+                }
             });
         });
 
-       const archivo = files.imagen;
+        console.log("📦 Files recibidos:", files);
+
+        // ⚠️ IMPORTANTE: probamos ambas opciones
+        const archivo = files.file || files.imagen;
 
         if (!archivo) {
+            console.log("❌ No llegó archivo");
             return res.status(400).json({ error: "No se envió archivo" });
         }
+
+        console.log("📄 Archivo detectado:", archivo);
 
         const filePath = archivo.filepath;
         const fileName = `imagenes/${Date.now()}_${archivo.originalFilename}`;
 
-        // 🔥 Subir a Firebase Storage
+        console.log("☁️ Subiendo a Firebase:", fileName);
+
         await bucket.upload(filePath, {
             destination: fileName,
             metadata: {
@@ -56,9 +72,13 @@ export default async function handler(req, res) {
         });
 
         const file = bucket.file(fileName);
+
+        console.log("🌍 Haciendo público...");
         await file.makePublic();
 
         const url = `https://storage.googleapis.com/${bucket.name}/${fileName}`;
+
+        console.log("✅ URL generada:", url);
 
         fs.unlinkSync(filePath);
 
@@ -67,14 +87,13 @@ export default async function handler(req, res) {
             url: url,
         });
 
-  } catch (error) {
-    console.error("🔥 ERROR BACKEND REAL:", error);
+    } catch (error) {
+        console.error("🔥 ERROR BACKEND REAL:", error);
 
-    return res.status(500).json({
-        error: "Error interno",
-        detalle: error.message,
-        stack: error.stack
-    });
-}
-}
+        return res.status(500).json({
+            error: "Error interno",
+            detalle: error.message,
+            stack: error.stack
+        });
+    }
 }
