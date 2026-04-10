@@ -28,50 +28,50 @@ export default async function handler(req, res) {
         return res.status(405).json({ error: "Método no permitido" });
     }
 
+    const form = formidable({ multiples: false });
+
     try {
-        const form = formidable({ multiples: false });
-
-        form.parse(req, async (err, fields, files) => {
-            if (err) {
-                console.error("Error parseando form:", err);
-                return res.status(500).json({ error: "Error procesando archivo" });
-            }
-
-            const archivo = files.file;
-
-            if (!archivo) {
-                return res.status(400).json({ error: "No se envió archivo" });
-            }
-
-            const filePath = archivo.filepath;
-            const fileName = `imagenes/${Date.now()}_${archivo.originalFilename}`;
-
-            // 🔥 Subir a Firebase Storage
-            await bucket.upload(filePath, {
-                destination: fileName,
-                metadata: {
-                    contentType: archivo.mimetype,
-                },
-            });
-
-            // 🔥 Obtener URL pública
-            const file = bucket.file(fileName);
-
-            await file.makePublic();
-
-            const url = `https://storage.googleapis.com/${bucket.name}/${fileName}`;
-
-            // 🔥 Limpiar archivo temporal
-            fs.unlinkSync(filePath);
-
-            return res.status(200).json({
-                ok: true,
-                url: url,
+        const { fields, files } = await new Promise((resolve, reject) => {
+            form.parse(req, (err, fields, files) => {
+                if (err) reject(err);
+                else resolve({ fields, files });
             });
         });
 
+        const archivo = files.file;
+
+        if (!archivo) {
+            return res.status(400).json({ error: "No se envió archivo" });
+        }
+
+        const filePath = archivo.filepath;
+        const fileName = `imagenes/${Date.now()}_${archivo.originalFilename}`;
+
+        // 🔥 Subir a Firebase Storage
+        await bucket.upload(filePath, {
+            destination: fileName,
+            metadata: {
+                contentType: archivo.mimetype,
+            },
+        });
+
+        const file = bucket.file(fileName);
+        await file.makePublic();
+
+        const url = `https://storage.googleapis.com/${bucket.name}/${fileName}`;
+
+        fs.unlinkSync(filePath);
+
+        return res.status(200).json({
+            ok: true,
+            url: url,
+        });
+
     } catch (error) {
-        console.error("Error en backend:", error);
-        return res.status(500).json({ error: "Error interno" });
+        console.error("🔥 ERROR REAL BACKEND:", error);
+        return res.status(500).json({
+            error: "Error interno",
+            detalle: error.message
+        });
     }
 }
