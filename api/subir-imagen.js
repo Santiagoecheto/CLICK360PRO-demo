@@ -50,7 +50,11 @@ export default async function handler(req, res) {
         console.log("📦 Files recibidos:", files);
 
         // ⚠️ IMPORTANTE: probamos ambas opciones
-        const archivo = files.file || files.imagen;
+        let archivo = files.file || files.imagen;
+
+      if (Array.isArray(archivo)) {
+         archivo = archivo[0];
+    }
 
         if (!archivo) {
             console.log("❌ No llegó archivo");
