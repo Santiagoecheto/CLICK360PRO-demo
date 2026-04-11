@@ -26,6 +26,11 @@ height:100%;
 background:rgba(0,0,0,0.45);
 z-index:0;
 }
+
+.hero::after {
+    pointer-events: none;
+}
+
 .hero video{
     position:absolute;
     top:0;
