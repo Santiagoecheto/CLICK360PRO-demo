@@ -5,10 +5,6 @@ body{
     color:white;
 }
 
-#inicio,
-#inicio * {
-    pointer-events: none;
-}
 
 .hero{
     position:relative;
@@ -19,9 +15,6 @@ body{
     text-align:center;
 }
 
-.hero {
-    pointer-events: none;
-}
 
 .hero::after{
 content:"";
