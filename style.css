@@ -5,6 +5,11 @@ body{
     color:white;
 }
 
+#inicio,
+#inicio * {
+    pointer-events: none;
+}
+
 .hero{
     position:relative;
     height:90vh;
@@ -12,6 +17,10 @@ body{
     justify-content:center;
     align-items:center;
     text-align:center;
+}
+
+.hero {
+    pointer-events: none;
 }
 
 .hero::after{
