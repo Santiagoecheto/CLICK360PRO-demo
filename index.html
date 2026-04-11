@@ -1874,17 +1874,18 @@ function renderServicios(data) {
         btnAgregar.style.zIndex = "1000";
         btnAgregar.style.pointerEvents = "auto";
 
-        btnAgregar.onclick = () => {
+    btnAgregar.onclick = () => {
+    console.log("CLICK EN AGREGAR SERVICIO");
 
-            const modal = document.getElementById("modalServicio");
+    const modal = document.getElementById("modalServicio");
 
-            if (!modal) {
-                console.error("No se encontró el modalServicio");
-                return;
-            }
+    if (!modal) {
+        console.error("No se encontró el modalServicio");
+        return;
+    }
 
-            modal.style.display = "flex";
-        };
+    modal.style.display = "flex";
+};
 
         contenedor.appendChild(btnAgregar);
     }
