@@ -1987,13 +1987,12 @@ function renderGaleria(data) {
         img.src = item.imagen || "";
         img.alt = item.descripcion || "Imagen";
 
-        // 🔥 CLICK → ABRIR MODAL PRO
+        // CLICK → MODAL
         img.style.cursor = "pointer";
         img.onclick = () => {
 
             let modal = document.getElementById("modalImagen");
 
-            // 🔹 CREAR MODAL SI NO EXISTE (UNA SOLA VEZ)
             if (!modal) {
 
                 modal = document.createElement("div");
@@ -2012,47 +2011,39 @@ function renderGaleria(data) {
                 modal.style.zIndex = "9999";
                 modal.style.padding = "20px";
 
-                // ❌ BOTÓN CERRAR
-              const cerrar = document.createElement("span");
-              cerrar.innerHTML = "✕";
+                const cerrar = document.createElement("span");
+                cerrar.innerHTML = "✕";
 
-              cerrar.style.position = "fixed"; // 🔥 CAMBIO CLAVE
-              cerrar.style.top = "20px";
-              cerrar.style.right = "25px";
-              cerrar.style.fontSize = "32px";
-              cerrar.style.color = "white";
-              cerrar.style.cursor = "pointer";
-              cerrar.style.zIndex = "10000"; // 🔥 SUPERIOR AL MODAL
-              cerrar.style.background = "rgba(0,0,0,0.5)";
-              cerrar.style.borderRadius = "50%";
-              cerrar.style.padding = "5px 10px";
+                cerrar.style.position = "fixed";
+                cerrar.style.top = "20px";
+                cerrar.style.right = "25px";
+                cerrar.style.fontSize = "32px";
+                cerrar.style.color = "white";
+                cerrar.style.cursor = "pointer";
+                cerrar.style.zIndex = "10000";
+                cerrar.style.background = "rgba(0,0,0,0.5)";
+                cerrar.style.borderRadius = "50%";
+                cerrar.style.padding = "5px 10px";
 
-              cerrar.onclick = () => {
-                  modal.style.display = "none";
-               };
+                cerrar.onclick = () => {
+                    modal.style.display = "none";
+                };
 
-                // 🖼️ IMAGEN GRANDE
                 const imgGrande = document.createElement("img");
                 imgGrande.id = "imgModalGrande";
                 imgGrande.style.maxWidth = "90%";
                 imgGrande.style.maxHeight = "80%";
                 imgGrande.style.borderRadius = "12px";
-                imgGrande.style.boxShadow = "0 0 20px rgba(0,0,0,0.8)";
 
-                // 📝 DESCRIPCIÓN
                 const descripcion = document.createElement("p");
                 descripcion.id = "textoModal";
                 descripcion.style.color = "white";
                 descripcion.style.marginTop = "15px";
-                descripcion.style.fontSize = "16px";
-                descripcion.style.textAlign = "center";
-                descripcion.style.maxWidth = "600px";
 
                 modal.appendChild(cerrar);
                 modal.appendChild(imgGrande);
                 modal.appendChild(descripcion);
 
-                // 🔹 CERRAR AL HACER CLICK EN FONDO
                 modal.addEventListener("click", (e) => {
                     if (e.target === modal) {
                         modal.style.display = "none";
@@ -2062,11 +2053,8 @@ function renderGaleria(data) {
                 document.body.appendChild(modal);
             }
 
-            const imgGrande = document.getElementById("imgModalGrande");
-            const textoModal = document.getElementById("textoModal");
-
-            imgGrande.src = item.imagen;
-            textoModal.textContent = item.descripcion || "";
+            document.getElementById("imgModalGrande").src = item.imagen;
+            document.getElementById("textoModal").textContent = item.descripcion || "";
 
             modal.style.display = "flex";
         };
@@ -2077,80 +2065,72 @@ function renderGaleria(data) {
         card.appendChild(img);
         card.appendChild(texto);
 
-        // 🔥 MODO ADMIN → EDICIÓN + ELIMINAR
+        // ===============================
+        // MODO ADMIN
+        // ===============================
         if (adminAutenticado) {
 
+            // EDICIÓN
             texto.contentEditable = true;
             texto.style.border = "1px dashed #4dd0e1";
-            texto.style.padding = "4px";
 
             texto.addEventListener("input", async () => {
 
                 if (!item.id) return;
 
                 try {
-
                     await setDoc(
                         doc(db, "galeria", item.id),
                         { descripcion: texto.textContent || "" },
                         { merge: true }
                     );
-
-                    console.log("✏️ Descripción actualizada:", item.id);
-
                 } catch (error) {
-                    console.error("❌ Error actualizando descripción:", error);
+                    console.error("Error actualizando descripción:", error);
                 }
             });
 
+            // ELIMINAR
             const btnEliminar = document.createElement("button");
             btnEliminar.textContent = "🗑️";
             btnEliminar.classList.add("btn-eliminar-galeria");
 
-        btnEliminar.onclick = async () => {
+            btnEliminar.onclick = async () => {
 
-    if (!item.id) {
-        console.error("❌ No hay ID para eliminar");
-        alert("Error: no se puede eliminar esta imagen");
-        return;
-    }
-
-    const confirmar = confirm("¿Eliminar esta imagen?");
-    if (!confirmar) return;
-
-    try {
-
-        // 🔥 INTENTO 1: eliminar por ruta (rápido)
-        if (item.ruta) {
-            try {
-                const storageRef = ref(storage, item.ruta);
-                await deleteObject(storageRef);
-                console.log("🗑️ Eliminado por ruta OK");
-            } catch (errorStorage) {
-                console.warn("⚠️ Falló eliminar por ruta, intento con URL...", errorStorage);
-
-                // 🔥 INTENTO 2: eliminar por URL (fallback PRO)
-                if (item.imagen) {
-                    try {
-                        const storageRef = ref(storage, item.imagen);
-                        await deleteObject(storageRef);
-                        console.log("🗑️ Eliminado por URL OK");
-                    } catch (errorURL) {
-                        console.error("❌ Error eliminando por URL:", errorURL);
-                    }
+                if (!item.id) {
+                    alert("Error: imagen sin ID");
+                    return;
                 }
-            }
-        }
 
-        await deleteDoc(doc(db, "galeria", item.id));
+                const confirmar = confirm("¿Eliminar esta imagen?");
+                if (!confirmar) return;
 
-        await cargarGaleriaDesdeFirebase();
+                try {
 
-    } catch (error) {
-        console.error("❌ Error eliminando imagen:", error);
-        alert("Error eliminando imagen");
-    }
-};
+                    // ELIMINAR DE STORAGE
+                    if (item.imagen) {
+                        try {
+                            const storageRef = ref(storage, item.imagen);
+                            await deleteObject(storageRef);
+                            console.log("Imagen eliminada de Storage");
+                        } catch (errorStorage) {
+                            console.warn("No se pudo eliminar de Storage:", errorStorage);
+                        }
+                    }
+
+                    // ELIMINAR DE FIRESTORE
+                    await deleteDoc(doc(db, "galeria", item.id));
+
+                    console.log("Documento eliminado");
+
+                    // RECARGA
+                    await cargarGaleriaDesdeFirebase();
+
+                } catch (error) {
+                    console.error("Error eliminando imagen:", error);
+                    alert("Error eliminando imagen");
+                }
+            };
+
             card.appendChild(btnEliminar);
         }
 
@@ -2233,6 +2213,8 @@ async function guardarPrueba() {
         console.error("❌ Error guardando:", e);
     }
 }
+
+ 
 async function cargarTituloWeb() {
     try {
 
@@ -2302,6 +2284,7 @@ async function cargarTituloWeb() {
         console.error("Error cargando título:", error);
     }
 }
+
  
 async function cargarSubtituloWeb() {
     try {
@@ -2349,6 +2332,8 @@ window.onload = async function () {
     // 🔥 CONTROL PARA NO EJECUTAR DOS VECES
     let loginIntentado = false;
 
+
+ 
     async function intentarLoginAdmin() {
         if (loginIntentado) return;
         loginIntentado = true;
