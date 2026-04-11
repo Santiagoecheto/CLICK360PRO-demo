@@ -1838,6 +1838,7 @@ data-tipo="titulo"
     });
 }
 
+ 
 function renderServicios(data) {
 
     const contenedor = document.getElementById("contenedor-servicios");
@@ -1899,13 +1900,15 @@ function renderServicios(data) {
             card.appendChild(img);
             card.appendChild(titulo);
 
-            // 🔒 MODO ADMIN SOLO AUTENTICADO
+            // ===============================
+            // 🔐 MODO ADMIN
+            // ===============================
             if (adminAutenticado) {
 
                 const controles = document.createElement("div");
                 controles.style.marginTop = "8px";
 
-                // ✏️ EDITAR
+                // ✏️ EDITAR SERVICIO
                 const btnEditar = document.createElement("button");
                 btnEditar.textContent = "✏️";
                 btnEditar.style.margin = "0 4px";
@@ -1916,13 +1919,10 @@ function renderServicios(data) {
                     if (!nuevoTitulo) return;
 
                     try {
-                        console.log("EDITANDO EN FIREBASE...");
 
                         await updateDoc(doc(db, "servicios", servicio.id), {
                             titulo: nuevoTitulo
                         });
-
-                        console.log("EDITADO OK");
 
                         await cargarServiciosDesdeFirebase();
 
@@ -1932,7 +1932,7 @@ function renderServicios(data) {
                     }
                 };
 
-                // ❌ ELIMINAR
+                // ❌ ELIMINAR SERVICIO (SE MANTIENE)
                 const btnEliminar = document.createElement("button");
                 btnEliminar.textContent = "🗑";
                 btnEliminar.style.margin = "0 4px";
@@ -1943,11 +1943,8 @@ function renderServicios(data) {
                     if (!confirmar) return;
 
                     try {
-                        console.log("ELIMINANDO EN FIREBASE...");
 
                         await deleteDoc(doc(db, "servicios", servicio.id));
-
-                        console.log("ELIMINADO OK");
 
                         await cargarServiciosDesdeFirebase();
 
@@ -1959,6 +1956,49 @@ function renderServicios(data) {
 
                 controles.appendChild(btnEditar);
                 controles.appendChild(btnEliminar);
+
+                // ===============================
+                // 🗑️ ELIMINAR SOLO IMAGEN
+                // ===============================
+                if (servicio.imagen && servicio.imagen.trim() !== "") {
+
+                    const btnEliminarImagen = document.createElement("button");
+                    btnEliminarImagen.textContent = "🖼️❌";
+                    btnEliminarImagen.style.margin = "0 4px";
+
+                    btnEliminarImagen.onclick = async () => {
+
+                        const confirmar = confirm("¿Eliminar solo la imagen?");
+                        if (!confirmar) return;
+
+                        try {
+
+                            // 🔥 ELIMINAR DE STORAGE
+                            try {
+                                const storageRef = ref(storage, servicio.imagen);
+                                await deleteObject(storageRef);
+                                console.log("Imagen eliminada de Storage");
+                            } catch (errorStorage) {
+                                console.warn("No se pudo eliminar de Storage:", errorStorage);
+                            }
+
+                            // 🔥 LIMPIAR SOLO EL CAMPO IMAGEN
+                            await updateDoc(doc(db, "servicios", servicio.id), {
+                                imagen: ""
+                            });
+
+                            console.log("Imagen removida del servicio");
+
+                            await cargarServiciosDesdeFirebase();
+
+                        } catch (error) {
+                            console.error("Error eliminando imagen:", error);
+                            alert("Error eliminando imagen");
+                        }
+                    };
+
+                    controles.appendChild(btnEliminarImagen);
+                }
 
                 card.appendChild(controles);
             }
