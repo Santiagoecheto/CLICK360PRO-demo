@@ -1878,26 +1878,10 @@ function renderServicios(data) {
             const card = document.createElement("div");
             card.classList.add("servicio-card");
 
-            // 🔹 IMAGEN
-            const img = document.createElement("img");
-
-            if (servicio.imagen && servicio.imagen.trim() !== "") {
-                img.src = servicio.imagen;
-            } else {
-                img.style.display = "none";
-            }
-
-            img.alt = "";
-
-            img.onerror = function () {
-                this.style.display = "none";
-            };
-
-            // 🔹 TÍTULO
+            // 🔹 SOLO TÍTULO (SIN IMAGEN)
             const titulo = document.createElement("h3");
             titulo.textContent = servicio.titulo || "Servicio";
 
-            card.appendChild(img);
             card.appendChild(titulo);
 
             // ===============================
@@ -1908,7 +1892,7 @@ function renderServicios(data) {
                 const controles = document.createElement("div");
                 controles.style.marginTop = "8px";
 
-                // ✏️ EDITAR SERVICIO
+                // ✏️ EDITAR
                 const btnEditar = document.createElement("button");
                 btnEditar.textContent = "✏️";
                 btnEditar.style.margin = "0 4px";
@@ -1932,7 +1916,7 @@ function renderServicios(data) {
                     }
                 };
 
-                // ❌ ELIMINAR SERVICIO (SE MANTIENE)
+                // 🗑 ELIMINAR SERVICIO (COMPLETO)
                 const btnEliminar = document.createElement("button");
                 btnEliminar.textContent = "🗑";
                 btnEliminar.style.margin = "0 4px";
@@ -1957,49 +1941,6 @@ function renderServicios(data) {
                 controles.appendChild(btnEditar);
                 controles.appendChild(btnEliminar);
 
-                // ===============================
-                // 🗑️ ELIMINAR SOLO IMAGEN
-                // ===============================
-                if (servicio.imagen && servicio.imagen.trim() !== "") {
-
-                    const btnEliminarImagen = document.createElement("button");
-                    btnEliminarImagen.textContent = "🖼️❌";
-                    btnEliminarImagen.style.margin = "0 4px";
-
-                    btnEliminarImagen.onclick = async () => {
-
-                        const confirmar = confirm("¿Eliminar solo la imagen?");
-                        if (!confirmar) return;
-
-                        try {
-
-                            // 🔥 ELIMINAR DE STORAGE
-                            try {
-                                const storageRef = ref(storage, servicio.imagen);
-                                await deleteObject(storageRef);
-                                console.log("Imagen eliminada de Storage");
-                            } catch (errorStorage) {
-                                console.warn("No se pudo eliminar de Storage:", errorStorage);
-                            }
-
-                            // 🔥 LIMPIAR SOLO EL CAMPO IMAGEN
-                            await updateDoc(doc(db, "servicios", servicio.id), {
-                                imagen: ""
-                            });
-
-                            console.log("Imagen removida del servicio");
-
-                            await cargarServiciosDesdeFirebase();
-
-                        } catch (error) {
-                            console.error("Error eliminando imagen:", error);
-                            alert("Error eliminando imagen");
-                        }
-                    };
-
-                    controles.appendChild(btnEliminarImagen);
-                }
-
                 card.appendChild(controles);
             }
 
@@ -2008,7 +1949,8 @@ function renderServicios(data) {
 
     });
 }
- 
+
+
  
 function renderGaleria(data) {
 
