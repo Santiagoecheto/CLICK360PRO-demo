@@ -1335,18 +1335,21 @@ flex-shrink: 0;
 }
 .modal-servicio {
     display: none;
-    position: fixed;
+
+    position: fixed; /* 🔥 CLAVE */
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+
+    width: 100vw;   /* 🔥 mejor que 100% */
+    height: 100vh;  /* 🔥 mejor que 100% */
 
     background: rgba(0,0,0,0.7);
 
+    display: flex;
     justify-content: center;
     align-items: center;
 
-    z-index: 99999; /* 🔥 CLAVE */
+    z-index: 99999; /* 🔥 bien alto */
 }
 
 .contenido-servicio {
