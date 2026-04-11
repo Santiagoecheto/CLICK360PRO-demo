@@ -1856,6 +1856,10 @@ function renderServicios(data) {
 
     contenedor.innerHTML = "";
 
+    // 🔥 FIX GLOBAL → TRAER CONTENEDOR AL FRENTE
+    contenedor.style.position = "relative";
+    contenedor.style.zIndex = "10";
+
     // 🔥 BOTÓN AGREGAR (SOLO SI ESTÁ AUTENTICADO)
     if (adminAutenticado) {
 
@@ -1864,6 +1868,11 @@ function renderServicios(data) {
         btnAgregar.style.margin = "10px";
         btnAgregar.style.padding = "8px 14px";
         btnAgregar.style.cursor = "pointer";
+
+        // 🔥 FIX CLICK (CLAVE)
+        btnAgregar.style.position = "relative";
+        btnAgregar.style.zIndex = "1000";
+        btnAgregar.style.pointerEvents = "auto";
 
         btnAgregar.onclick = () => {
 
@@ -1958,7 +1967,7 @@ function renderServicios(data) {
 
     });
 }
-
+ 
 
  
 function renderGaleria(data) {
