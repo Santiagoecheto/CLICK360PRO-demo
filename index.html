@@ -1707,20 +1707,29 @@ btnPassword.onclick = async () => {
             const btnAgregar = document.createElement("button");
             btnAgregar.textContent = "+ Agregar servicio";
 
-            btnAgregar.onclick = () => {
-                const nuevoServicio = {
-                    id: "temp_" + Date.now(),
-                    categoria: categoria.nombre,
-                    titulo: "Nuevo servicio",
-                    corto: 0,
-                    medio: 0,
-                    largo: 0
-                };
+        btnAgregar.onclick = async () => {
 
-                categoria.servicios.push(nuevoServicio);
-                localStorage.setItem("serviciosEditados", JSON.stringify(data));
-                renderPrecios(data, true);
-            };
+    try {
+
+        const nuevoServicio = {
+            categoria: categoria.nombre,
+            titulo: "Nuevo servicio",
+            corto: 0,
+            medio: 0,
+            largo: 0
+        };
+
+        const docRef = await addDoc(collection(db, "servicios"), nuevoServicio);
+
+        console.log("Servicio creado:", docRef.id);
+
+        await cargarServiciosDesdeFirebase();
+
+    } catch (error) {
+        console.error("Error creando servicio:", error);
+        alert("Error al crear servicio");
+    }
+};
 
             listaPrecios.appendChild(btnAgregar);
         }
