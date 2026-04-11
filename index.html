@@ -1876,9 +1876,7 @@ function renderServicios(data) {
         btnAgregar.style.zIndex = "1000";
         btnAgregar.style.pointerEvents = "auto";
 
-    btnAgregar.onclick = () => {
-    console.log("CLICK EN AGREGAR SERVICIO");
-
+ btnAgregar.onclick = () => {
     const modal = document.getElementById("modalServicio");
 
     if (!modal) {
@@ -1886,9 +1884,7 @@ function renderServicios(data) {
         return;
     }
 
-         modal.style.display = "flex";
-         modal.style.background = "red";
-         console.log("MODAL ACTIVADO");
+    modal.style.display = "flex";
 };
 
         contenedor.appendChild(btnAgregar);
