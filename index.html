@@ -57,28 +57,39 @@
 <h1 id="tituloWeb">Cargando...</h1>
 
 <p id="subtituloWeb">Estilo, belleza y cuidado profesional para tu cabello</p>
+
+ 
   
 <div id="panelTituloAdmin" style="display:none; margin-top:10px;">
     
+    <!-- 🎨 COLOR FONDO -->
+    <label style="color:white;">Color Fondo:</label>
+    <input type="color" id="inputColorFondo">
+    <br><br>
+
     <label style="color:white;">Color:</label>
     <input type="color" id="inputColorTitulo">
 
     <label style="color:white; margin-left:10px;">Tamaño:</label>
     <input type="number" id="inputTamanoTitulo" min="10" max="100" style="width:60px;"> px
-   <br>
+    <br>
 
-<label style="color:white;">Color Subtítulo:</label>
-<input type="color" id="inputColorSubtitulo">
+    <label style="color:white;">Color Subtítulo:</label>
+    <input type="color" id="inputColorSubtitulo">
 
-<label style="color:white; margin-left:10px;">Tamaño Subtítulo:</label>
-<input type="number" id="inputTamanoSubtitulo" min="10" max="100" style="width:60px;"> px
-  <br><br>
+    <label style="color:white; margin-left:10px;">Tamaño Subtítulo:</label>
+    <input type="number" id="inputTamanoSubtitulo" min="10" max="100" style="width:60px;"> px
+    <br><br>
 
-<label style="color:white;">Subir imagen a galería:</label>
-<input type="file" id="inputImagen">
-<button id="btnSubirImagen">Subir imagen</button>
- <img id="previewImagen" style="max-width:300px; display:block; margin-top:10px;">
- <hr style="margin:20px 0; border:1px solid #444;">
+    <label style="color:white;">Subir imagen a galería:</label>
+    <input type="file" id="inputImagen">
+    <button id="btnSubirImagen">Subir imagen</button>
+
+    <img id="previewImagen" style="max-width:300px; display:block; margin-top:10px;">
+
+    <hr style="margin:20px 0; border:1px solid #444;">
+</div>
+
  
  <!-- 🎬 ADMIN VIDEOS -->
 <div id="adminVideos" style="margin-top:20px;">
