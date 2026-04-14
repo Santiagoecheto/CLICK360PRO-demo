@@ -1481,7 +1481,23 @@ window.agregarVideoFirebase = async function() {
             return;
         }
 
-        // 🔥 NORMALIZAR URL YOUTUBE
+        // =========================
+        // 🔥 ELEGIR DESTINO
+        // =========================
+
+        const destino = prompt(
+            "¿Dónde querés usar este video?\n\n1 = Sección Videos\n2 = Video de Inicio (Hero)"
+        );
+
+        if (destino !== "1" && destino !== "2") {
+            alert("Operación cancelada");
+            return;
+        }
+
+        // =========================
+        // 🔥 NORMALIZAR YOUTUBE
+        // =========================
+
         let videoId = "";
 
         try {
@@ -1506,42 +1522,83 @@ window.agregarVideoFirebase = async function() {
         }
 
         console.log("🔥 URL final:", url);
-        console.log("🎯 Video ID:", videoId);
 
-        // 🔴 VALIDAR DUPLICADOS POR ID
-        if (videoId) {
+        // =========================
+        // 🔵 DESTINO 1 → VIDEOS
+        // =========================
 
-            const snapshot = await getDocs(collection(db, "videos"));
+        if (destino === "1") {
 
-            let existe = false;
+            // 🔴 VALIDAR DUPLICADOS
+            if (videoId) {
 
-            snapshot.forEach(docSnap => {
-                const data = docSnap.data();
+                const snapshot = await getDocs(collection(db, "videos"));
 
-                if (data.url && data.url.includes(videoId)) {
-                    existe = true;
+                let existe = false;
+
+                snapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+
+                    if (data.url && data.url.includes(videoId)) {
+                        existe = true;
+                    }
+                });
+
+                if (existe) {
+                    alert("⚠ Este video ya fue agregado");
+                    return;
                 }
+            }
+
+            await addDoc(collection(db, "videos"), {
+                url: url,
+                titulo: titulo || "Sin título",
+                descripcion: descripcion || "",
+                fecha: new Date()
             });
 
-            if (existe) {
-                alert("⚠ Este video ya fue agregado");
+            console.log("✅ Video guardado en sección videos");
+            alert("Video agregado en sección Videos");
+
+        }
+
+        // =========================
+        // 🔴 DESTINO 2 → HERO
+        // =========================
+
+        if (destino === "2") {
+
+            // ⚠️ VALIDACIÓN IMPORTANTE
+            if (url.includes("youtube")) {
+                alert("⚠ El video de inicio debe ser un .mp4 (no YouTube)");
                 return;
+            }
+
+            await setDoc(
+                doc(db, "configuracion", "web"),
+                {
+                    videoHero: url
+                },
+                { merge: true }
+            );
+
+            console.log("🎬 Video hero actualizado");
+            alert("Video de inicio actualizado");
+
+            // 🔥 RECARGAR VIDEO EN VIVO
+            const video = document.querySelector(".hero video");
+            const source = video ? video.querySelector("source") : null;
+
+            if (video && source) {
+                source.src = url;
+                video.load();
             }
         }
 
-        // ✅ GUARDAR
-        await addDoc(collection(db, "videos"), {
-            url: url,
-            titulo: titulo || "Sin título",
-            descripcion: descripcion || "",
-            fecha: new Date()
-        });
-
-        console.log("✅ Video guardado");
-
-        alert("Video agregado correctamente");
-
+        // =========================
         // 🔥 LIMPIAR INPUTS
+        // =========================
+
         urlInput.value = "";
         tituloInput.value = "";
         descInput.value = "";
@@ -1551,6 +1608,7 @@ window.agregarVideoFirebase = async function() {
         alert("Error agregando video");
     }
 }
+
  
  
 function renderPrecios(data, modoEdicion = false){
