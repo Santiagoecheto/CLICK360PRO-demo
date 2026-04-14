@@ -67,6 +67,10 @@
     <input type="color" id="inputColorFondo">
     <br><br>
 
+ <br>
+<input type="text" id="inputColorFondoHex" placeholder="#ffffff" style="width:100px;">
+<button type="button" id="btnColorBlanco">Blanco</button>
+
     <label style="color:white;">Color:</label>
     <input type="color" id="inputColorTitulo">
 
@@ -2295,10 +2299,15 @@ async function cargarTituloWeb() {
         const inputColorSubtitulo = document.getElementById("inputColorSubtitulo");
         const inputTamanoSubtitulo = document.getElementById("inputTamanoSubtitulo");
 
-        // 🔥 NUEVO
         const inputColorFondo = document.getElementById("inputColorFondo");
 
+        // 🔥 NUEVOS
+        const inputColorFondoHex = document.getElementById("inputColorFondoHex");
+        const btnColorBlanco = document.getElementById("btnColorBlanco");
+
         if (!titulo) return;
+
+        let colorFondo = "#000000";
 
         if (docSnap.exists()) {
 
@@ -2311,8 +2320,7 @@ async function cargarTituloWeb() {
             const colorSub = data.colorSubtitulo || "#ffffff";
             const tamanoSub = data.tamanoSubtitulo || "20px";
 
-            // 🔥 NUEVO
-            const colorFondo = data.colorFondo || "#000000";
+            colorFondo = data.colorFondo || "#000000";
 
             // 🔵 APLICAR AL DOM
             titulo.textContent = texto !== "" ? texto : "Jenny Estilista Profesional";
@@ -2324,18 +2332,14 @@ async function cargarTituloWeb() {
                 subtitulo.style.fontSize = tamanoSub;
             }
 
-            // 🔥 APLICAR FONDO A TODA LA WEB
             document.body.style.backgroundColor = colorFondo;
 
-            // 🔵 PRECARGAR INPUTS
+            // 🔵 INPUTS
             if (inputColor) inputColor.value = color;
             if (inputTamano) inputTamano.value = parseInt(tamano);
 
             if (inputColorSubtitulo) inputColorSubtitulo.value = colorSub;
             if (inputTamanoSubtitulo) inputTamanoSubtitulo.value = parseInt(tamanoSub);
-
-            // 🔥 NUEVO
-            if (inputColorFondo) inputColorFondo.value = colorFondo;
 
         } else {
 
@@ -2344,38 +2348,66 @@ async function cargarTituloWeb() {
             titulo.style.fontSize = "48px";
 
             document.body.style.backgroundColor = "#000000";
-
-            if (inputColor) inputColor.value = "#ffffff";
-            if (inputTamano) inputTamano.value = 48;
-
-            if (inputColorSubtitulo) inputColorSubtitulo.value = "#ffffff";
-            if (inputTamanoSubtitulo) inputTamanoSubtitulo.value = 20;
-
-            // 🔥 NUEVO
-            if (inputColorFondo) inputColorFondo.value = "#000000";
         }
 
-        // 🔥 EVENTO CAMBIO COLOR FONDO
+        // 🔥 SINCRONIZAR INPUTS DE FONDO
+        if (inputColorFondo) inputColorFondo.value = colorFondo;
+        if (inputColorFondoHex) inputColorFondoHex.value = colorFondo;
+
+        // 🔥 FUNCIÓN CENTRALIZADA (CLAVE)
+        const aplicarColorFondo = async (nuevoColor) => {
+
+            if (!nuevoColor) return;
+
+            document.body.style.backgroundColor = nuevoColor;
+
+            if (inputColorFondo) inputColorFondo.value = nuevoColor;
+            if (inputColorFondoHex) inputColorFondoHex.value = nuevoColor;
+
+            try {
+                await setDoc(
+                    doc(db, "configuracion", "web"),
+                    { colorFondo: nuevoColor },
+                    { merge: true }
+                );
+
+                console.log("🎨 Color fondo guardado:", nuevoColor);
+
+            } catch (e) {
+                console.error("❌ Error guardando color fondo:", e);
+            }
+        };
+
+        // 🔵 EVENTO COLOR PICKER
         if (inputColorFondo) {
-            inputColorFondo.addEventListener("input", async () => {
+            inputColorFondo.addEventListener("input", () => {
+                aplicarColorFondo(inputColorFondo.value);
+            });
+        }
 
-                const nuevoColor = inputColorFondo.value;
+        // 🔵 EVENTO INPUT HEX
+        if (inputColorFondoHex) {
+            inputColorFondoHex.addEventListener("change", () => {
 
-                // aplicar en vivo
-                document.body.style.backgroundColor = nuevoColor;
+                let valor = inputColorFondoHex.value.trim();
 
-                try {
-                    await setDoc(
-                        doc(db, "configuracion", "web"),
-                        { colorFondo: nuevoColor },
-                        { merge: true }
-                    );
-
-                    console.log("🎨 Color fondo guardado:", nuevoColor);
-
-                } catch (e) {
-                    console.error("❌ Error guardando color fondo:", e);
+                if (!valor.startsWith("#")) {
+                    valor = "#" + valor;
                 }
+
+                // validar formato HEX simple
+                if (/^#[0-9A-Fa-f]{6}$/.test(valor)) {
+                    aplicarColorFondo(valor);
+                } else {
+                    alert("Color inválido. Ej: #ffffff");
+                }
+            });
+        }
+
+        // 🔵 BOTÓN BLANCO
+        if (btnColorBlanco) {
+            btnColorBlanco.addEventListener("click", () => {
+                aplicarColorFondo("#ffffff");
             });
         }
 
