@@ -1185,6 +1185,43 @@ async function cargarServiciosDesdeFirebase() {
     try {
         console.log("1 - Entró a cargarServicios");
 
+        // =========================
+        // 🎬 CARGAR VIDEO HERO
+        // =========================
+
+        try {
+            const configRef = doc(db, "configuracion", "web");
+            const configSnap = await getDoc(configRef);
+
+            if (configSnap.exists()) {
+
+                const dataConfig = configSnap.data();
+
+                if (dataConfig.videoHero) {
+
+                    const video = document.querySelector(".hero video");
+                    const source = video ? video.querySelector("source") : null;
+
+                    if (video && source) {
+
+                        source.src = dataConfig.videoHero;
+
+                        // 🔥 RECARGAR VIDEO (CLAVE)
+                        video.load();
+
+                        console.log("🎬 Video hero cargado:", dataConfig.videoHero);
+                    }
+                }
+            }
+
+        } catch (error) {
+            console.warn("Error cargando video hero:", error);
+        }
+
+        // =========================
+        // 🔽 TU LÓGICA EXISTENTE
+        // =========================
+
         const snapshot = await getDocs(collection(db, "servicios"));
 
         // 🔹 INPUTS TÍTULO
@@ -1285,7 +1322,7 @@ async function cargarServiciosDesdeFirebase() {
         console.error("Error cargando desde Firebase:", error);
     }
 }
- 
+
  
 async function cargarGaleriaDesdeFirebase() {
     try {
