@@ -2617,18 +2617,21 @@ setTimeout(() => {
         });
     }
 
-    // 🔵 PANEL
-    const panelTitulo = document.getElementById("panelTituloAdmin");
-    if (panelTitulo) panelTitulo.style.display = "block";
+// 🔵 PANEL
+const panelTitulo = document.getElementById("panelTituloAdmin");
+if (panelTitulo) panelTitulo.style.display = "block";
 
-    // 🔵 INPUTS
-    const inputColor = document.getElementById("inputColorTitulo");
-    const inputTamano = document.getElementById("inputTamanoTitulo");
-    const inputColorSubtitulo = document.getElementById("inputColorSubtitulo");
-    const inputTamanoSubtitulo = document.getElementById("inputTamanoSubtitulo");
+// 🔵 INPUTS
+const inputColor = document.getElementById("inputColorTitulo");
+const inputTamano = document.getElementById("inputTamanoTitulo");
+const inputColorSubtitulo = document.getElementById("inputColorSubtitulo");
+const inputTamanoSubtitulo = document.getElementById("inputTamanoSubtitulo");
 
-    // 🔥 BOTÓN IMAGEN
- const btnSubir = document.getElementById("btnSubirImagen");
+// 🔥 NUEVO INPUT FONDO
+const inputColorFondo = document.getElementById("inputColorFondo");
+
+// 🔥 BOTÓN IMAGEN
+const btnSubir = document.getElementById("btnSubirImagen");
 
 if (btnSubir) {
     btnSubir.addEventListener("click", async () => {
@@ -2644,7 +2647,7 @@ if (btnSubir) {
     console.warn("⚠️ No se encontró btnSubirImagen");
 }
 
-    // 🔥 BOTÓN VIDEO
+// 🔥 BOTÓN VIDEO
 document.addEventListener("DOMContentLoaded", function () {
 
     const btnAgregarVideo = document.getElementById("btnAgregarVideo");
@@ -2658,56 +2661,81 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
-    // 🔵 EVENTOS TÍTULO
-    if (inputColor && inputTamano) {
+// 🔵 EVENTOS TÍTULO
+if (inputColor && inputTamano) {
 
-        inputColor.addEventListener("input", () => {
-            if (titulo) titulo.style.color = inputColor.value;
-            guardarEstiloTitulo(inputColor.value, inputTamano.value);
-        });
+    inputColor.addEventListener("input", () => {
+        if (titulo) titulo.style.color = inputColor.value;
+        guardarEstiloTitulo(inputColor.value, inputTamano.value);
+    });
 
-        inputTamano.addEventListener("input", () => {
-            let tamano = inputTamano.value;
-            if (titulo && tamano) titulo.style.fontSize = tamano + "px";
-            guardarEstiloTitulo(inputColor.value, tamano);
-        });
-    }
+    inputTamano.addEventListener("input", () => {
+        let tamano = inputTamano.value;
+        if (titulo && tamano) titulo.style.fontSize = tamano + "px";
+        guardarEstiloTitulo(inputColor.value, tamano);
+    });
+}
 
-    // 🔵 EVENTOS SUBTÍTULO
-    if (inputColorSubtitulo) {
-        inputColorSubtitulo.addEventListener("input", () => {
-            if (subtitulo) subtitulo.style.color = inputColorSubtitulo.value;
+// 🔵 EVENTOS SUBTÍTULO
+if (inputColorSubtitulo) {
+    inputColorSubtitulo.addEventListener("input", () => {
+        if (subtitulo) subtitulo.style.color = inputColorSubtitulo.value;
 
-            guardarEstiloTitulo(
-                null,
-                null,
-                null,
-                inputColorSubtitulo.value,
-                inputTamanoSubtitulo ? inputTamanoSubtitulo.value : null
+        guardarEstiloTitulo(
+            null,
+            null,
+            null,
+            inputColorSubtitulo.value,
+            inputTamanoSubtitulo ? inputTamanoSubtitulo.value : null
+        );
+    });
+}
+
+if (inputTamanoSubtitulo) {
+    inputTamanoSubtitulo.addEventListener("input", () => {
+
+        let tamano = inputTamanoSubtitulo.value;
+
+        if (subtitulo && tamano) {
+            subtitulo.style.fontSize = tamano + "px";
+        }
+
+        guardarEstiloTitulo(
+            null,
+            null,
+            null,
+            inputColorSubtitulo ? inputColorSubtitulo.value : null,
+            tamano
+        );
+    });
+}
+
+// 🔥 EVENTO NUEVO: FONDO GLOBAL
+if (inputColorFondo) {
+    inputColorFondo.addEventListener("input", async () => {
+
+        const color = inputColorFondo.value;
+
+        // 🔵 APLICAR EN VIVO
+        document.body.style.backgroundColor = color;
+
+        try {
+            await setDoc(
+                doc(db, "configuracion", "web"),
+                { colorFondo: color },
+                { merge: true }
             );
-        });
-    }
 
-    if (inputTamanoSubtitulo) {
-        inputTamanoSubtitulo.addEventListener("input", () => {
+            console.log("🎨 Color de fondo guardado:", color);
 
-            let tamano = inputTamanoSubtitulo.value;
-
-            if (subtitulo && tamano) {
-                subtitulo.style.fontSize = tamano + "px";
-            }
-
-            guardarEstiloTitulo(
-                null,
-                null,
-                null,
-                inputColorSubtitulo ? inputColorSubtitulo.value : null,
-                tamano
-            );
-        });
-    }
+        } catch (error) {
+            console.error("❌ Error guardando fondo:", error);
+        }
+    });
+}
 
 }, 300);
+ 
      
  // 🔥 CONTROL MODAL SERVICIO
 
