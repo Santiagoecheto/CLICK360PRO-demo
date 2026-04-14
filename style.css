@@ -8,11 +8,13 @@ body{
 
 .hero{
     position:relative;
-    height:90vh;
+    min-height:90vh; /* 🔥 CAMBIO CLAVE */
     display:flex;
     justify-content:center;
-    align-items:center;
+    align-items:flex-start; /* 🔥 CAMBIO CLAVE */
     text-align:center;
+    padding-top:100px; /* 🔥 DA AIRE PARA QUE NO QUEDE PEGADO ARRIBA */
+    padding-bottom:40px; /* 🔥 evita que quede cortado abajo */
 }
 
 
@@ -42,12 +44,14 @@ z-index:0;
 }
 
 .hero-box{
-position:relative;
-z-index:2;
-background:rgba(0,0,0,0.6);
-padding:40px;
-border-radius:12px;
-max-width:600px;
+    position:relative;
+    z-index:2;
+    background:rgba(0,0,0,0.6);
+    padding:40px;
+    border-radius:12px;
+    max-width:600px;
+    width:90%; /* 🔥 evita que quede chico en pantallas grandes o raro en mobile */
+    margin:0 auto; /* 🔥 lo centra perfecto horizontalmente */
 }
 
 .hero h1{
