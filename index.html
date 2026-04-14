@@ -2618,23 +2618,21 @@ setTimeout(() => {
     }
 
 // 🔵 PANEL
-const panelTitulo = document.getElementById("panelTituloAdmin");
-if (panelTitulo && adminAutenticado) {
-    panelTitulo.style.display = "block";
-}
- const panelVideos = document.getElementById("adminVideos");
 
-if (panelVideos && adminAutenticado) {
-    panelVideos.style.display = "block";
-}
+if (!adminAutenticado) return;
+
+const panelTitulo = document.getElementById("panelTituloAdmin");
+if (panelTitulo) panelTitulo.style.display = "block";
+
+// 🔵 PANEL VIDEOS
+const panelVideos = document.getElementById("adminVideos");
+if (panelVideos) panelVideos.style.display = "block";
 
 // 🔵 INPUTS
 const inputColor = document.getElementById("inputColorTitulo");
 const inputTamano = document.getElementById("inputTamanoTitulo");
 const inputColorSubtitulo = document.getElementById("inputColorSubtitulo");
 const inputTamanoSubtitulo = document.getElementById("inputTamanoSubtitulo");
-
-// 🔥 NUEVO INPUT FONDO
 const inputColorFondo = document.getElementById("inputColorFondo");
 
 // 🔥 BOTÓN IMAGEN
@@ -2648,25 +2646,14 @@ if (btnSubir) {
             console.error("❌ Error en botón subir imagen:", e);
         }
     });
-
-    console.log("✅ Botón Subir Imagen conectado");
-} else {
-    console.warn("⚠️ No se encontró btnSubirImagen");
 }
 
 // 🔥 BOTÓN VIDEO
-document.addEventListener("DOMContentLoaded", function () {
+const btnAgregarVideo = document.getElementById("btnAgregarVideo");
 
-    const btnAgregarVideo = document.getElementById("btnAgregarVideo");
-
-    if (btnAgregarVideo) {
-        btnAgregarVideo.onclick = agregarVideoFirebase;
-        console.log("✅ Botón Agregar Video conectado");
-    } else {
-        console.warn("⚠️ No se encontró btnAgregarVideo");
-    }
-
-});
+if (btnAgregarVideo) {
+    btnAgregarVideo.onclick = agregarVideoFirebase;
+}
 
 // 🔵 EVENTOS TÍTULO
 if (inputColor && inputTamano) {
@@ -2717,13 +2704,12 @@ if (inputTamanoSubtitulo) {
     });
 }
 
-// 🔥 EVENTO NUEVO: FONDO GLOBAL
+// 🔥 EVENTO FONDO
 if (inputColorFondo) {
     inputColorFondo.addEventListener("input", async () => {
 
         const color = inputColorFondo.value;
 
-        // 🔵 APLICAR EN VIVO
         document.body.style.backgroundColor = color;
 
         try {
@@ -2732,9 +2718,6 @@ if (inputColorFondo) {
                 { colorFondo: color },
                 { merge: true }
             );
-
-            console.log("🎨 Color de fondo guardado:", color);
-
         } catch (error) {
             console.error("❌ Error guardando fondo:", error);
         }
