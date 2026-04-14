@@ -1476,54 +1476,41 @@ window.agregarVideoFirebase = async function() {
         const titulo = tituloInput.value.trim();
         const descripcion = descInput.value.trim();
 
-        // =========================
-        // 🔥 ELEGIR DESTINO
-        // =========================
-
-        const destino = prompt(
-            "¿Dónde querés usar este video?\n\n1 = Sección Videos (YouTube)\n2 = Video de Inicio (Subir archivo)"
-        );
-
-        if (destino !== "1" && destino !== "2") {
-            alert("Operación cancelada");
+        if (!url) {
+            alert("Ingresá una URL de YouTube");
             return;
         }
 
-        // =========================
-        // 🔵 DESTINO 1 → YOUTUBE
-        // =========================
+        // 🔥 NORMALIZAR URL YOUTUBE
+        let videoId = "";
 
-        if (destino === "1") {
+        try {
+            const urlObj = new URL(url);
 
-            if (!url) {
-                alert("Ingresá una URL de YouTube");
-                return;
+            if (urlObj.hostname.includes("youtu.be")) {
+                videoId = urlObj.pathname.replace("/", "");
+            }
+            else if (urlObj.searchParams.get("v")) {
+                videoId = urlObj.searchParams.get("v");
+            }
+            else if (urlObj.pathname.includes("/embed/")) {
+                videoId = urlObj.pathname.split("/embed/")[1];
             }
 
-            let videoId = "";
+        } catch (e) {
+            console.warn("⚠ URL inválida, se guarda tal cual");
+        }
 
-            try {
-                const urlObj = new URL(url);
+        if (videoId) {
+            url = `https://www.youtube.com/embed/${videoId}`;
+        }
 
-                if (urlObj.hostname.includes("youtu.be")) {
-                    videoId = urlObj.pathname.replace("/", "");
-                }
-                else if (urlObj.searchParams.get("v")) {
-                    videoId = urlObj.searchParams.get("v");
-                }
-                else if (urlObj.pathname.includes("/embed/")) {
-                    videoId = urlObj.pathname.split("/embed/")[1];
-                }
+        console.log("🔥 URL final:", url);
+        console.log("🎯 Video ID:", videoId);
 
-            } catch (e) {
-                console.warn("URL inválida");
-            }
+        // 🔴 VALIDAR DUPLICADOS POR ID
+        if (videoId) {
 
-            if (videoId) {
-                url = `https://www.youtube.com/embed/${videoId}`;
-            }
-
-            // VALIDAR DUPLICADOS
             const snapshot = await getDocs(collection(db, "videos"));
 
             let existe = false;
@@ -1537,107 +1524,33 @@ window.agregarVideoFirebase = async function() {
             });
 
             if (existe) {
-                alert("Este video ya fue agregado");
+                alert("⚠ Este video ya fue agregado");
                 return;
             }
-
-            await addDoc(collection(db, "videos"), {
-                url: url,
-                titulo: titulo || "Sin título",
-                descripcion: descripcion || "",
-                fecha: new Date()
-            });
-
-            alert("Video agregado en sección Videos");
-
         }
 
-        // =========================
-        // 🔴 DESTINO 2 → HERO (UPLOAD)
-        // =========================
+        // ✅ GUARDAR
+        await addDoc(collection(db, "videos"), {
+            url: url,
+            titulo: titulo || "Sin título",
+            descripcion: descripcion || "",
+            fecha: new Date()
+        });
 
-        if (destino === "2") {
+        console.log("✅ Video guardado");
 
-            // 🔥 CREAR INPUT FILE DINÁMICO
-            const inputFile = document.createElement("input");
-            inputFile.type = "file";
-            inputFile.accept = "video/mp4";
+        alert("Video agregado correctamente");
 
-            inputFile.click();
-
-            inputFile.onchange = async function() {
-
-                const archivo = inputFile.files[0];
-
-                if (!archivo) return;
-
-                // VALIDACIONES
-                if (!archivo.type.includes("mp4")) {
-                    alert("Solo se permiten videos MP4");
-                    return;
-                }
-
-                if (archivo.size > 50 * 1024 * 1024) {
-                    alert("El video es muy pesado (máx 50MB)");
-                    return;
-                }
-
-                try {
-
-                    console.log("📤 Subiendo video a Firebase...");
-
-                    const nombreArchivo = "hero_" + Date.now() + ".mp4";
-                    const storageRef = ref(storage, "videos/" + nombreArchivo);
-
-                    await uploadBytes(storageRef, archivo);
-
-                    const urlVideo = await getDownloadURL(storageRef);
-
-                    console.log("✅ Video subido:", urlVideo);
-
-                    // 🔥 GUARDAR EN FIRESTORE
-                    await setDoc(
-                        doc(db, "configuracion", "web"),
-                        {
-                            videoHero: urlVideo
-                        },
-                        { merge: true }
-                    );
-
-                    console.log("🎬 Video hero actualizado");
-
-                    // 🔥 ACTUALIZAR EN VIVO
-                    const video = document.querySelector(".hero video");
-                    const source = video ? video.querySelector("source") : null;
-
-                    if (video && source) {
-                        source.src = urlVideo;
-                        video.load();
-                    }
-
-                    alert("Video de inicio actualizado correctamente");
-
-                } catch (error) {
-                    console.error("Error subiendo video:", error);
-                    alert("Error subiendo video");
-                }
-            };
-        }
-
-        // =========================
         // 🔥 LIMPIAR INPUTS
-        // =========================
-
         urlInput.value = "";
         tituloInput.value = "";
         descInput.value = "";
 
     } catch (error) {
-        console.error("Error general:", error);
-        alert("Error en el proceso");
+        console.error("❌ Error agregando video:", error);
+        alert("Error agregando video");
     }
-};
- 
+}
  
  
 function renderPrecios(data, modoEdicion = false){
