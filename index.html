@@ -2286,6 +2286,7 @@ async function cargarTituloWeb() {
         const docSnap = await getDoc(docRef);
 
         const titulo = document.getElementById("tituloWeb");
+        const subtitulo = document.getElementById("subtituloWeb");
 
         // 🔵 INPUTS
         const inputColor = document.getElementById("inputColorTitulo");
@@ -2294,6 +2295,7 @@ async function cargarTituloWeb() {
         const inputColorSubtitulo = document.getElementById("inputColorSubtitulo");
         const inputTamanoSubtitulo = document.getElementById("inputTamanoSubtitulo");
 
+        // 🔥 NUEVO
         const inputColorFondo = document.getElementById("inputColorFondo");
 
         if (!titulo) return;
@@ -2309,6 +2311,7 @@ async function cargarTituloWeb() {
             const colorSub = data.colorSubtitulo || "#ffffff";
             const tamanoSub = data.tamanoSubtitulo || "20px";
 
+            // 🔥 NUEVO
             const colorFondo = data.colorFondo || "#000000";
 
             // 🔵 APLICAR AL DOM
@@ -2316,31 +2319,23 @@ async function cargarTituloWeb() {
             titulo.style.color = color;
             titulo.style.fontSize = tamano;
 
-            // 🔵 APLICAR FONDO GLOBAL
+            if (subtitulo) {
+                subtitulo.style.color = colorSub;
+                subtitulo.style.fontSize = tamanoSub;
+            }
+
+            // 🔥 APLICAR FONDO A TODA LA WEB
             document.body.style.backgroundColor = colorFondo;
 
-            // 🔵 PRECARGAR INPUTS TÍTULO
-            if (inputColor) {
-                inputColor.value = color;
-            }
+            // 🔵 PRECARGAR INPUTS
+            if (inputColor) inputColor.value = color;
+            if (inputTamano) inputTamano.value = parseInt(tamano);
 
-            if (inputTamano) {
-                inputTamano.value = parseInt(tamano);
-            }
+            if (inputColorSubtitulo) inputColorSubtitulo.value = colorSub;
+            if (inputTamanoSubtitulo) inputTamanoSubtitulo.value = parseInt(tamanoSub);
 
-            // 🔵 PRECARGAR INPUTS SUBTÍTULO
-            if (inputColorSubtitulo) {
-                inputColorSubtitulo.value = colorSub;
-            }
-
-            if (inputTamanoSubtitulo) {
-                inputTamanoSubtitulo.value = parseInt(tamanoSub);
-            }
-
-            // 🔵 PRECARGAR INPUT FONDO
-            if (inputColorFondo) {
-                inputColorFondo.value = colorFondo;
-            }
+            // 🔥 NUEVO
+            if (inputColorFondo) inputColorFondo.value = colorFondo;
 
         } else {
 
@@ -2348,17 +2343,40 @@ async function cargarTituloWeb() {
             titulo.style.color = "#ffffff";
             titulo.style.fontSize = "48px";
 
-            // 🔵 DEFAULT INPUTS
+            document.body.style.backgroundColor = "#000000";
+
             if (inputColor) inputColor.value = "#ffffff";
             if (inputTamano) inputTamano.value = 48;
 
             if (inputColorSubtitulo) inputColorSubtitulo.value = "#ffffff";
             if (inputTamanoSubtitulo) inputTamanoSubtitulo.value = 20;
 
+            // 🔥 NUEVO
             if (inputColorFondo) inputColorFondo.value = "#000000";
+        }
 
-            // 🔵 DEFAULT FONDO GLOBAL
-            document.body.style.backgroundColor = "#000000";
+        // 🔥 EVENTO CAMBIO COLOR FONDO
+        if (inputColorFondo) {
+            inputColorFondo.addEventListener("input", async () => {
+
+                const nuevoColor = inputColorFondo.value;
+
+                // aplicar en vivo
+                document.body.style.backgroundColor = nuevoColor;
+
+                try {
+                    await setDoc(
+                        doc(db, "configuracion", "web"),
+                        { colorFondo: nuevoColor },
+                        { merge: true }
+                    );
+
+                    console.log("🎨 Color fondo guardado:", nuevoColor);
+
+                } catch (e) {
+                    console.error("❌ Error guardando color fondo:", e);
+                }
+            });
         }
 
     } catch (error) {
