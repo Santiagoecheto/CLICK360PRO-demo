@@ -2468,81 +2468,91 @@ document.addEventListener("DOMContentLoaded", () => {
     // =========================
     // 🎬 SUBIR VIDEO HERO
     // =========================
+const btnVideoHero = document.getElementById("btnSubirVideoHero");
 
-    const btnVideoHero = document.getElementById("btnSubirVideoHero");
+if (btnVideoHero) {
 
-    if (btnVideoHero) {
+    btnVideoHero.addEventListener("click", async () => {
 
-        btnVideoHero.addEventListener("click", async () => {
+        try {
 
-            try {
+            const input = document.getElementById("inputVideoHero");
 
-                const input = document.getElementById("inputVideoHero");
-
-                if (!input || !input.files || input.files.length === 0) {
-                    alert("Seleccioná un video primero");
-                    return;
-                }
-
-                const archivo = input.files[0];
-
-                // 🔥 VALIDACIONES
-                if (!archivo.type.includes("mp4")) {
-                    alert("Solo se permiten videos MP4");
-                    return;
-                }
-
-                if (archivo.size > 50 * 1024 * 1024) {
-                    alert("El video es muy pesado (máx 50MB)");
-                    return;
-                }
-
-                console.log("📤 Subiendo video hero...");
-
-                const nombre = "hero_" + Date.now() + ".mp4";
-                const storageRef = ref(storage, "videos/" + nombre);
-
-                await uploadBytes(storageRef, archivo);
-
-                const url = await getDownloadURL(storageRef);
-
-                console.log("✅ Video subido:", url);
-
-                // 🔥 GUARDAR EN FIRESTORE
-                await setDoc(
-                    doc(db, "configuracion", "web"),
-                    { videoHero: url },
-                    { merge: true }
-                );
-
-                console.log("🎬 Video hero guardado");
-
-                // 🔥 ACTUALIZAR EN VIVO
-                const video = document.querySelector(".hero video");
-                const source = video ? video.querySelector("source") : null;
-
-                if (video && source) {
-                    source.src = url;
-                    video.load();
-                }
-
-                alert("Video de inicio actualizado correctamente");
-
-                // 🔥 LIMPIAR INPUT
-                input.value = "";
-
-            } catch (error) {
-                console.error("❌ Error subiendo video hero:", error);
-                alert("Error subiendo video");
+            if (!input || !input.files || input.files.length === 0) {
+                alert("Seleccioná un video primero");
+                return;
             }
 
-        });
+            const archivo = input.files[0];
 
-        console.log("✅ Botón Video Hero conectado");
+            // 🔥 VALIDACIONES
+            if (!archivo.type.includes("mp4")) {
+                alert("Solo se permiten videos MP4");
+                return;
+            }
 
-    } else {
-        console.warn("⚠️ No se encontró btnSubirVideoHero");
-    }
+            if (archivo.size > 50 * 1024 * 1024) {
+                alert("El video es muy pesado (máx 50MB)");
+                return;
+            }
+
+            console.log("📤 Enviando video al backend...");
+
+            // 🔥 FORM DATA (IGUAL QUE IMÁGENES)
+            const formData = new FormData();
+            formData.append("video", archivo);
+
+            // 🔥 LLAMADA AL BACKEND
+            const response = await fetch("/api/subir-video", {
+                method: "POST",
+                body: formData
+            });
+
+            if (!response.ok) {
+                throw new Error("Error en el servidor");
+            }
+
+            const data = await response.json();
+
+            const url = data.url;
+
+            console.log("✅ Video subido:", url);
+
+            // 🔥 GUARDAR EN FIRESTORE
+            await setDoc(
+                doc(db, "configuracion", "web"),
+                { videoHero: url },
+                { merge: true }
+            );
+
+            console.log("🎬 Video hero guardado");
+
+            // 🔥 ACTUALIZAR EN VIVO
+            const video = document.querySelector(".hero video");
+            const source = video ? video.querySelector("source") : null;
+
+            if (video && source) {
+                source.src = url;
+                video.load();
+            }
+
+            alert("Video de inicio actualizado correctamente");
+
+            // 🔥 LIMPIAR INPUT
+            input.value = "";
+
+        } catch (error) {
+            console.error("❌ Error subiendo video hero:", error);
+            alert("Error subiendo video");
+        }
+
+    });
+
+    console.log("✅ Botón Video Hero conectado");
+
+} else {
+    console.warn("⚠️ No se encontró btnSubirVideoHero");
+}
 
 });
  
