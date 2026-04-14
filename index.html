@@ -2294,6 +2294,8 @@ async function cargarTituloWeb() {
         const inputColorSubtitulo = document.getElementById("inputColorSubtitulo");
         const inputTamanoSubtitulo = document.getElementById("inputTamanoSubtitulo");
 
+        const inputColorFondo = document.getElementById("inputColorFondo");
+
         if (!titulo) return;
 
         if (docSnap.exists()) {
@@ -2307,10 +2309,15 @@ async function cargarTituloWeb() {
             const colorSub = data.colorSubtitulo || "#ffffff";
             const tamanoSub = data.tamanoSubtitulo || "20px";
 
+            const colorFondo = data.colorFondo || "#000000";
+
             // 🔵 APLICAR AL DOM
             titulo.textContent = texto !== "" ? texto : "Jenny Estilista Profesional";
             titulo.style.color = color;
             titulo.style.fontSize = tamano;
+
+            // 🔵 APLICAR FONDO GLOBAL
+            document.body.style.backgroundColor = colorFondo;
 
             // 🔵 PRECARGAR INPUTS TÍTULO
             if (inputColor) {
@@ -2330,6 +2337,11 @@ async function cargarTituloWeb() {
                 inputTamanoSubtitulo.value = parseInt(tamanoSub);
             }
 
+            // 🔵 PRECARGAR INPUT FONDO
+            if (inputColorFondo) {
+                inputColorFondo.value = colorFondo;
+            }
+
         } else {
 
             titulo.textContent = "Jenny Estilista Profesional";
@@ -2342,13 +2354,18 @@ async function cargarTituloWeb() {
 
             if (inputColorSubtitulo) inputColorSubtitulo.value = "#ffffff";
             if (inputTamanoSubtitulo) inputTamanoSubtitulo.value = 20;
+
+            if (inputColorFondo) inputColorFondo.value = "#000000";
+
+            // 🔵 DEFAULT FONDO GLOBAL
+            document.body.style.backgroundColor = "#000000";
         }
 
     } catch (error) {
         console.error("Error cargando título:", error);
     }
 }
-
+ 
  
 async function cargarSubtituloWeb() {
     try {
