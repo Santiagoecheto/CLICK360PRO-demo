@@ -1476,17 +1476,12 @@ window.agregarVideoFirebase = async function() {
         const titulo = tituloInput.value.trim();
         const descripcion = descInput.value.trim();
 
-        if (!url) {
-            alert("Ingresá una URL de YouTube");
-            return;
-        }
-
         // =========================
         // 🔥 ELEGIR DESTINO
         // =========================
 
         const destino = prompt(
-            "¿Dónde querés usar este video?\n\n1 = Sección Videos\n2 = Video de Inicio (Hero)"
+            "¿Dónde querés usar este video?\n\n1 = Sección Videos (YouTube)\n2 = Video de Inicio (Subir archivo)"
         );
 
         if (destino !== "1" && destino !== "2") {
@@ -1495,59 +1490,55 @@ window.agregarVideoFirebase = async function() {
         }
 
         // =========================
-        // 🔥 NORMALIZAR YOUTUBE
-        // =========================
-
-        let videoId = "";
-
-        try {
-            const urlObj = new URL(url);
-
-            if (urlObj.hostname.includes("youtu.be")) {
-                videoId = urlObj.pathname.replace("/", "");
-            }
-            else if (urlObj.searchParams.get("v")) {
-                videoId = urlObj.searchParams.get("v");
-            }
-            else if (urlObj.pathname.includes("/embed/")) {
-                videoId = urlObj.pathname.split("/embed/")[1];
-            }
-
-        } catch (e) {
-            console.warn("⚠ URL inválida, se guarda tal cual");
-        }
-
-        if (videoId) {
-            url = `https://www.youtube.com/embed/${videoId}`;
-        }
-
-        console.log("🔥 URL final:", url);
-
-        // =========================
-        // 🔵 DESTINO 1 → VIDEOS
+        // 🔵 DESTINO 1 → YOUTUBE
         // =========================
 
         if (destino === "1") {
 
-            // 🔴 VALIDAR DUPLICADOS
-            if (videoId) {
+            if (!url) {
+                alert("Ingresá una URL de YouTube");
+                return;
+            }
 
-                const snapshot = await getDocs(collection(db, "videos"));
+            let videoId = "";
 
-                let existe = false;
+            try {
+                const urlObj = new URL(url);
 
-                snapshot.forEach(docSnap => {
-                    const data = docSnap.data();
-
-                    if (data.url && data.url.includes(videoId)) {
-                        existe = true;
-                    }
-                });
-
-                if (existe) {
-                    alert("⚠ Este video ya fue agregado");
-                    return;
+                if (urlObj.hostname.includes("youtu.be")) {
+                    videoId = urlObj.pathname.replace("/", "");
                 }
+                else if (urlObj.searchParams.get("v")) {
+                    videoId = urlObj.searchParams.get("v");
+                }
+                else if (urlObj.pathname.includes("/embed/")) {
+                    videoId = urlObj.pathname.split("/embed/")[1];
+                }
+
+            } catch (e) {
+                console.warn("URL inválida");
+            }
+
+            if (videoId) {
+                url = `https://www.youtube.com/embed/${videoId}`;
+            }
+
+            // VALIDAR DUPLICADOS
+            const snapshot = await getDocs(collection(db, "videos"));
+
+            let existe = false;
+
+            snapshot.forEach(docSnap => {
+                const data = docSnap.data();
+
+                if (data.url && data.url.includes(videoId)) {
+                    existe = true;
+                }
+            });
+
+            if (existe) {
+                alert("Este video ya fue agregado");
+                return;
             }
 
             await addDoc(collection(db, "videos"), {
@@ -1557,42 +1548,80 @@ window.agregarVideoFirebase = async function() {
                 fecha: new Date()
             });
 
-            console.log("✅ Video guardado en sección videos");
             alert("Video agregado en sección Videos");
 
         }
 
         // =========================
-        // 🔴 DESTINO 2 → HERO
+        // 🔴 DESTINO 2 → HERO (UPLOAD)
         // =========================
 
         if (destino === "2") {
 
-            // ⚠️ VALIDACIÓN IMPORTANTE
-            if (url.includes("youtube")) {
-                alert("⚠ El video de inicio debe ser un .mp4 (no YouTube)");
-                return;
-            }
+            // 🔥 CREAR INPUT FILE DINÁMICO
+            const inputFile = document.createElement("input");
+            inputFile.type = "file";
+            inputFile.accept = "video/mp4";
 
-            await setDoc(
-                doc(db, "configuracion", "web"),
-                {
-                    videoHero: url
-                },
-                { merge: true }
-            );
+            inputFile.click();
 
-            console.log("🎬 Video hero actualizado");
-            alert("Video de inicio actualizado");
+            inputFile.onchange = async function() {
 
-            // 🔥 RECARGAR VIDEO EN VIVO
-            const video = document.querySelector(".hero video");
-            const source = video ? video.querySelector("source") : null;
+                const archivo = inputFile.files[0];
 
-            if (video && source) {
-                source.src = url;
-                video.load();
-            }
+                if (!archivo) return;
+
+                // VALIDACIONES
+                if (!archivo.type.includes("mp4")) {
+                    alert("Solo se permiten videos MP4");
+                    return;
+                }
+
+                if (archivo.size > 50 * 1024 * 1024) {
+                    alert("El video es muy pesado (máx 50MB)");
+                    return;
+                }
+
+                try {
+
+                    console.log("📤 Subiendo video a Firebase...");
+
+                    const nombreArchivo = "hero_" + Date.now() + ".mp4";
+                    const storageRef = ref(storage, "videos/" + nombreArchivo);
+
+                    await uploadBytes(storageRef, archivo);
+
+                    const urlVideo = await getDownloadURL(storageRef);
+
+                    console.log("✅ Video subido:", urlVideo);
+
+                    // 🔥 GUARDAR EN FIRESTORE
+                    await setDoc(
+                        doc(db, "configuracion", "web"),
+                        {
+                            videoHero: urlVideo
+                        },
+                        { merge: true }
+                    );
+
+                    console.log("🎬 Video hero actualizado");
+
+                    // 🔥 ACTUALIZAR EN VIVO
+                    const video = document.querySelector(".hero video");
+                    const source = video ? video.querySelector("source") : null;
+
+                    if (video && source) {
+                        source.src = urlVideo;
+                        video.load();
+                    }
+
+                    alert("Video de inicio actualizado correctamente");
+
+                } catch (error) {
+                    console.error("Error subiendo video:", error);
+                    alert("Error subiendo video");
+                }
+            };
         }
 
         // =========================
@@ -1604,11 +1633,11 @@ window.agregarVideoFirebase = async function() {
         descInput.value = "";
 
     } catch (error) {
-        console.error("❌ Error agregando video:", error);
-        alert("Error agregando video");
+        console.error("Error general:", error);
+        alert("Error en el proceso");
     }
-}
-
+};
+ 
  
  
 function renderPrecios(data, modoEdicion = false){
