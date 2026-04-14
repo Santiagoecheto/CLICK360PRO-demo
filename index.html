@@ -2619,7 +2619,9 @@ setTimeout(() => {
 
 // 🔵 PANEL
 const panelTitulo = document.getElementById("panelTituloAdmin");
-if (panelTitulo) panelTitulo.style.display = "block";
+if (panelTitulo && adminAutenticado) {
+    panelTitulo.style.display = "block";
+}
 
 // 🔵 INPUTS
 const inputColor = document.getElementById("inputColorTitulo");
