@@ -1009,78 +1009,51 @@ async function guardarEstiloTitulo(
         const data = {};
 
         // 🔵 TÍTULO
-        if (color) {
-            data.colorTitulo = color;
-        }
+        if (color) data.colorTitulo = color;
 
         if (tamano) {
             let tamanoFinal = tamano.toString().trim();
-
             if (!tamanoFinal.endsWith("px")) {
-                tamanoFinal = tamanoFinal + "px";
+                tamanoFinal += "px";
             }
-
             data.tamanoTitulo = tamanoFinal;
         }
 
-        // 🔵 SUBTÍTULO TEXTO
+        // 🔵 SUBTÍTULO
         if (subtituloTexto !== undefined && subtituloTexto !== null) {
             data.subtitulo = subtituloTexto;
         }
 
-        // 🔵 COLOR SUBTÍTULO
-        if (colorSubtitulo) {
-            data.colorSubtitulo = colorSubtitulo;
-        }
+        if (colorSubtitulo) data.colorSubtitulo = colorSubtitulo;
 
-        // 🔵 TAMAÑO SUBTÍTULO
         if (tamanoSubtitulo) {
             let tamanoSubFinal = tamanoSubtitulo.toString().trim();
-
             if (!tamanoSubFinal.endsWith("px")) {
-                tamanoSubFinal = tamanoSubFinal + "px";
+                tamanoSubFinal += "px";
             }
-
             data.tamanoSubtitulo = tamanoSubFinal;
         }
 
-        // =========================
-        // 🟣 NAVBAR (NUEVO)
-        // =========================
+        // 🟣 NAVBAR
 
-        // 🔥 SI NO VIENEN POR PARÁMETRO, LOS TOMAMOS DEL DOM
         if (!colorNavbarLinks) {
             const inputLinks = document.getElementById("inputColorNavbarLinks");
-            if (inputLinks && inputLinks.value) {
-                colorNavbarLinks = inputLinks.value;
-            }
+            if (inputLinks) colorNavbarLinks = inputLinks.value;
         }
 
         if (!colorNavbarHover) {
             const inputHover = document.getElementById("inputColorNavbarHover");
-            if (inputHover && inputHover.value) {
-                colorNavbarHover = inputHover.value;
-            }
+            if (inputHover) colorNavbarHover = inputHover.value;
         }
 
         if (!colorNavbarLogo) {
             const inputLogo = document.getElementById("inputColorNavbarLogo");
-            if (inputLogo && inputLogo.value) {
-                colorNavbarLogo = inputLogo.value;
-            }
+            if (inputLogo) colorNavbarLogo = inputLogo.value;
         }
 
-        if (colorNavbarLinks) {
-            data.colorNavbarLinks = colorNavbarLinks;
-        }
-
-        if (colorNavbarHover) {
-            data.colorNavbarHover = colorNavbarHover;
-        }
-
-        if (colorNavbarLogo) {
-            data.colorNavbarLogo = colorNavbarLogo;
-        }
+        if (colorNavbarLinks) data.colorNavbarLinks = colorNavbarLinks;
+        if (colorNavbarHover) data.colorNavbarHover = colorNavbarHover;
+        if (colorNavbarLogo) data.colorNavbarLogo = colorNavbarLogo;
 
         await setDoc(
             doc(db, "configuracion", "web"),
@@ -1088,7 +1061,36 @@ async function guardarEstiloTitulo(
             { merge: true }
         );
 
-        console.log("Estilo guardado en Firebase");
+        // =========================
+        // 💥 APLICAR EN VIVO (CLAVE)
+        // =========================
+
+        const navLinks = document.querySelectorAll(".nav-links a");
+        const logoNavbar = document.getElementById("logoNavbar");
+
+        if (colorNavbarLinks) {
+            navLinks.forEach(link => {
+                link.style.color = colorNavbarLinks;
+            });
+        }
+
+        if (colorNavbarHover) {
+            navLinks.forEach(link => {
+                link.onmouseenter = () => {
+                    link.style.color = colorNavbarHover;
+                };
+                link.onmouseleave = () => {
+                    link.style.color = colorNavbarLinks || "";
+                };
+            });
+        }
+
+        if (colorNavbarLogo && logoNavbar) {
+            logoNavbar.style.color = colorNavbarLogo;
+        }
+
+        console.log("Estilo guardado y aplicado en vivo");
+
     } catch (error) {
         console.error("Error guardando estilo:", error);
     }
