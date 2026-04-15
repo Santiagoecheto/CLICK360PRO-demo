@@ -977,8 +977,11 @@ const params = new URLSearchParams(window.location.search);
 const esAdmin = params.get("admin") === "1";
 
 let adminAutenticado = false;
+
+
+
  
-async function guardarEstiloTitulo(color, tamano, subtituloTexto, colorSubtitulo, tamanoSubtitulo) {
+async function guardarEstiloTitulo(color, tamano, subtituloTexto, colorSubtitulo, tamanoSubtitulo, colorNavbarLinks, colorNavbarHover, colorNavbarLogo) {
     try {
         const data = {};
 
@@ -1018,6 +1021,22 @@ async function guardarEstiloTitulo(color, tamano, subtituloTexto, colorSubtitulo
             data.tamanoSubtitulo = tamanoSubFinal;
         }
 
+        // =========================
+        // 🟣 NAVBAR (NUEVO)
+        // =========================
+
+        if (colorNavbarLinks) {
+            data.colorNavbarLinks = colorNavbarLinks;
+        }
+
+        if (colorNavbarHover) {
+            data.colorNavbarHover = colorNavbarHover;
+        }
+
+        if (colorNavbarLogo) {
+            data.colorNavbarLogo = colorNavbarLogo;
+        }
+
         await setDoc(
             doc(db, "configuracion", "web"),
             data,
@@ -1029,6 +1048,7 @@ async function guardarEstiloTitulo(color, tamano, subtituloTexto, colorSubtitulo
         console.error("Error guardando estilo:", error);
     }
 }
+
  
 /*
 if (esAdmin) {
@@ -1306,46 +1326,61 @@ async function cargarServiciosDesdeFirebase() {
 
                     if (video && source) {
                         source.src = dataConfig.videoHero;
-
-                        // 🔥 RECARGAR VIDEO (CLAVE)
                         video.load();
-
                         console.log("🎬 Video hero cargado:", dataConfig.videoHero);
                     }
                 }
 
                 // =========================
-                // 🏷 CARGAR LOGO NAVBAR DINÁMICO
+                // 🏷 LOGO NAVBAR
                 // =========================
                 const logoNavbar = document.getElementById("logoNavbar");
 
                 if (logoNavbar) {
                     const tituloConfig = (dataConfig.titulo || "").toString().trim();
 
-                    if (tituloConfig !== "") {
-                        logoNavbar.textContent = tituloConfig;
-                        console.log("🏷 Logo navbar cargado desde Firebase:", tituloConfig);
-                    } else {
-                        logoNavbar.textContent = "Studio Hair";
-                        console.warn("⚠ No se encontró 'titulo' en configuración web. Se usa fallback.");
-                    }
-                }
-            } else {
-                const logoNavbar = document.getElementById("logoNavbar");
-                if (logoNavbar) {
-                    logoNavbar.textContent = "Studio Hair";
+                    logoNavbar.textContent = tituloConfig || "Studio Hair";
                 }
 
+                // =========================
+                // 🎨 COLORES NAVBAR (NUEVO)
+                // =========================
+
+                const navLinks = document.querySelectorAll(".nav-links a");
+
+                // 🔹 COLOR LINKS
+                if (dataConfig.colorNavbarLinks) {
+                    navLinks.forEach(link => {
+                        link.style.color = dataConfig.colorNavbarLinks;
+                    });
+                }
+
+                // 🔹 COLOR HOVER
+                if (dataConfig.colorNavbarHover) {
+                    navLinks.forEach(link => {
+                        link.addEventListener("mouseenter", () => {
+                            link.style.color = dataConfig.colorNavbarHover;
+                        });
+
+                        link.addEventListener("mouseleave", () => {
+                            link.style.color = dataConfig.colorNavbarLinks || "";
+                        });
+                    });
+                }
+
+                // 🔹 COLOR LOGO
+                if (dataConfig.colorNavbarLogo) {
+                    if (logoNavbar) {
+                        logoNavbar.style.color = dataConfig.colorNavbarLogo;
+                    }
+                }
+
+            } else {
                 console.warn("⚠ No existe configuracion/web");
             }
 
         } catch (error) {
             console.warn("Error cargando configuración web:", error);
-
-            const logoNavbar = document.getElementById("logoNavbar");
-            if (logoNavbar) {
-                logoNavbar.textContent = "Studio Hair";
-            }
         }
 
         // =========================
@@ -1354,15 +1389,12 @@ async function cargarServiciosDesdeFirebase() {
 
         const snapshot = await getDocs(collection(db, "servicios"));
 
-        // 🔹 INPUTS TÍTULO
         const inputColor = document.getElementById("inputColorTitulo");
         const inputTamano = document.getElementById("inputTamanoTitulo");
 
-        // 🔹 INPUTS SUBTÍTULO
         const inputColorSubtitulo = document.getElementById("inputColorSubtitulo");
         const inputTamanoSubtitulo = document.getElementById("inputTamanoSubtitulo");
 
-        // 🔵 PROCESAR SERVICIOS
         let servicios = [];
 
         snapshot.forEach(docSnap => {
@@ -1374,9 +1406,6 @@ async function cargarServiciosDesdeFirebase() {
             });
         });
 
-        console.log("Datos desde Firebase:", servicios);
-
-        // 🔥 ELIMINAR DUPLICADOS (CLAVE)
         const serviciosUnicos = [];
         const clavesVistas = new Set();
 
@@ -1389,9 +1418,6 @@ async function cargarServiciosDesdeFirebase() {
             }
         });
 
-        console.log("Servicios únicos:", serviciosUnicos);
-
-        // 🔵 AGRUPAR POR CATEGORÍA
         let categoriasMap = {};
 
         serviciosUnicos.forEach(servicio => {
@@ -1413,14 +1439,12 @@ async function cargarServiciosDesdeFirebase() {
         const listaPrecios = document.getElementById("lista-precios");
         const btnEditar = document.getElementById("btnEditarPrecios");
 
-        // 🔒 PROTECCIÓN BOTÓN
         if (!adminAutenticado) {
             if (btnEditar) {
                 btnEditar.style.display = "none";
             }
         }
 
-        // 🔒 PROTECCIÓN CONTENEDORES
         if (contenedor) {
             contenedor.innerHTML = "";
         }
@@ -1431,16 +1455,9 @@ async function cargarServiciosDesdeFirebase() {
 
         let modoEdicion = adminAutenticado ? true : false;
 
-        console.log("2 - Datos traídos");
-        console.log("3 - Antes de renderServicios");
-
         renderServicios(data);
-
-        console.log("4 - Después de renderServicios");
-
         renderPrecios(data, adminAutenticado ? modoEdicion : false);
 
-        // 🔒 PROTECCIÓN EVENTO
         if (btnEditar) {
             btnEditar.onclick = () => {
                 modoEdicion = !modoEdicion;
@@ -1452,7 +1469,7 @@ async function cargarServiciosDesdeFirebase() {
         console.error("Error cargando desde Firebase:", error);
     }
 }
-
+ 
 
  
 async function cargarGaleriaDesdeFirebase() {
