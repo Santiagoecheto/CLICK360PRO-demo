@@ -1417,17 +1417,17 @@ try {
     if (configSnap.exists()) {
         const dataConfig = configSnap.data();
 
-        if (inputNavbarLinks && dataConfig.colorNavbarLinks) {
-            inputNavbarLinks.value = dataConfig.colorNavbarLinks;
-        }
+if (inputNavbarLinks && dataConfig.colorNavbarLinks && !inputNavbarLinks.value) {
+    inputNavbarLinks.value = dataConfig.colorNavbarLinks;
+}
 
-        if (inputNavbarHover && dataConfig.colorNavbarHover) {
-            inputNavbarHover.value = dataConfig.colorNavbarHover;
-        }
+   if (inputNavbarHover && dataConfig.colorNavbarHover && !inputNavbarHover.value) {
+    inputNavbarHover.value = dataConfig.colorNavbarHover;
+}
 
-        if (inputNavbarLogo && dataConfig.colorNavbarLogo) {
-            inputNavbarLogo.value = dataConfig.colorNavbarLogo;
-        }
+       if (inputNavbarLogo && dataConfig.colorNavbarLogo && !inputNavbarLogo.value) {
+    inputNavbarLogo.value = dataConfig.colorNavbarLogo;
+}
     }
 
 } catch (error) {
