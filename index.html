@@ -995,7 +995,16 @@ let adminAutenticado = false;
 
 
  
-async function guardarEstiloTitulo(color, tamano, subtituloTexto, colorSubtitulo, tamanoSubtitulo, colorNavbarLinks, colorNavbarHover, colorNavbarLogo) {
+async function guardarEstiloTitulo(
+    color,
+    tamano,
+    subtituloTexto,
+    colorSubtitulo,
+    tamanoSubtitulo,
+    colorNavbarLinks,
+    colorNavbarHover,
+    colorNavbarLogo
+) {
     try {
         const data = {};
 
@@ -1039,6 +1048,28 @@ async function guardarEstiloTitulo(color, tamano, subtituloTexto, colorSubtitulo
         // 🟣 NAVBAR (NUEVO)
         // =========================
 
+        // 🔥 SI NO VIENEN POR PARÁMETRO, LOS TOMAMOS DEL DOM
+        if (!colorNavbarLinks) {
+            const inputLinks = document.getElementById("inputColorNavbarLinks");
+            if (inputLinks && inputLinks.value) {
+                colorNavbarLinks = inputLinks.value;
+            }
+        }
+
+        if (!colorNavbarHover) {
+            const inputHover = document.getElementById("inputColorNavbarHover");
+            if (inputHover && inputHover.value) {
+                colorNavbarHover = inputHover.value;
+            }
+        }
+
+        if (!colorNavbarLogo) {
+            const inputLogo = document.getElementById("inputColorNavbarLogo");
+            if (inputLogo && inputLogo.value) {
+                colorNavbarLogo = inputLogo.value;
+            }
+        }
+
         if (colorNavbarLinks) {
             data.colorNavbarLinks = colorNavbarLinks;
         }
@@ -1062,52 +1093,9 @@ async function guardarEstiloTitulo(color, tamano, subtituloTexto, colorSubtitulo
         console.error("Error guardando estilo:", error);
     }
 }
+ 
 
  
-/*
-if (esAdmin) {
-
-    let claveCorrecta = false;
-
-    try {
-
-        // 🔹 Traer contraseña desde Firebase
-        const docRef = doc(db, "configuracion", "admin");
-        const docSnap = await getDoc(docRef);
-
-        let CLAVE_ADMIN = "1234"; // fallback
-
-        if (docSnap.exists()) {
-            CLAVE_ADMIN = docSnap.data().password || "1234";
-        }
-
-        while (!claveCorrecta) {
-
-            const clave = prompt("🔐 Ingresar clave de administrador:");
-
-            if (clave === null) {
-                // Canceló → salir del modo admin
-                esAdmin = false;
-                break;
-            }
-
-            if (clave === CLAVE_ADMIN) {
-                claveCorrecta = true;
-                console.log("✅ Acceso admin concedido");
-            } else {
-                alert("❌ Clave incorrecta");
-            }
-        }
-
-    } catch (error) {
-        console.error("Error obteniendo clave admin:", error);
-        alert("Error verificando acceso admin");
-        esAdmin = false;
-    }
-}
-*/
-
-
 async function iniciarModoAdmin() {
 
     if (!esAdmin) return true;
@@ -1405,9 +1393,60 @@ async function cargarServiciosDesdeFirebase() {
 
         const inputColor = document.getElementById("inputColorTitulo");
         const inputTamano = document.getElementById("inputTamanoTitulo");
-
         const inputColorSubtitulo = document.getElementById("inputColorSubtitulo");
         const inputTamanoSubtitulo = document.getElementById("inputTamanoSubtitulo");
+
+     // =========================
+// 🎯 EVENTOS GUARDADO AUTOMÁTICO
+// =========================
+
+if (inputColor) {
+    inputColor.addEventListener("input", () => {
+        guardarEstiloTitulo();
+    });
+}
+
+if (inputTamano) {
+    inputTamano.addEventListener("input", () => {
+        guardarEstiloTitulo();
+    });
+}
+
+if (inputColorSubtitulo) {
+    inputColorSubtitulo.addEventListener("input", () => {
+        guardarEstiloTitulo();
+    });
+}
+
+if (inputTamanoSubtitulo) {
+    inputTamanoSubtitulo.addEventListener("input", () => {
+        guardarEstiloTitulo();
+    });
+}
+
+// 🟣 NAVBAR (NUEVO)
+
+const inputNavbarLinks = document.getElementById("inputColorNavbarLinks");
+const inputNavbarHover = document.getElementById("inputColorNavbarHover");
+const inputNavbarLogo = document.getElementById("inputColorNavbarLogo");
+
+if (inputNavbarLinks) {
+    inputNavbarLinks.addEventListener("input", () => {
+        guardarEstiloTitulo();
+    });
+}
+
+if (inputNavbarHover) {
+    inputNavbarHover.addEventListener("input", () => {
+        guardarEstiloTitulo();
+    });
+}
+
+if (inputNavbarLogo) {
+    inputNavbarLogo.addEventListener("input", () => {
+        guardarEstiloTitulo();
+    });
+}
 
         let servicios = [];
 
