@@ -2361,16 +2361,55 @@ async function cargarTituloWeb() {
         const inputColorFondoHex = document.getElementById("inputColorFondoHex");
         const btnColorBlanco = document.getElementById("btnColorBlanco");
 
-        // 🔵 NUEVOS INPUTS POR SECCIÓN
         const seccionesConfig = [
-            { input: "inputColorFondoServicios", selector: ".servicios", campo: "fondoServicios" },
-            { input: "inputColorFondoGaleria", selector: "#galeria", campo: "fondoGaleria" },
-            { input: "inputColorFondoTrabajos", selector: ".trabajos", campo: "fondoTrabajos" },
-            { input: "inputColorFondoVideos", selector: ".videos", campo: "fondoVideos" },
-            { input: "inputColorFondoAntesDespues", selector: ".antes-despues", campo: "fondoAntesDespues" },
-            { input: "inputColorFondoTestimonios", selector: ".testimonios", campo: "fondoTestimonios" },
-            { input: "inputColorFondoMapa", selector: ".mapa", campo: "fondoMapa" },
-            { input: "inputColorFondoFooter", selector: ".footer", campo: "fondoFooter" }
+            {
+                input: "inputColorFondoServicios",
+                botonBlanco: "btnBlancoServicios",
+                selector: ".servicios",
+                campo: "fondoServicios"
+            },
+            {
+                input: "inputColorFondoGaleria",
+                botonBlanco: "btnBlancoGaleria",
+                selector: "#galeria",
+                campo: "fondoGaleria"
+            },
+            {
+                input: "inputColorFondoTrabajos",
+                botonBlanco: "btnBlancoTrabajos",
+                selector: ".trabajos",
+                campo: "fondoTrabajos"
+            },
+            {
+                input: "inputColorFondoVideos",
+                botonBlanco: "btnBlancoVideos",
+                selector: ".videos",
+                campo: "fondoVideos"
+            },
+            {
+                input: "inputColorFondoAntesDespues",
+                botonBlanco: "btnBlancoAntesDespues",
+                selector: ".antes-despues",
+                campo: "fondoAntesDespues"
+            },
+            {
+                input: "inputColorFondoTestimonios",
+                botonBlanco: "btnBlancoTestimonios",
+                selector: ".testimonios",
+                campo: "fondoTestimonios"
+            },
+            {
+                input: "inputColorFondoMapa",
+                botonBlanco: "btnBlancoMapa",
+                selector: ".mapa",
+                campo: "fondoMapa"
+            },
+            {
+                input: "inputColorFondoFooter",
+                botonBlanco: "btnBlancoFooter",
+                selector: ".footer",
+                campo: "fondoFooter"
+            }
         ];
 
         if (!titulo) return;
@@ -2385,10 +2424,20 @@ async function cargarTituloWeb() {
         };
 
         const aplicarColorSeccion = (selector, color) => {
+            if (!selector || !color) return;
+
             document.querySelectorAll(selector).forEach(el => {
                 el.style.background = color;
                 el.style.backgroundColor = color;
             });
+        };
+
+        const guardarCampoWeb = async (obj) => {
+            await setDoc(
+                doc(db, "configuracion", "web"),
+                obj,
+                { merge: true }
+            );
         };
 
         if (docSnap.exists()) {
@@ -2420,17 +2469,18 @@ async function cargarTituloWeb() {
             if (inputColorSubtitulo) inputColorSubtitulo.value = colorSub;
             if (inputTamanoSubtitulo) inputTamanoSubtitulo.value = parseInt(tamanoSub, 10);
 
-            // 🔵 CARGAR FONDOS POR SECCIÓN
             seccionesConfig.forEach(cfg => {
-                const valor = data[cfg.campo];
+                const valorGuardado = data[cfg.campo];
                 const input = document.getElementById(cfg.input);
 
-                if (valor) {
-                    aplicarColorSeccion(cfg.selector, valor);
-                    if (input) input.value = valor;
+                if (input) {
+                    input.value = valorGuardado || colorFondo;
+                }
+
+                if (valorGuardado) {
+                    aplicarColorSeccion(cfg.selector, valorGuardado);
                 }
             });
-
         } else {
             titulo.textContent = "Jenny Estilista Profesional";
             titulo.style.color = "#ffffff";
@@ -2442,12 +2492,18 @@ async function cargarTituloWeb() {
             }
 
             aplicarColorFondoGlobal("#000000");
+
+            seccionesConfig.forEach(cfg => {
+                const input = document.getElementById(cfg.input);
+                if (input) {
+                    input.value = "#000000";
+                }
+            });
         }
 
         if (inputColorFondo) inputColorFondo.value = colorFondo;
         if (inputColorFondoHex) inputColorFondoHex.value = colorFondo;
 
-        // 🔵 GLOBAL
         const aplicarColorFondo = async (nuevoColor) => {
             if (!nuevoColor) return;
 
@@ -2456,14 +2512,13 @@ async function cargarTituloWeb() {
             if (inputColorFondo) inputColorFondo.value = nuevoColor;
             if (inputColorFondoHex) inputColorFondoHex.value = nuevoColor;
 
-            await setDoc(doc(db, "configuracion", "web"), {
-                colorFondo: nuevoColor
-            }, { merge: true });
+            await guardarCampoWeb({ colorFondo: nuevoColor });
+            colorFondo = nuevoColor;
         };
 
-        // 🔵 SECCIONES
         seccionesConfig.forEach(cfg => {
             const input = document.getElementById(cfg.input);
+            const botonBlanco = document.getElementById(cfg.botonBlanco);
 
             if (input) {
                 input.oninput = async () => {
@@ -2471,14 +2526,33 @@ async function cargarTituloWeb() {
 
                     aplicarColorSeccion(cfg.selector, color);
 
-                    await setDoc(doc(db, "configuracion", "web"), {
-                        [cfg.campo]: color
-                    }, { merge: true });
+                    try {
+                        await guardarCampoWeb({ [cfg.campo]: color });
+                    } catch (error) {
+                        console.error(`Error guardando ${cfg.campo}:`, error);
+                    }
+                };
+            }
+
+            if (botonBlanco) {
+                botonBlanco.onclick = async () => {
+                    const colorBlanco = "#ffffff";
+
+                    aplicarColorSeccion(cfg.selector, colorBlanco);
+
+                    if (input) {
+                        input.value = colorBlanco;
+                    }
+
+                    try {
+                        await guardarCampoWeb({ [cfg.campo]: colorBlanco });
+                    } catch (error) {
+                        console.error(`Error guardando ${cfg.campo}:`, error);
+                    }
                 };
             }
         });
 
-        // 🔵 EVENTOS GLOBAL
         if (inputColorFondo) {
             inputColorFondo.oninput = () => {
                 aplicarColorFondo(inputColorFondo.value);
