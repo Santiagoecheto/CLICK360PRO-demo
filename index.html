@@ -70,7 +70,7 @@
 
     <br><br>
 
- <!-- 🎨 FONDOS POR SECCIÓN -->
+
 <!-- 🎨 FONDOS POR SECCIÓN -->
 <label style="color:white;">Fondo Servicios:</label>
 <input type="color" id="inputColorFondoServicios" style="margin-right:5px;">
@@ -2534,24 +2534,29 @@ async function cargarTituloWeb() {
                 };
             }
 
-            if (botonBlanco) {
-                botonBlanco.onclick = async () => {
-                    const colorBlanco = "#ffffff";
+          if (botonBlanco) {
 
-                    aplicarColorSeccion(cfg.selector, colorBlanco);
+    botonBlanco.addEventListener("click", async () => {
 
-                    if (input) {
-                        input.value = colorBlanco;
-                    }
+        const colorBlanco = "#ffffff";
 
-                    try {
-                        await guardarCampoWeb({ [cfg.campo]: colorBlanco });
-                    } catch (error) {
-                        console.error(`Error guardando ${cfg.campo}:`, error);
-                    }
-                };
-            }
-        });
+        aplicarColorSeccion(cfg.selector, colorBlanco);
+
+        if (input) {
+            input.value = colorBlanco;
+        }
+
+        try {
+            await guardarCampoWeb({ [cfg.campo]: colorBlanco });
+            console.log("✔ Blanco aplicado en:", cfg.campo);
+        } catch (error) {
+            console.error(`Error guardando ${cfg.campo}:`, error);
+        }
+
+    });
+
+}
+});
 
         if (inputColorFondo) {
             inputColorFondo.oninput = () => {
