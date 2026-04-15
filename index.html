@@ -2584,12 +2584,56 @@ async function cargarTituloWeb() {
             };
         }
 
-        if (btnColorBlanco) {
-            btnColorBlanco.onclick = () => {
-                aplicarColorFondo("#ffffff");
-            };
+        // 🔵 BOTÓN BLANCO GLOBAL
+if (btnColorBlanco) {
+    btnColorBlanco.onclick = () => {
+        aplicarColorFondo("#ffffff");
+    };
+}
+
+// 🔴 BOTÓN APLICAR GLOBAL A TODO (RESET)
+const btnAplicarGlobalTodo = document.getElementById("btnAplicarGlobalTodo");
+
+if (btnAplicarGlobalTodo) {
+
+    btnAplicarGlobalTodo.onclick = async () => {
+
+        if (!colorFondo) return;
+
+        // 1. Aplicar visualmente a TODAS las secciones
+        seccionesConfig.forEach(cfg => {
+
+            aplicarColorSeccion(cfg.selector, colorFondo);
+
+            const input = document.getElementById(cfg.input);
+            if (input) {
+                input.value = colorFondo;
+            }
+        });
+
+        try {
+            // 2. Limpiar overrides en Firebase (MUY IMPORTANTE)
+            const resetData = {};
+
+            seccionesConfig.forEach(cfg => {
+                resetData[cfg.campo] = null;
+            });
+
+            await setDoc(
+                doc(db, "configuracion", "web"),
+                resetData,
+                { merge: true }
+            );
+
+            console.log("🔥 Overrides eliminados, global aplicado");
+
+        } catch (error) {
+            console.error("Error reseteando secciones:", error);
         }
 
+    };
+
+}
     } catch (error) {
         console.error("Error cargando título:", error);
     }
