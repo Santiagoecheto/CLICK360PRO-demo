@@ -61,24 +61,55 @@
  
   
 <div id="panelTituloAdmin" style="display:none; margin-top:10px;">
-    
-    <!-- 🎨 COLOR FONDO -->
- <label style="color:white;">Color Fondo:</label>
 
-<input type="color" id="inputColorFondo" style="margin-right:10px;">
+    <!-- 🎨 FONDO GLOBAL -->
+    <label style="color:white;">Color Fondo Global:</label>
+    <input type="color" id="inputColorFondo" style="margin-right:10px;">
+    <input type="text" id="inputColorFondoHex" placeholder="#ffffff" style="width:100px; margin-right:5px;">
+    <button type="button" id="btnColorBlanco">Blanco</button>
 
-<input type="text" id="inputColorFondoHex" placeholder="#ffffff" style="width:100px; margin-right:5px;">
+    <br><br>
 
-<button type="button" id="btnColorBlanco">Blanco</button>
+    <!-- 🎨 FONDOS POR SECCIÓN -->
+    <label style="color:white;">Fondo Servicios:</label>
+    <input type="color" id="inputColorFondoServicios" style="margin-right:10px;">
 
-<br><br>
+    <label style="color:white;">Fondo Galería:</label>
+    <input type="color" id="inputColorFondoGaleria">
 
-<br><br>
+    <br><br>
 
-    <label style="color:white;">Color:</label>
+    <label style="color:white;">Fondo Trabajos:</label>
+    <input type="color" id="inputColorFondoTrabajos" style="margin-right:10px;">
+
+    <label style="color:white;">Fondo Videos:</label>
+    <input type="color" id="inputColorFondoVideos">
+
+    <br><br>
+
+    <label style="color:white;">Fondo Transformaciones:</label>
+    <input type="color" id="inputColorFondoAntesDespues" style="margin-right:10px;">
+
+    <label style="color:white;">Fondo Testimonios:</label>
+    <input type="color" id="inputColorFondoTestimonios">
+
+    <br><br>
+
+    <label style="color:white;">Fondo Mapa:</label>
+    <input type="color" id="inputColorFondoMapa" style="margin-right:10px;">
+
+    <label style="color:white;">Fondo Footer:</label>
+    <input type="color" id="inputColorFondoFooter">
+
+    <br><br>
+
+    <hr style="margin:20px 0; border:1px solid #444;">
+
+    <!-- 🎨 TÍTULO -->
+    <label style="color:white;">Color Título:</label>
     <input type="color" id="inputColorTitulo">
 
-    <label style="color:white; margin-left:10px;">Tamaño:</label>
+    <label style="color:white; margin-left:10px;">Tamaño Título:</label>
     <input type="number" id="inputTamanoTitulo" min="10" max="100" style="width:60px;"> px
     <br>
 
@@ -97,7 +128,7 @@
 
     <hr style="margin:20px 0; border:1px solid #444;">
 </div>
-
+ 
  
  <!-- 🎬 ADMIN VIDEOS -->
 <div id="adminVideos" style="display:none; margin-top:20px;">
