@@ -2604,11 +2604,11 @@ if (!colorActual) return;
         // 1. Aplicar visualmente a TODAS las secciones
         seccionesConfig.forEach(cfg => {
 
-            aplicarColorSeccion(cfg.selector, colorFondo);
+         aplicarColorSeccion(cfg.selector, colorActual);
 
             const input = document.getElementById(cfg.input);
             if (input) {
-                input.value = colorFondo;
+             input.value = colorActual;
             }
         });
 
