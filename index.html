@@ -2289,14 +2289,12 @@ async function guardarPrueba() {
  
 async function cargarTituloWeb() {
     try {
-
         const docRef = doc(db, "configuracion", "web");
         const docSnap = await getDoc(docRef);
 
         const titulo = document.getElementById("tituloWeb");
         const subtitulo = document.getElementById("subtituloWeb");
 
-        // 🔵 INPUTS
         const inputColor = document.getElementById("inputColorTitulo");
         const inputTamano = document.getElementById("inputTamanoTitulo");
 
@@ -2304,8 +2302,6 @@ async function cargarTituloWeb() {
         const inputTamanoSubtitulo = document.getElementById("inputTamanoSubtitulo");
 
         const inputColorFondo = document.getElementById("inputColorFondo");
-
-        // 🔥 NUEVOS
         const inputColorFondoHex = document.getElementById("inputColorFondoHex");
         const btnColorBlanco = document.getElementById("btnColorBlanco");
 
@@ -2313,8 +2309,34 @@ async function cargarTituloWeb() {
 
         let colorFondo = "#000000";
 
-        if (docSnap.exists()) {
+        const aplicarColorFondoEnTodaLaWeb = (nuevoColor) => {
+            if (!nuevoColor) return;
 
+            // Fondo general base
+            document.body.style.backgroundColor = nuevoColor;
+            document.documentElement.style.backgroundColor = nuevoColor;
+
+            // Secciones principales que hoy tienen fondo fijo en CSS
+            const selectoresFondoGlobal = [
+                ".servicios",
+                "#galeria",
+                ".trabajos",
+                ".videos",
+                ".antes-despues",
+                ".testimonios",
+                ".mapa",
+                ".footer"
+            ];
+
+            selectoresFondoGlobal.forEach(selector => {
+                document.querySelectorAll(selector).forEach(elemento => {
+                    elemento.style.background = nuevoColor;
+                    elemento.style.backgroundColor = nuevoColor;
+                });
+            });
+        };
+
+        if (docSnap.exists()) {
             const data = docSnap.data();
 
             const texto = (data.titulo || "").trim();
@@ -2326,7 +2348,6 @@ async function cargarTituloWeb() {
 
             colorFondo = data.colorFondo || "#000000";
 
-            // 🔵 APLICAR AL DOM
             titulo.textContent = texto !== "" ? texto : "Jenny Estilista Profesional";
             titulo.style.color = color;
             titulo.style.fontSize = tamano;
@@ -2336,34 +2357,33 @@ async function cargarTituloWeb() {
                 subtitulo.style.fontSize = tamanoSub;
             }
 
-            document.body.style.backgroundColor = colorFondo;
+            aplicarColorFondoEnTodaLaWeb(colorFondo);
 
-            // 🔵 INPUTS
             if (inputColor) inputColor.value = color;
-            if (inputTamano) inputTamano.value = parseInt(tamano);
+            if (inputTamano) inputTamano.value = parseInt(tamano, 10);
 
             if (inputColorSubtitulo) inputColorSubtitulo.value = colorSub;
-            if (inputTamanoSubtitulo) inputTamanoSubtitulo.value = parseInt(tamanoSub);
-
+            if (inputTamanoSubtitulo) inputTamanoSubtitulo.value = parseInt(tamanoSub, 10);
         } else {
-
             titulo.textContent = "Jenny Estilista Profesional";
             titulo.style.color = "#ffffff";
             titulo.style.fontSize = "48px";
 
-            document.body.style.backgroundColor = "#000000";
+            if (subtitulo) {
+                subtitulo.style.color = "#ffffff";
+                subtitulo.style.fontSize = "20px";
+            }
+
+            aplicarColorFondoEnTodaLaWeb("#000000");
         }
 
-        // 🔥 SINCRONIZAR INPUTS DE FONDO
         if (inputColorFondo) inputColorFondo.value = colorFondo;
         if (inputColorFondoHex) inputColorFondoHex.value = colorFondo;
 
-        // 🔥 FUNCIÓN CENTRALIZADA (CLAVE)
         const aplicarColorFondo = async (nuevoColor) => {
-
             if (!nuevoColor) return;
 
-            document.body.style.backgroundColor = nuevoColor;
+            aplicarColorFondoEnTodaLaWeb(nuevoColor);
 
             if (inputColorFondo) inputColorFondo.value = nuevoColor;
             if (inputColorFondoHex) inputColorFondoHex.value = nuevoColor;
@@ -2376,43 +2396,38 @@ async function cargarTituloWeb() {
                 );
 
                 console.log("🎨 Color fondo guardado:", nuevoColor);
-
             } catch (e) {
                 console.error("❌ Error guardando color fondo:", e);
             }
         };
 
-        // 🔵 EVENTO COLOR PICKER
         if (inputColorFondo) {
-            inputColorFondo.addEventListener("input", () => {
+            inputColorFondo.oninput = () => {
                 aplicarColorFondo(inputColorFondo.value);
-            });
+            };
         }
 
-        // 🔵 EVENTO INPUT HEX
         if (inputColorFondoHex) {
-            inputColorFondoHex.addEventListener("change", () => {
-
+            inputColorFondoHex.onchange = () => {
                 let valor = inputColorFondoHex.value.trim();
 
                 if (!valor.startsWith("#")) {
                     valor = "#" + valor;
                 }
 
-                // validar formato HEX simple
                 if (/^#[0-9A-Fa-f]{6}$/.test(valor)) {
                     aplicarColorFondo(valor);
                 } else {
                     alert("Color inválido. Ej: #ffffff");
+                    inputColorFondoHex.value = colorFondo;
                 }
-            });
+            };
         }
 
-        // 🔵 BOTÓN BLANCO
         if (btnColorBlanco) {
-            btnColorBlanco.addEventListener("click", () => {
+            btnColorBlanco.onclick = () => {
                 aplicarColorFondo("#ffffff");
-            });
+            };
         }
 
     } catch (error) {
