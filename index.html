@@ -1402,7 +1402,38 @@ async function cargarServiciosDesdeFirebase() {
         const inputColorSubtitulo = document.getElementById("inputColorSubtitulo");
         const inputTamanoSubtitulo = document.getElementById("inputTamanoSubtitulo");
 
+// =========================
+// 🟣 SETEAR VALORES NAVBAR EN INPUTS
+// =========================
 
+const inputNavbarLinks = document.getElementById("inputColorNavbarLinks");
+const inputNavbarHover = document.getElementById("inputColorNavbarHover");
+const inputNavbarLogo = document.getElementById("inputColorNavbarLogo");
+
+try {
+    const configRef = doc(db, "configuracion", "web");
+    const configSnap = await getDoc(configRef);
+
+    if (configSnap.exists()) {
+        const dataConfig = configSnap.data();
+
+        if (inputNavbarLinks && dataConfig.colorNavbarLinks) {
+            inputNavbarLinks.value = dataConfig.colorNavbarLinks;
+        }
+
+        if (inputNavbarHover && dataConfig.colorNavbarHover) {
+            inputNavbarHover.value = dataConfig.colorNavbarHover;
+        }
+
+        if (inputNavbarLogo && dataConfig.colorNavbarLogo) {
+            inputNavbarLogo.value = dataConfig.colorNavbarLogo;
+        }
+    }
+
+} catch (error) {
+    console.warn("Error cargando colores navbar en inputs:", error);
+}
+     
 
 // =========================
 // 🎯 EVENTOS + CAMBIO EN VIVO NAVBAR
