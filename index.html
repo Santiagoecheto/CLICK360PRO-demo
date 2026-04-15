@@ -19,7 +19,7 @@
 
 <div class="nav-container">
 
-<div class="logo">Studio Hair</div>
+<div class="logo" id="logoNavbar">Cargando...</div>
 
 <div class="menu-toggle" id="menu-toggle">
 ☰
@@ -1285,24 +1285,26 @@ async function cargarServiciosDesdeFirebase() {
         console.log("1 - Entró a cargarServicios");
 
         // =========================
-        // 🎬 CARGAR VIDEO HERO
+        // ⚙ CARGAR CONFIGURACIÓN WEB
         // =========================
+
+        let dataConfig = {};
 
         try {
             const configRef = doc(db, "configuracion", "web");
             const configSnap = await getDoc(configRef);
 
             if (configSnap.exists()) {
+                dataConfig = configSnap.data() || {};
 
-                const dataConfig = configSnap.data();
-
+                // =========================
+                // 🎬 CARGAR VIDEO HERO
+                // =========================
                 if (dataConfig.videoHero) {
-
                     const video = document.querySelector(".hero video");
                     const source = video ? video.querySelector("source") : null;
 
                     if (video && source) {
-
                         source.src = dataConfig.videoHero;
 
                         // 🔥 RECARGAR VIDEO (CLAVE)
@@ -1311,10 +1313,39 @@ async function cargarServiciosDesdeFirebase() {
                         console.log("🎬 Video hero cargado:", dataConfig.videoHero);
                     }
                 }
+
+                // =========================
+                // 🏷 CARGAR LOGO NAVBAR DINÁMICO
+                // =========================
+                const logoNavbar = document.getElementById("logoNavbar");
+
+                if (logoNavbar) {
+                    const tituloConfig = (dataConfig.titulo || "").toString().trim();
+
+                    if (tituloConfig !== "") {
+                        logoNavbar.textContent = tituloConfig;
+                        console.log("🏷 Logo navbar cargado desde Firebase:", tituloConfig);
+                    } else {
+                        logoNavbar.textContent = "Studio Hair";
+                        console.warn("⚠ No se encontró 'titulo' en configuración web. Se usa fallback.");
+                    }
+                }
+            } else {
+                const logoNavbar = document.getElementById("logoNavbar");
+                if (logoNavbar) {
+                    logoNavbar.textContent = "Studio Hair";
+                }
+
+                console.warn("⚠ No existe configuracion/web");
             }
 
         } catch (error) {
-            console.warn("Error cargando video hero:", error);
+            console.warn("Error cargando configuración web:", error);
+
+            const logoNavbar = document.getElementById("logoNavbar");
+            if (logoNavbar) {
+                logoNavbar.textContent = "Studio Hair";
+            }
         }
 
         // =========================
@@ -1421,6 +1452,7 @@ async function cargarServiciosDesdeFirebase() {
         console.error("Error cargando desde Firebase:", error);
     }
 }
+
 
  
 async function cargarGaleriaDesdeFirebase() {
