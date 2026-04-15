@@ -2598,7 +2598,8 @@ if (btnAplicarGlobalTodo) {
 
     btnAplicarGlobalTodo.onclick = async () => {
 
-        if (!colorFondo) return;
+      const colorActual = inputColorFondo ? inputColorFondo.value : colorFondo;
+if (!colorActual) return;
 
         // 1. Aplicar visualmente a TODAS las secciones
         seccionesConfig.forEach(cfg => {
