@@ -146,26 +146,32 @@ style="margin-left:10px; padding:5px 10px; background:#ff2d75; color:#fff; borde
 
 <label style="color:white;">Color links menú:</label>
 <input type="color" id="inputColorNavbarLinks">
-
+<button id="btnNavbarLinksBlanco">Blanco</button>
+ 
 <label style="color:white; margin-left:10px;">Color hover:</label>
 <input type="color" id="inputColorNavbarHover">
+<button id="btnNavbarHoverBlanco">Blanco</button>
+ 
 
 <label style="color:white; margin-left:10px;">Color logo:</label>
 <input type="color" id="inputColorNavbarLogo">
+<button id="btnNavbarLogoBlanco">Blanco</button>
 
 <br>
 
   <!-- 🎨 TÍTULO -->
-   <label style="color:white;">Color Título:</label>
-    
-    <input type="color" id="inputColorTitulo">
+  <label style="color:white;">Color Título:</label>
+<input type="color" id="inputColorTitulo">
+<button id="btnTituloBlanco">Blanco</button>
 
     <label style="color:white; margin-left:10px;">Tamaño Título:</label>
     <input type="number" id="inputTamanoTitulo" min="10" max="100" style="width:60px;"> px
     <br>
 
-    <label style="color:white;">Color Subtítulo:</label>
-    <input type="color" id="inputColorSubtitulo">
+  <label style="color:white;">Color Subtítulo:</label>
+<input type="color" id="inputColorSubtitulo">
+<button id="btnSubtituloBlanco">Blanco</button>
+ 
 
     <label style="color:white; margin-left:10px;">Tamaño Subtítulo:</label>
     <input type="number" id="inputTamanoSubtitulo" min="10" max="100" style="width:60px;"> px
@@ -1491,7 +1497,57 @@ if (inputNavbarLogo) {
     });
 }
      
+// =========================
+// ⚪ BOTONES BLANCO NAVBAR
+// =========================
 
+const btnNavbarLinksBlanco = document.getElementById("btnNavbarLinksBlanco");
+const btnNavbarHoverBlanco = document.getElementById("btnNavbarHoverBlanco");
+const btnNavbarLogoBlanco = document.getElementById("btnNavbarLogoBlanco");
+const btnTituloBlanco = document.getElementById("btnTituloBlanco");
+const btnSubtituloBlanco = document.getElementById("btnSubtituloBlanco");
+
+// LINKS
+if (btnNavbarLinksBlanco && inputNavbarLinks) {
+    btnNavbarLinksBlanco.addEventListener("click", () => {
+        inputNavbarLinks.value = "#ffffff";
+        inputNavbarLinks.dispatchEvent(new Event("input"));
+    });
+}
+
+// HOVER
+if (btnNavbarHoverBlanco && inputNavbarHover) {
+    btnNavbarHoverBlanco.addEventListener("click", () => {
+        inputNavbarHover.value = "#ffffff";
+        inputNavbarHover.dispatchEvent(new Event("input"));
+    });
+}
+
+// LOGO
+if (btnNavbarLogoBlanco && inputNavbarLogo) {
+    btnNavbarLogoBlanco.addEventListener("click", () => {
+        inputNavbarLogo.value = "#ffffff";
+        inputNavbarLogo.dispatchEvent(new Event("input"));
+    });
+}
+
+// TÍTULO
+if (btnTituloBlanco && inputColor) {
+    btnTituloBlanco.addEventListener("click", () => {
+        inputColor.value = "#ffffff";
+        inputColor.dispatchEvent(new Event("input"));
+    });
+}
+
+// SUBTÍTULO
+if (btnSubtituloBlanco && inputColorSubtitulo) {
+    btnSubtituloBlanco.addEventListener("click", () => {
+        inputColorSubtitulo.value = "#ffffff";
+        inputColorSubtitulo.dispatchEvent(new Event("input"));
+    });
+}
+     
+     
         let servicios = [];
 
         snapshot.forEach(docSnap => {
