@@ -2336,34 +2336,33 @@ async function cargarTituloWeb() {
         const inputColorFondoHex = document.getElementById("inputColorFondoHex");
         const btnColorBlanco = document.getElementById("btnColorBlanco");
 
+        // 🔵 NUEVOS INPUTS POR SECCIÓN
+        const seccionesConfig = [
+            { input: "inputColorFondoServicios", selector: ".servicios", campo: "fondoServicios" },
+            { input: "inputColorFondoGaleria", selector: "#galeria", campo: "fondoGaleria" },
+            { input: "inputColorFondoTrabajos", selector: ".trabajos", campo: "fondoTrabajos" },
+            { input: "inputColorFondoVideos", selector: ".videos", campo: "fondoVideos" },
+            { input: "inputColorFondoAntesDespues", selector: ".antes-despues", campo: "fondoAntesDespues" },
+            { input: "inputColorFondoTestimonios", selector: ".testimonios", campo: "fondoTestimonios" },
+            { input: "inputColorFondoMapa", selector: ".mapa", campo: "fondoMapa" },
+            { input: "inputColorFondoFooter", selector: ".footer", campo: "fondoFooter" }
+        ];
+
         if (!titulo) return;
 
         let colorFondo = "#000000";
 
-        const aplicarColorFondoEnTodaLaWeb = (nuevoColor) => {
+        const aplicarColorFondoGlobal = (nuevoColor) => {
             if (!nuevoColor) return;
 
-            // Fondo general base
             document.body.style.backgroundColor = nuevoColor;
             document.documentElement.style.backgroundColor = nuevoColor;
+        };
 
-            // Secciones principales que hoy tienen fondo fijo en CSS
-            const selectoresFondoGlobal = [
-                ".servicios",
-                "#galeria",
-                ".trabajos",
-                ".videos",
-                ".antes-despues",
-                ".testimonios",
-                ".mapa",
-                ".footer"
-            ];
-
-            selectoresFondoGlobal.forEach(selector => {
-                document.querySelectorAll(selector).forEach(elemento => {
-                    elemento.style.background = nuevoColor;
-                    elemento.style.backgroundColor = nuevoColor;
-                });
+        const aplicarColorSeccion = (selector, color) => {
+            document.querySelectorAll(selector).forEach(el => {
+                el.style.background = color;
+                el.style.backgroundColor = color;
             });
         };
 
@@ -2388,13 +2387,25 @@ async function cargarTituloWeb() {
                 subtitulo.style.fontSize = tamanoSub;
             }
 
-            aplicarColorFondoEnTodaLaWeb(colorFondo);
+            aplicarColorFondoGlobal(colorFondo);
 
             if (inputColor) inputColor.value = color;
             if (inputTamano) inputTamano.value = parseInt(tamano, 10);
 
             if (inputColorSubtitulo) inputColorSubtitulo.value = colorSub;
             if (inputTamanoSubtitulo) inputTamanoSubtitulo.value = parseInt(tamanoSub, 10);
+
+            // 🔵 CARGAR FONDOS POR SECCIÓN
+            seccionesConfig.forEach(cfg => {
+                const valor = data[cfg.campo];
+                const input = document.getElementById(cfg.input);
+
+                if (valor) {
+                    aplicarColorSeccion(cfg.selector, valor);
+                    if (input) input.value = valor;
+                }
+            });
+
         } else {
             titulo.textContent = "Jenny Estilista Profesional";
             titulo.style.color = "#ffffff";
@@ -2405,33 +2416,44 @@ async function cargarTituloWeb() {
                 subtitulo.style.fontSize = "20px";
             }
 
-            aplicarColorFondoEnTodaLaWeb("#000000");
+            aplicarColorFondoGlobal("#000000");
         }
 
         if (inputColorFondo) inputColorFondo.value = colorFondo;
         if (inputColorFondoHex) inputColorFondoHex.value = colorFondo;
 
+        // 🔵 GLOBAL
         const aplicarColorFondo = async (nuevoColor) => {
             if (!nuevoColor) return;
 
-            aplicarColorFondoEnTodaLaWeb(nuevoColor);
+            aplicarColorFondoGlobal(nuevoColor);
 
             if (inputColorFondo) inputColorFondo.value = nuevoColor;
             if (inputColorFondoHex) inputColorFondoHex.value = nuevoColor;
 
-            try {
-                await setDoc(
-                    doc(db, "configuracion", "web"),
-                    { colorFondo: nuevoColor },
-                    { merge: true }
-                );
-
-                console.log("🎨 Color fondo guardado:", nuevoColor);
-            } catch (e) {
-                console.error("❌ Error guardando color fondo:", e);
-            }
+            await setDoc(doc(db, "configuracion", "web"), {
+                colorFondo: nuevoColor
+            }, { merge: true });
         };
 
+        // 🔵 SECCIONES
+        seccionesConfig.forEach(cfg => {
+            const input = document.getElementById(cfg.input);
+
+            if (input) {
+                input.oninput = async () => {
+                    const color = input.value;
+
+                    aplicarColorSeccion(cfg.selector, color);
+
+                    await setDoc(doc(db, "configuracion", "web"), {
+                        [cfg.campo]: color
+                    }, { merge: true });
+                };
+            }
+        });
+
+        // 🔵 EVENTOS GLOBAL
         if (inputColorFondo) {
             inputColorFondo.oninput = () => {
                 aplicarColorFondo(inputColorFondo.value);
