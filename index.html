@@ -1398,57 +1398,64 @@ async function cargarServiciosDesdeFirebase() {
         const inputColorSubtitulo = document.getElementById("inputColorSubtitulo");
         const inputTamanoSubtitulo = document.getElementById("inputTamanoSubtitulo");
 
-     // =========================
-// 🎯 EVENTOS GUARDADO AUTOMÁTICO
+
+
+// =========================
+// 🎯 EVENTOS + CAMBIO EN VIVO NAVBAR
 // =========================
 
-if (inputColor) {
-    inputColor.addEventListener("input", () => {
-        guardarEstiloTitulo();
-    });
-}
+const navLinks = document.querySelectorAll(".nav-links a");
+const logoNavbar = document.getElementById("logoNavbar");
 
-if (inputTamano) {
-    inputTamano.addEventListener("input", () => {
-        guardarEstiloTitulo();
-    });
-}
-
-if (inputColorSubtitulo) {
-    inputColorSubtitulo.addEventListener("input", () => {
-        guardarEstiloTitulo();
-    });
-}
-
-if (inputTamanoSubtitulo) {
-    inputTamanoSubtitulo.addEventListener("input", () => {
-        guardarEstiloTitulo();
-    });
-}
-
-// 🟣 NAVBAR (NUEVO)
-
-const inputNavbarLinks = document.getElementById("inputColorNavbarLinks");
-const inputNavbarHover = document.getElementById("inputColorNavbarHover");
-const inputNavbarLogo = document.getElementById("inputColorNavbarLogo");
+// 🟣 NAVBAR
 
 if (inputNavbarLinks) {
     inputNavbarLinks.addEventListener("input", () => {
+
+        const color = inputNavbarLinks.value;
+
+        navLinks.forEach(link => {
+            link.style.color = color;
+        });
+
         guardarEstiloTitulo();
     });
 }
 
 if (inputNavbarHover) {
     inputNavbarHover.addEventListener("input", () => {
+
+        const hoverColor = inputNavbarHover.value;
+        const baseColor = inputNavbarLinks ? inputNavbarLinks.value : "";
+
+        navLinks.forEach(link => {
+
+            link.onmouseenter = () => {
+                link.style.color = hoverColor;
+            };
+
+            link.onmouseleave = () => {
+                link.style.color = baseColor;
+            };
+        });
+
         guardarEstiloTitulo();
     });
 }
 
 if (inputNavbarLogo) {
     inputNavbarLogo.addEventListener("input", () => {
+
+        const color = inputNavbarLogo.value;
+
+        if (logoNavbar) {
+            logoNavbar.style.color = color;
+        }
+
         guardarEstiloTitulo();
     });
 }
+     
 
         let servicios = [];
 
