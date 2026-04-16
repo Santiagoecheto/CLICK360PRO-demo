@@ -2778,8 +2778,9 @@ async function cargarTituloWeb() {
             const color = data.colorTitulo || "#ffffff";
             const tamano = data.tamanoTitulo || "48px";
 
-            const colorSub = data.colorSubtitulo || "#ffffff";
-            const tamanoSub = data.tamanoSubtitulo || "20px";
+          const colorSub = data.colorSubtitulo || "#ffffff";
+          const tamanoSub = data.tamanoSubtitulo || "20px";
+          const colorTextoGaleria = data.colorTextoGaleria || "#ffffff";
 
             colorFondo = data.colorFondo || "#000000";
 
@@ -2788,9 +2789,18 @@ async function cargarTituloWeb() {
             titulo.style.fontSize = tamano;
 
             if (subtitulo) {
-                subtitulo.style.color = colorSub;
-                subtitulo.style.fontSize = tamanoSub;
+               subtitulo.style.color = colorSub;
+               subtitulo.style.fontSize = tamanoSub;
             }
+
+            if (textoGaleria) {
+                textoGaleria.style.color = colorTextoGaleria;
+            }
+
+            if (inputColorTextoGaleria) {
+                inputColorTextoGaleria.value = colorTextoGaleria;
+            }
+          
 
             aplicarColorFondoGlobal(colorFondo);
 
@@ -2820,7 +2830,17 @@ async function cargarTituloWeb() {
             if (subtitulo) {
                 subtitulo.style.color = "#ffffff";
                 subtitulo.style.fontSize = "20px";
-            }
+               }
+
+         }
+
+            if (textoGaleria) {
+                textoGaleria.style.color = "#ffffff";
+         }
+
+            if (inputColorTextoGaleria) {
+                inputColorTextoGaleria.value = "#ffffff";
+         }
 
             aplicarColorFondoGlobal("#000000");
 
@@ -2832,6 +2852,44 @@ async function cargarTituloWeb() {
             });
         }
 
+         if (inputColorTextoGaleria) {
+    inputColorTextoGaleria.oninput = async () => {
+
+        const color = inputColorTextoGaleria.value;
+
+        if (textoGaleria) {
+            textoGaleria.style.color = color;
+        }
+
+        try {
+            await guardarCampoWeb({ colorTextoGaleria: color });
+        } catch (error) {
+            console.error("Error guardando colorTextoGaleria:", error);
+        }
+    };
+}
+
+if (btnTextoGaleriaBlanco) {
+    btnTextoGaleriaBlanco.onclick = async () => {
+
+        const color = "#ffffff";
+
+        if (textoGaleria) {
+            textoGaleria.style.color = color;
+        }
+
+        if (inputColorTextoGaleria) {
+            inputColorTextoGaleria.value = color;
+        }
+
+        try {
+            await guardarCampoWeb({ colorTextoGaleria: color });
+        } catch (error) {
+            console.error("Error guardando colorTextoGaleria:", error);
+        }
+    };
+}
+ 
         if (inputColorFondo) inputColorFondo.value = colorFondo;
         if (inputColorFondoHex) inputColorFondoHex.value = colorFondo;
 
@@ -3235,6 +3293,10 @@ const inputColor = document.getElementById("inputColorTitulo");
 const inputTamano = document.getElementById("inputTamanoTitulo");
 const inputColorSubtitulo = document.getElementById("inputColorSubtitulo");
 const inputTamanoSubtitulo = document.getElementById("inputTamanoSubtitulo");
+
+const textoGaleria = document.getElementById("textoGaleria");
+const inputColorTextoGaleria = document.getElementById("inputColorTextoGaleria");
+const btnTextoGaleriaBlanco = document.getElementById("btnTextoGaleriaBlanco");
 const inputColorFondo = document.getElementById("inputColorFondo");
 
 // 🔥 BOTÓN IMAGEN
