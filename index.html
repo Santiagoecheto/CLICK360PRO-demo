@@ -1140,6 +1140,8 @@ async function iniciarModoAdmin() {
             const error = document.getElementById("loginAdminError");
             const linkReset = document.getElementById("linkResetAdmin");
 
+     
+
             if (!modal || !inputEmail || !inputPassword || !btnLogin || !error) {
                 alert("No se pudo abrir login admin");
                 resolve(false);
@@ -3470,6 +3472,13 @@ Ingresar
 </button>
 
 <p id="loginAdminError" style="color:#ff8080; margin-top:12px; text-align:center; min-height:20px;"></p>
+ <div style="text-align:center; margin-top:10px;">
+    <a href="#"
+       id="linkResetAdmin"
+       style="color:#bdbdbd; font-size:14px; text-decoration:none;">
+       ¿Olvidaste tu contraseña?
+    </a>
+</div>
 
 </div>
 </div>
