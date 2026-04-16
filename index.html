@@ -2688,6 +2688,10 @@ async function cargarTituloWeb() {
         const inputColorSubtitulo = document.getElementById("inputColorSubtitulo");
         const inputTamanoSubtitulo = document.getElementById("inputTamanoSubtitulo");
 
+        const textoGaleria = document.getElementById("textoGaleria");
+        const inputColorTextoGaleria = document.getElementById("inputColorTextoGaleria");
+        const btnTextoGaleriaBlanco = document.getElementById("btnTextoGaleriaBlanco");
+
         const inputColorFondo = document.getElementById("inputColorFondo");
         const inputColorFondoHex = document.getElementById("inputColorFondoHex");
         const btnColorBlanco = document.getElementById("btnColorBlanco");
@@ -2778,9 +2782,9 @@ async function cargarTituloWeb() {
             const color = data.colorTitulo || "#ffffff";
             const tamano = data.tamanoTitulo || "48px";
 
-          const colorSub = data.colorSubtitulo || "#ffffff";
-          const tamanoSub = data.tamanoSubtitulo || "20px";
-          const colorTextoGaleria = data.colorTextoGaleria || "#ffffff";
+            const colorSub = data.colorSubtitulo || "#ffffff";
+            const tamanoSub = data.tamanoSubtitulo || "20px";
+            const colorTextoGaleria = data.colorTextoGaleria || "#ffffff";
 
             colorFondo = data.colorFondo || "#000000";
 
@@ -2789,18 +2793,13 @@ async function cargarTituloWeb() {
             titulo.style.fontSize = tamano;
 
             if (subtitulo) {
-               subtitulo.style.color = colorSub;
-               subtitulo.style.fontSize = tamanoSub;
+                subtitulo.style.color = colorSub;
+                subtitulo.style.fontSize = tamanoSub;
             }
 
             if (textoGaleria) {
                 textoGaleria.style.color = colorTextoGaleria;
             }
-
-            if (inputColorTextoGaleria) {
-                inputColorTextoGaleria.value = colorTextoGaleria;
-            }
-          
 
             aplicarColorFondoGlobal(colorFondo);
 
@@ -2809,6 +2808,10 @@ async function cargarTituloWeb() {
 
             if (inputColorSubtitulo) inputColorSubtitulo.value = colorSub;
             if (inputTamanoSubtitulo) inputTamanoSubtitulo.value = parseInt(tamanoSub, 10);
+
+            if (inputColorTextoGaleria) {
+                inputColorTextoGaleria.value = colorTextoGaleria;
+            }
 
             seccionesConfig.forEach(cfg => {
                 const valorGuardado = data[cfg.campo];
@@ -2822,71 +2825,34 @@ async function cargarTituloWeb() {
                     aplicarColorSeccion(cfg.selector, valorGuardado);
                 }
             });
-      } else {
-    titulo.textContent = "Jenny Estilista Profesional";
-    titulo.style.color = "#ffffff";
-    titulo.style.fontSize = "48px";
+        } else {
+            titulo.textContent = "Jenny Estilista Profesional";
+            titulo.style.color = "#ffffff";
+            titulo.style.fontSize = "48px";
 
-    if (subtitulo) {
-        subtitulo.style.color = "#ffffff";
-        subtitulo.style.fontSize = "20px";
-    }
+            if (subtitulo) {
+                subtitulo.style.color = "#ffffff";
+                subtitulo.style.fontSize = "20px";
+            }
 
-    if (textoGaleria) {
-        textoGaleria.style.color = "#ffffff";
-    }
+            if (textoGaleria) {
+                textoGaleria.style.color = "#ffffff";
+            }
 
-    if (inputColorTextoGaleria) {
-        inputColorTextoGaleria.value = "#ffffff";
-    }
+            if (inputColorTextoGaleria) {
+                inputColorTextoGaleria.value = "#ffffff";
+            }
 
-    aplicarColorFondoGlobal("#000000");
+            aplicarColorFondoGlobal("#000000");
 
-    seccionesConfig.forEach(cfg => {
-        const input = document.getElementById(cfg.input);
-        if (input) {
-            input.value = "#000000";
-        }
-    });
-}
-         if (inputColorTextoGaleria) {
-    inputColorTextoGaleria.oninput = async () => {
-
-        const color = inputColorTextoGaleria.value;
-
-        if (textoGaleria) {
-            textoGaleria.style.color = color;
+            seccionesConfig.forEach(cfg => {
+                const input = document.getElementById(cfg.input);
+                if (input) {
+                    input.value = "#000000";
+                }
+            });
         }
 
-        try {
-            await guardarCampoWeb({ colorTextoGaleria: color });
-        } catch (error) {
-            console.error("Error guardando colorTextoGaleria:", error);
-        }
-    };
-}
-
-if (btnTextoGaleriaBlanco) {
-    btnTextoGaleriaBlanco.onclick = async () => {
-
-        const color = "#ffffff";
-
-        if (textoGaleria) {
-            textoGaleria.style.color = color;
-        }
-
-        if (inputColorTextoGaleria) {
-            inputColorTextoGaleria.value = color;
-        }
-
-        try {
-            await guardarCampoWeb({ colorTextoGaleria: color });
-        } catch (error) {
-            console.error("Error guardando colorTextoGaleria:", error);
-        }
-    };
-}
- 
         if (inputColorFondo) inputColorFondo.value = colorFondo;
         if (inputColorFondoHex) inputColorFondoHex.value = colorFondo;
 
@@ -2920,29 +2886,61 @@ if (btnTextoGaleriaBlanco) {
                 };
             }
 
-          if (botonBlanco) {
+            if (botonBlanco) {
+                botonBlanco.addEventListener("click", async () => {
+                    const colorBlanco = "#ffffff";
 
-    botonBlanco.addEventListener("click", async () => {
+                    aplicarColorSeccion(cfg.selector, colorBlanco);
 
-        const colorBlanco = "#ffffff";
+                    if (input) {
+                        input.value = colorBlanco;
+                    }
 
-        aplicarColorSeccion(cfg.selector, colorBlanco);
+                    try {
+                        await guardarCampoWeb({ [cfg.campo]: colorBlanco });
+                        console.log("✔ Blanco aplicado en:", cfg.campo);
+                    } catch (error) {
+                        console.error(`Error guardando ${cfg.campo}:`, error);
+                    }
+                });
+            }
+        });
 
-        if (input) {
-            input.value = colorBlanco;
+        if (inputColorTextoGaleria) {
+            inputColorTextoGaleria.oninput = async () => {
+                const color = inputColorTextoGaleria.value;
+
+                if (textoGaleria) {
+                    textoGaleria.style.color = color;
+                }
+
+                try {
+                    await guardarCampoWeb({ colorTextoGaleria: color });
+                } catch (error) {
+                    console.error("Error guardando colorTextoGaleria:", error);
+                }
+            };
         }
 
-        try {
-            await guardarCampoWeb({ [cfg.campo]: colorBlanco });
-            console.log("✔ Blanco aplicado en:", cfg.campo);
-        } catch (error) {
-            console.error(`Error guardando ${cfg.campo}:`, error);
+        if (btnTextoGaleriaBlanco) {
+            btnTextoGaleriaBlanco.onclick = async () => {
+                const color = "#ffffff";
+
+                if (textoGaleria) {
+                    textoGaleria.style.color = color;
+                }
+
+                if (inputColorTextoGaleria) {
+                    inputColorTextoGaleria.value = color;
+                }
+
+                try {
+                    await guardarCampoWeb({ colorTextoGaleria: color });
+                } catch (error) {
+                    console.error("Error guardando colorTextoGaleria:", error);
+                }
+            };
         }
-
-    });
-
-}
-});
 
         if (inputColorFondo) {
             inputColorFondo.oninput = () => {
@@ -2968,60 +2966,53 @@ if (btnTextoGaleriaBlanco) {
         }
 
         // 🔵 BOTÓN BLANCO GLOBAL
-if (btnColorBlanco) {
-    btnColorBlanco.onclick = () => {
-        aplicarColorFondo("#ffffff");
-    };
-}
-
-// 🔴 BOTÓN APLICAR GLOBAL A TODO (RESET)
-const btnAplicarGlobalTodo = document.getElementById("btnAplicarGlobalTodo");
-
-if (btnAplicarGlobalTodo) {
-
-    btnAplicarGlobalTodo.onclick = async () => {
-
-      const colorActual = inputColorFondo ? inputColorFondo.value : colorFondo;
-if (!colorActual) return;
-
-        // 1. Aplicar visualmente a TODAS las secciones
-        seccionesConfig.forEach(cfg => {
-
-         aplicarColorSeccion(cfg.selector, colorActual);
-
-            const input = document.getElementById(cfg.input);
-            if (input) {
-             input.value = colorActual;
-            }
-        });
-
-        try {
-            // 2. Limpiar overrides en Firebase (MUY IMPORTANTE)
-            const resetData = {};
-
-            seccionesConfig.forEach(cfg => {
-                resetData[cfg.campo] = null;
-            });
-
-            await setDoc(
-                doc(db, "configuracion", "web"),
-                resetData,
-                { merge: true }
-            );
-
-            console.log("🔥 Overrides eliminados, global aplicado");
-
-        } catch (error) {
-            console.error("Error reseteando secciones:", error);
+        if (btnColorBlanco) {
+            btnColorBlanco.onclick = () => {
+                aplicarColorFondo("#ffffff");
+            };
         }
 
-    };
+        // 🔴 BOTÓN APLICAR GLOBAL A TODO (RESET)
+        const btnAplicarGlobalTodo = document.getElementById("btnAplicarGlobalTodo");
 
-}
+        if (btnAplicarGlobalTodo) {
+            btnAplicarGlobalTodo.onclick = async () => {
+                const colorActual = inputColorFondo ? inputColorFondo.value : colorFondo;
+                if (!colorActual) return;
+
+                seccionesConfig.forEach(cfg => {
+                    aplicarColorSeccion(cfg.selector, colorActual);
+
+                    const input = document.getElementById(cfg.input);
+                    if (input) {
+                        input.value = colorActual;
+                    }
+                });
+
+                try {
+                    const resetData = {};
+
+                    seccionesConfig.forEach(cfg => {
+                        resetData[cfg.campo] = null;
+                    });
+
+                    await setDoc(
+                        doc(db, "configuracion", "web"),
+                        resetData,
+                        { merge: true }
+                    );
+
+                    console.log("🔥 Overrides eliminados, global aplicado");
+                } catch (error) {
+                    console.error("Error reseteando secciones:", error);
+                }
+            };
+        }
     } catch (error) {
         console.error("Error cargando título:", error);
     }
 }
+ 
  
  
 async function cargarSubtituloWeb() {
