@@ -1143,14 +1143,22 @@ async function iniciarModoAdmin() {
                 return false;
             }
 
-            const email = prompt("📧 Ingresar email administrador:");
+            const email = prompt(
+`🔐 ACCESO ADMIN
+
+Ingresar email administrador:`
+            );
 
             if (email === null) {
                 window.location.href = window.location.origin + window.location.pathname;
                 return false;
             }
 
-            const password = prompt("🔐 Ingresar contraseña:");
+            const password = prompt(
+`🔐 ACCESO ADMIN
+
+Ingresar contraseña:`
+            );
 
             if (password === null) {
                 window.location.href = window.location.origin + window.location.pathname;
@@ -1175,14 +1183,14 @@ async function iniciarModoAdmin() {
 
                 sessionStorage.setItem("admin_ok", "1");
 
-                console.log("Modo admin autenticado");
-
                 await cargarServiciosDesdeFirebase();
                 await cargarGaleriaDesdeFirebase();
                 await cargarVideosDesdeFirebase();
 
                 const panel = document.getElementById("panelTituloAdmin");
                 if (panel) panel.style.display = "block";
+
+                alert("✅ Bienvenida al panel administrador");
 
                 return true;
 
@@ -1193,7 +1201,7 @@ async function iniciarModoAdmin() {
                 intentos++;
 
                 if (errorLogin.code) {
-                    alert("Error: " + errorLogin.code);
+                    alert("❌ " + errorLogin.code);
                 } else {
                     alert("Email o contraseña incorrectos");
                 }
