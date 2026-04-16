@@ -1114,10 +1114,6 @@ async function iniciarModoAdmin() {
 
     if (!esAdmin) return true;
 
-    let loginCorrecto = false;
-    let intentos = 0;
-    const MAX_INTENTOS = 5;
-
     try {
 
         if (auth.currentUser) {
@@ -1135,87 +1131,76 @@ async function iniciarModoAdmin() {
             return true;
         }
 
-        while (!loginCorrecto) {
+        return await new Promise((resolve) => {
 
-            if (intentos >= MAX_INTENTOS) {
-                alert("Demasiados intentos fallidos");
-                window.location.href = window.location.origin + window.location.pathname;
-                return false;
+            const modal = document.getElementById("modalLoginAdmin");
+            const inputEmail = document.getElementById("adminEmail");
+            const inputPassword = document.getElementById("adminPassword");
+            const btnLogin = document.getElementById("btnLoginAdmin");
+            const error = document.getElementById("loginAdminError");
+
+            if (!modal || !inputEmail || !inputPassword || !btnLogin || !error) {
+                alert("No se pudo abrir login admin");
+                resolve(false);
+                return;
             }
 
-            const email = prompt(
-`🔐 ACCESO ADMIN
+            modal.style.display = "flex";
+            inputEmail.focus();
 
-Ingresar email administrador:`
-            );
+            btnLogin.onclick = async () => {
 
-            if (email === null) {
-                window.location.href = window.location.origin + window.location.pathname;
-                return false;
-            }
+                error.textContent = "";
 
-            const password = prompt(
-`🔐 ACCESO ADMIN
+                const email = inputEmail.value.trim().toLowerCase();
+                const password = inputPassword.value.trim();
 
-Ingresar contraseña:`
-            );
-
-            if (password === null) {
-                window.location.href = window.location.origin + window.location.pathname;
-                return false;
-            }
-
-            const emailLimpio = email.toString().trim().toLowerCase();
-            const passwordLimpia = password.toString().trim();
-
-            if (emailLimpio === "" || passwordLimpia === "") {
-                alert("Completá email y contraseña");
-                intentos++;
-                continue;
-            }
-
-            try {
-
-                await signInWithEmailAndPassword(auth, emailLimpio, passwordLimpia);
-
-                adminAutenticado = true;
-                loginCorrecto = true;
-
-                sessionStorage.setItem("admin_ok", "1");
-
-                await cargarServiciosDesdeFirebase();
-                await cargarGaleriaDesdeFirebase();
-                await cargarVideosDesdeFirebase();
-
-                const panel = document.getElementById("panelTituloAdmin");
-                if (panel) panel.style.display = "block";
-
-                alert("✅ Bienvenida al panel administrador");
-
-                return true;
-
-            } catch (errorLogin) {
-
-                console.error("ERROR LOGIN FIREBASE:", errorLogin);
-
-                intentos++;
-
-                if (errorLogin.code) {
-                    alert("❌ " + errorLogin.code);
-                } else {
-                    alert("Email o contraseña incorrectos");
+                if (!email || !password) {
+                    error.textContent = "Completá email y contraseña";
+                    return;
                 }
-            }
-        }
+
+                btnLogin.disabled = true;
+                btnLogin.textContent = "Ingresando...";
+
+                try {
+
+                    await signInWithEmailAndPassword(auth, email, password);
+
+                    adminAutenticado = true;
+                    sessionStorage.setItem("admin_ok", "1");
+
+                    modal.style.display = "none";
+
+                    await cargarServiciosDesdeFirebase();
+                    await cargarGaleriaDesdeFirebase();
+                    await cargarVideosDesdeFirebase();
+
+                    const panel = document.getElementById("panelTituloAdmin");
+                    if (panel) panel.style.display = "block";
+
+                    resolve(true);
+
+                } catch (e) {
+
+                    error.textContent = "Email o contraseña incorrectos";
+
+                } finally {
+
+                    btnLogin.disabled = false;
+                    btnLogin.textContent = "Ingresar";
+                }
+            };
+        });
 
     } catch (error) {
 
         console.error("Error iniciando admin:", error);
         alert("Error verificando acceso");
-
         return false;
     }
 }
+ 
  
 
  
