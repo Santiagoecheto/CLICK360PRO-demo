@@ -978,7 +978,13 @@ import { getFirestore, collection, addDoc, getDocs, getDoc, doc, setDoc, deleteD
 import { getStorage, ref, uploadBytes, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-storage.js";
 
 // Auth
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import {
+    getAuth,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut,
+    sendPasswordResetEmail
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
   
 // Configuración
