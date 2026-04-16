@@ -972,15 +972,13 @@ modalTurnos.style.display = "none";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
 // Firestore
-import { getFirestore, collection, addDoc, getDocs, getDoc, doc, setDoc, deleteDoc, updateDoc, onSnapshot, query, orderBy }
- from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, getDoc, doc, setDoc, deleteDoc, updateDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-  
- import { uploadBytesResumable } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-storage.js";
- 
-import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } 
-from "https://www.gstatic.com/firebasejs/12.1.0/firebase-storage.js";
+// Storage
+import { getStorage, ref, uploadBytes, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-storage.js";
 
+// Auth
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
   
 // Configuración
@@ -995,9 +993,12 @@ const firebaseConfig = {
 
 // Inicializar Firebase
 const app = initializeApp(firebaseConfig);
- const db = getFirestore(app);
+const db = getFirestore(app);
 const storage = getStorage(app);
- let unsubscribeVideos = null;
+const auth = getAuth(app);
+
+let unsubscribeVideos = null;
+
 const params = new URLSearchParams(window.location.search);
 const esAdmin = params.get("admin") === "1";
 
@@ -1113,23 +1114,29 @@ async function iniciarModoAdmin() {
 
     if (!esAdmin) return true;
 
-    let claveCorrecta = false;
+    let loginCorrecto = false;
     let intentos = 0;
     const MAX_INTENTOS = 5;
 
     try {
 
-        const docRef = doc(db, "configuracion", "admin");
-        const docSnap = await getDoc(docRef);
+        // ✅ Si ya hay sesión iniciada
+        if (auth.currentUser) {
 
-        let CLAVE_ADMIN = "1234";
+            adminAutenticado = true;
+            sessionStorage.setItem("admin_ok", "1");
 
-        if (docSnap.exists()) {
-            const data = docSnap.data() || {};
-            CLAVE_ADMIN = (data.password || "1234").toString();
+            await cargarServiciosDesdeFirebase();
+            await cargarGaleriaDesdeFirebase();
+            await cargarVideosDesdeFirebase();
+
+            const panel = document.getElementById("panelTituloAdmin");
+            if (panel) panel.style.display = "block";
+
+            return true;
         }
 
-        while (!claveCorrecta) {
+        while (!loginCorrecto) {
 
             if (intentos >= MAX_INTENTOS) {
                 alert("Demasiados intentos fallidos");
@@ -1137,60 +1144,64 @@ async function iniciarModoAdmin() {
                 return false;
             }
 
-            const clave = prompt("🔐 Ingresar clave de administrador:");
+            const email = prompt("📧 Ingresar email administrador:");
 
-            // ❌ CANCELA → SALIR TOTALMENTE DEL ADMIN
-            if (clave === null) {
+            if (email === null) {
                 window.location.href = window.location.origin + window.location.pathname;
                 return false;
             }
 
-            const claveIngresada = clave.toString().trim();
+            const password = prompt("🔐 Ingresar contraseña:");
 
-            // ❌ VACÍA
-            if (claveIngresada === "") {
-                alert("Ingresá una contraseña válida");
+            if (password === null) {
+                window.location.href = window.location.origin + window.location.pathname;
+                return false;
+            }
+
+            const emailLimpio = email.toString().trim();
+            const passwordLimpia = password.toString().trim();
+
+            if (emailLimpio === "" || passwordLimpia === "") {
+                alert("Completá email y contraseña");
                 intentos++;
                 continue;
             }
 
-            // ✅ CORRECTA
-            if (claveIngresada === CLAVE_ADMIN) {
+            try {
+
+                await signInWithEmailAndPassword(auth, emailLimpio, passwordLimpia);
 
                 adminAutenticado = true;
-                claveCorrecta = true;
+                loginCorrecto = true;
 
-                // 🔒 sesión admin temporal en navegador
                 sessionStorage.setItem("admin_ok", "1");
 
-                console.log("Modo admin activado");
+                console.log("Modo admin autenticado");
 
-                // 🔥 RECARGAR UI COMPLETA CON ADMIN ACTIVO
                 await cargarServiciosDesdeFirebase();
                 await cargarGaleriaDesdeFirebase();
                 await cargarVideosDesdeFirebase();
 
-                // 🔥 MOSTRAR PANEL ADMIN
                 const panel = document.getElementById("panelTituloAdmin");
                 if (panel) panel.style.display = "block";
 
                 return true;
 
-            } else {
+            } catch (errorLogin) {
                 intentos++;
-                alert("Clave incorrecta");
+                alert("Email o contraseña incorrectos");
             }
         }
 
     } catch (error) {
 
-        console.error("Error obteniendo contraseña:", error);
+        console.error("Error iniciando admin:", error);
         alert("Error verificando acceso");
 
         return false;
     }
 }
-
+ 
 
  
 async function subirImagenFirebase() {
