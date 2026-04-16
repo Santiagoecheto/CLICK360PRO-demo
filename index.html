@@ -2822,36 +2822,33 @@ async function cargarTituloWeb() {
                     aplicarColorSeccion(cfg.selector, valorGuardado);
                 }
             });
-        } else {
-            titulo.textContent = "Jenny Estilista Profesional";
-            titulo.style.color = "#ffffff";
-            titulo.style.fontSize = "48px";
+      } else {
+    titulo.textContent = "Jenny Estilista Profesional";
+    titulo.style.color = "#ffffff";
+    titulo.style.fontSize = "48px";
 
-            if (subtitulo) {
-                subtitulo.style.color = "#ffffff";
-                subtitulo.style.fontSize = "20px";
-               }
+    if (subtitulo) {
+        subtitulo.style.color = "#ffffff";
+        subtitulo.style.fontSize = "20px";
+    }
 
-         }
+    if (textoGaleria) {
+        textoGaleria.style.color = "#ffffff";
+    }
 
-            if (textoGaleria) {
-                textoGaleria.style.color = "#ffffff";
-         }
+    if (inputColorTextoGaleria) {
+        inputColorTextoGaleria.value = "#ffffff";
+    }
 
-            if (inputColorTextoGaleria) {
-                inputColorTextoGaleria.value = "#ffffff";
-         }
+    aplicarColorFondoGlobal("#000000");
 
-            aplicarColorFondoGlobal("#000000");
-
-            seccionesConfig.forEach(cfg => {
-                const input = document.getElementById(cfg.input);
-                if (input) {
-                    input.value = "#000000";
-                }
-            });
+    seccionesConfig.forEach(cfg => {
+        const input = document.getElementById(cfg.input);
+        if (input) {
+            input.value = "#000000";
         }
-
+    });
+}
          if (inputColorTextoGaleria) {
     inputColorTextoGaleria.oninput = async () => {
 
