@@ -3421,6 +3421,41 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
 
 </div>
+
+ <!-- LOGIN ADMIN PREMIUM -->
+<div id="modalLoginAdmin" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.75); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+
+<div style="width:100%; max-width:420px; background:#111; border:1px solid #333; border-radius:18px; padding:28px; box-shadow:0 20px 60px rgba(0,0,0,.45);">
+
+<h2 style="color:#fff; margin:0 0 18px 0; text-align:center;">
+🔐 Acceso Administrador
+</h2>
+
+<input
+type="email"
+id="adminEmail"
+placeholder="Correo electrónico"
+style="width:100%; padding:14px; margin-bottom:12px; border-radius:10px; border:none; outline:none; font-size:16px;"
+>
+
+<input
+type="password"
+id="adminPassword"
+placeholder="Contraseña"
+style="width:100%; padding:14px; margin-bottom:14px; border-radius:10px; border:none; outline:none; font-size:16px;"
+>
+
+<button
+id="btnLoginAdmin"
+style="width:100%; padding:14px; border:none; border-radius:10px; background:#ff2d75; color:#fff; font-size:16px; cursor:pointer; font-weight:bold;"
+>
+Ingresar
+</button>
+
+<p id="loginAdminError" style="color:#ff8080; margin-top:12px; text-align:center; min-height:20px;"></p>
+
+</div>
+</div>
  
 </body>
 </html>
