@@ -138,55 +138,84 @@ style="margin-left:10px; padding:5px 10px; background:#ff2d75; color:#fff; borde
 <br><br>
  
 
- <!-- 🟣 NAVBAR -->
+<!-- 🟣 NAVBAR -->
 <hr style="margin:20px 0; border:1px solid #444;">
 
-<label style="color:white;">🎨 Navbar</label>
-<br><br>
+<div style="display:flex; flex-direction:column; gap:14px;">
 
- 
-<label style="color:white;">Color links menú:</label>
-<input type="color" id="inputColorNavbarLinks">
-<button id="btnNavbarLinksBlanco">Blanco</button>
- 
-<label style="color:white; margin-left:10px;">Color hover:</label>
-<input type="color" id="inputColorNavbarHover">
-<button id="btnNavbarHoverBlanco">Blanco</button>
- 
+    <label style="color:white; text-align:center; font-weight:bold;">🎨 Navbar</label>
 
-<label style="color:white; margin-left:10px;">Color logo:</label>
-<input type="color" id="inputColorNavbarLogo">
-<button id="btnNavbarLogoBlanco">Blanco</button>
+    <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:12px 18px;">
 
-<br>
+        <div style="display:flex; align-items:center; gap:8px;">
+            <label style="color:white;">Color links menú:</label>
+            <input type="color" id="inputColorNavbarLinks">
+            <button id="btnNavbarLinksBlanco">Blanco</button>
+        </div>
 
-  <!-- 🎨 TÍTULO -->
-  <label style="color:white;">Color Título:</label>
-<input type="color" id="inputColorTitulo">
-<button id="btnTituloBlanco">Blanco</button>
+        <div style="display:flex; align-items:center; gap:8px;">
+            <label style="color:white;">Color hover:</label>
+            <input type="color" id="inputColorNavbarHover">
+            <button id="btnNavbarHoverBlanco">Blanco</button>
+        </div>
 
-    <label style="color:white; margin-left:10px;">Tamaño Título:</label>
-    <input type="number" id="inputTamanoTitulo" min="10" max="100" style="width:60px;"> px
-    <br>
+        <div style="display:flex; align-items:center; gap:8px;">
+            <label style="color:white;">Color logo:</label>
+            <input type="color" id="inputColorNavbarLogo">
+            <button id="btnNavbarLogoBlanco">Blanco</button>
+        </div>
 
-  <label style="color:white;">Color Subtítulo:</label>
-<input type="color" id="inputColorSubtitulo">
-<button id="btnSubtituloBlanco">Blanco</button>
- 
+    </div>
 
-    <label style="color:white; margin-left:10px;">Tamaño Subtítulo:</label>
-    <input type="number" id="inputTamanoSubtitulo" min="10" max="100" style="width:60px;"> px
-    <br><br>
+    <!-- 🎨 TÍTULO -->
+    <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:12px 18px;">
 
-    <label style="color:white;">Subir imagen a galería:</label>
-    <input type="file" id="inputImagen">
-    <button id="btnSubirImagen">Subir imagen</button>
+        <div style="display:flex; align-items:center; gap:8px;">
+            <label style="color:white;">Color Título:</label>
+            <input type="color" id="inputColorTitulo">
+            <button id="btnTituloBlanco">Blanco</button>
+        </div>
 
-    <img id="previewImagen" style="max-width:300px; display:block; margin-top:10px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+            <label style="color:white;">Tamaño Título:</label>
+            <input type="number" id="inputTamanoTitulo" min="10" max="100" style="width:60px;"> 
+            <span style="color:white;">px</span>
+        </div>
 
-    <hr style="margin:20px 0; border:1px solid #444;">
+    </div>
+
+    <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:12px 18px;">
+
+        <div style="display:flex; align-items:center; gap:8px;">
+            <label style="color:white;">Color Subtítulo:</label>
+            <input type="color" id="inputColorSubtitulo">
+            <button id="btnSubtituloBlanco">Blanco</button>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:8px;">
+            <label style="color:white;">Tamaño Subtítulo:</label>
+            <input type="number" id="inputTamanoSubtitulo" min="10" max="100" style="width:60px;"> 
+            <span style="color:white;">px</span>
+        </div>
+
+    </div>
+
+    <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:12px 18px;">
+
+        <div style="display:flex; align-items:center; gap:8px;">
+            <label style="color:white;">Subir imagen a galería:</label>
+            <input type="file" id="inputImagen">
+            <button id="btnSubirImagen">Subir imagen</button>
+        </div>
+
+    </div>
+
+    <img id="previewImagen" style="max-width:300px; display:block; margin:10px auto 0 auto;">
+
 </div>
 
+<hr style="margin:20px 0; border:1px solid #444;">
+</div>
  
  
  <!-- 🎬 ADMIN VIDEOS -->
