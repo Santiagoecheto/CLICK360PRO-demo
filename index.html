@@ -1120,7 +1120,6 @@ async function iniciarModoAdmin() {
 
     try {
 
-        // ✅ Si ya hay sesión iniciada
         if (auth.currentUser) {
 
             adminAutenticado = true;
@@ -1158,7 +1157,7 @@ async function iniciarModoAdmin() {
                 return false;
             }
 
-            const emailLimpio = email.toString().trim();
+            const emailLimpio = email.toString().trim().toLowerCase();
             const passwordLimpia = password.toString().trim();
 
             if (emailLimpio === "" || passwordLimpia === "") {
@@ -1188,8 +1187,16 @@ async function iniciarModoAdmin() {
                 return true;
 
             } catch (errorLogin) {
+
+                console.error("ERROR LOGIN FIREBASE:", errorLogin);
+
                 intentos++;
-                alert("Email o contraseña incorrectos");
+
+                if (errorLogin.code) {
+                    alert("Error: " + errorLogin.code);
+                } else {
+                    alert("Email o contraseña incorrectos");
+                }
             }
         }
 
