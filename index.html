@@ -518,10 +518,10 @@ loading="lazy">
 document.addEventListener("DOMContentLoaded", () => {
 
 const tituloPrincipal =
+document.querySelector(".hero h1")?.textContent.trim() ||
 document.querySelector("h1")?.textContent.trim() ||
 document.title ||
 "Mi Sitio";
-
 document.getElementById("footerTitulo").textContent = tituloPrincipal;
 document.getElementById("footerTituloCopy").textContent = tituloPrincipal;
 
