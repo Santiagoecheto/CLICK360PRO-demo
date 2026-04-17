@@ -1021,7 +1021,9 @@ alert("Este servicio puede requerir más tiempo del habitual. La duración final
 }
 
 // 👉 ABRIR WHATSAPP
-window.location.href = `https://wa.me/5491157611231?text=${mensaje}`;
+window.location.href = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
+? `https://wa.me/5491157611231?text=${mensaje}`
+: `https://web.whatsapp.com/send?phone=5491157611231&text=${mensaje}`;
 // LIMPIAR FORMULARIO
 document.getElementById("nombre").value = "";
 document.getElementById("servicio").value = "";
