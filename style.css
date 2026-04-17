@@ -953,6 +953,8 @@ z-index:3000;
 }
 
 .contenido-turnos{
+position:relative;
+margin:auto;
 background:#111;
 padding:30px;
 border-radius:12px;
@@ -962,6 +964,9 @@ display:flex;
 flex-direction:column;
 gap:15px;
 text-align:center;
+max-height:90vh;
+overflow-y:auto;
+box-sizing:border-box;
 }
 
 .contenido-turnos input,
