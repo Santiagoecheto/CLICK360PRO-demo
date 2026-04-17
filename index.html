@@ -517,16 +517,26 @@ loading="lazy">
 <script>
 window.addEventListener("load", function () {
 
+setTimeout(function () {
+
 const tituloPrincipal =
-document.querySelector(".hero h1")?.textContent.trim() ||
-document.querySelector("header h1")?.textContent.trim() ||
-document.querySelector("h1")?.textContent.trim() ||
+document.getElementById("tituloWeb")?.textContent.trim() ||
+document.getElementById("logoNavbar")?.textContent.trim() ||
 document.title ||
 "Mi Sitio";
 
-document.getElementById("footerTitulo").textContent = tituloPrincipal;
-document.getElementById("footerCopy").textContent =
-"© 2026 " + tituloPrincipal;
+const footerTitulo = document.getElementById("footerTitulo");
+const footerCopy = document.getElementById("footerCopy");
+
+if (footerTitulo) {
+footerTitulo.textContent = tituloPrincipal;
+}
+
+if (footerCopy) {
+footerCopy.textContent = "© 2026 " + tituloPrincipal;
+}
+
+}, 300);
 
 });
 </script>
