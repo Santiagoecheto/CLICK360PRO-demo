@@ -3107,6 +3107,20 @@ window.onload = async function () {
 
 
  
+function abrirWhatsappDirecto(texto){
+
+const mensaje = encodeURIComponent(texto);
+
+const url = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
+? `https://wa.me/5491157611231?text=${mensaje}`
+: `https://web.whatsapp.com/send?phone=5491157611231&text=${mensaje}`;
+
+window.open(url, "_blank");
+
+}
+
+
+ 
     async function intentarLoginAdmin() {
         if (loginIntentado) return;
         loginIntentado = true;
