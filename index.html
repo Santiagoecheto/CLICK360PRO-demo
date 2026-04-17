@@ -519,24 +519,29 @@ window.addEventListener("load", function () {
 
 setTimeout(function () {
 
-const tituloPrincipal =
-document.getElementById("tituloWeb")?.textContent.trim() ||
-document.getElementById("logoNavbar")?.textContent.trim() ||
-document.title ||
-"Mi Sitio";
+const tituloReal =
+document.getElementById("tituloWeb")?.textContent.trim();
+
+if (
+tituloReal &&
+tituloReal !== "Cargando..." &&
+tituloReal !== ""
+) {
 
 const footerTitulo = document.getElementById("footerTitulo");
 const footerCopy = document.getElementById("footerTituloCopy");
 
 if (footerTitulo) {
-footerTitulo.textContent = tituloPrincipal;
+footerTitulo.textContent = tituloReal;
 }
 
 if (footerCopy) {
-footerCopy.textContent = "© 2026 " + tituloPrincipal;
+footerCopy.textContent = tituloReal;
 }
 
-}, 300);
+}
+
+}, 500);
 
 });
 </script>
