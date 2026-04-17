@@ -515,15 +515,18 @@ loading="lazy">
 </footer>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("load", function () {
 
 const tituloPrincipal =
 document.querySelector(".hero h1")?.textContent.trim() ||
+document.querySelector("header h1")?.textContent.trim() ||
 document.querySelector("h1")?.textContent.trim() ||
 document.title ||
 "Mi Sitio";
+
 document.getElementById("footerTitulo").textContent = tituloPrincipal;
-document.getElementById("footerTituloCopy").textContent = tituloPrincipal;
+document.getElementById("footerCopy").textContent =
+"© 2026 " + tituloPrincipal;
 
 });
 </script>
