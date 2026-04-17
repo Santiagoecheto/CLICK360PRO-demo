@@ -526,6 +526,20 @@ tituloReal !== "Cargando..." &&
 tituloReal !== ""
 ) {
 
+<script>
+window.addEventListener("load", function () {
+
+const intervalo = setInterval(function () {
+
+const tituloReal =
+document.getElementById("tituloWeb")?.textContent.trim();
+
+if (
+tituloReal &&
+tituloReal !== "" &&
+tituloReal !== "Cargando..."
+) {
+
 const footerTitulo = document.getElementById("footerTitulo");
 const footerCopy = document.getElementById("footerTituloCopy");
 
@@ -536,6 +550,8 @@ footerTitulo.textContent = tituloReal;
 if (footerCopy) {
 footerCopy.textContent = tituloReal;
 }
+
+clearInterval(intervalo);
 
 }
 
