@@ -3107,7 +3107,7 @@ window.onload = async function () {
 
 
  
-function abrirWhatsappDirecto(texto){
+window.abrirWhatsappDirecto = function(texto){
 
 const mensaje = encodeURIComponent(texto);
 
@@ -3118,8 +3118,6 @@ const url = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
 window.open(url, "_blank");
 
 }
-
-
  
     async function intentarLoginAdmin() {
         if (loginIntentado) return;
