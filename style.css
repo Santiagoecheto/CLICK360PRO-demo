@@ -1410,3 +1410,36 @@ text-align:center;
 }
 
 }
+.cta-botones{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:14px;
+flex-wrap:wrap;
+margin-top:30px;
+}
+
+.boton-cta-calendario{
+background:#ffffff;
+color:#7c3aed;
+}
+
+.boton-cta-calendario:hover{
+transform:scale(1.05);
+box-shadow:0 10px 25px rgba(0,0,0,0.4);
+}
+
+@media (max-width:768px){
+
+.cta-botones{
+flex-direction:column;
+gap:12px;
+}
+
+.cta-botones a{
+width:100%;
+max-width:320px;
+text-align:center;
+}
+
+}
