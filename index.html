@@ -268,7 +268,7 @@ target="_blank">
 
 <a class="boton-whatsapp boton-calendario"
 href="#"
-target="_blank">
+id="abrirTurnosHero">
 📅 Elegir día y hora
 </a>
 
@@ -425,7 +425,7 @@ target="_blank">
 
 <a class="boton-cta boton-cta-calendario"
 href="#"
-target="_blank">
+id="abrirTurnosCTA">
 📅 Elegir día y hora
 </a>
 
@@ -786,12 +786,31 @@ nav.classList.remove("active");
 <script>
 
 const abrirTurnos = document.getElementById("abrirTurnos");
+const abrirTurnosHero = document.getElementById("abrirTurnosHero");
+const abrirTurnosCTA = document.getElementById("abrirTurnosCTA");
+
 const modalTurnos = document.getElementById("modalTurnos");
 const cerrarTurnos = document.getElementById("cerrarTurnos");
 
-abrirTurnos.addEventListener("click", () => {
+function mostrarModalTurnos(){
 modalTurnos.style.display = "flex";
+}
+
+abrirTurnos.addEventListener("click", mostrarModalTurnos);
+
+if(abrirTurnosHero){
+abrirTurnosHero.addEventListener("click", (e) => {
+e.preventDefault();
+mostrarModalTurnos();
 });
+}
+
+if(abrirTurnosCTA){
+abrirTurnosCTA.addEventListener("click", (e) => {
+e.preventDefault();
+mostrarModalTurnos();
+});
+}
 
 cerrarTurnos.addEventListener("click", () => {
 modalTurnos.style.display = "none";
