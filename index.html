@@ -1254,7 +1254,41 @@ async function guardarEstiloTitulo(
     }
 }
  
+async function guardarFooterAdmin() {
+    try {
 
+        const data = {
+            footerDescripcion: document.getElementById("inputFooterDescripcion")?.value.trim() || "",
+            footerDireccion: document.getElementById("inputFooterDireccion")?.value.trim() || "",
+            footerTelefono: document.getElementById("inputFooterTelefono")?.value.trim() || "",
+
+            footerHorario1: document.getElementById("inputFooterHorario1")?.value.trim() || "",
+            footerHorario2: document.getElementById("inputFooterHorario2")?.value.trim() || "",
+            footerHorario3: document.getElementById("inputFooterHorario3")?.value.trim() || "",
+            footerHorario4: document.getElementById("inputFooterHorario4")?.value.trim() || "",
+
+            footerRed1: document.getElementById("inputFooterRed1")?.value.trim() || "",
+            footerRed2: document.getElementById("inputFooterRed2")?.value.trim() || "",
+            footerRed3: document.getElementById("inputFooterRed3")?.value.trim() || ""
+        };
+
+        await setDoc(
+            doc(db, "configuracion", "web"),
+            data,
+            { merge: true }
+        );
+
+        alert("Footer guardado correctamente");
+
+        location.reload();
+
+    } catch (error) {
+        console.error(error);
+        alert("Error guardando footer");
+    }
+}
+
+ 
  
 async function iniciarModoAdmin() {
 
@@ -1695,7 +1729,19 @@ if (footerRed3) footerRed3.textContent = dataConfig.footerRed3 || "TikTok";
 const inputNavbarLinks = document.getElementById("inputColorNavbarLinks");
 const inputNavbarHover = document.getElementById("inputColorNavbarHover");
 const inputNavbarLogo = document.getElementById("inputColorNavbarLogo");
+const inputFooterDescripcion = document.getElementById("inputFooterDescripcion");
+const inputFooterDireccion = document.getElementById("inputFooterDireccion");
+const inputFooterTelefono = document.getElementById("inputFooterTelefono");
 
+const inputFooterHorario1 = document.getElementById("inputFooterHorario1");
+const inputFooterHorario2 = document.getElementById("inputFooterHorario2");
+const inputFooterHorario3 = document.getElementById("inputFooterHorario3");
+const inputFooterHorario4 = document.getElementById("inputFooterHorario4");
+
+const inputFooterRed1 = document.getElementById("inputFooterRed1");
+const inputFooterRed2 = document.getElementById("inputFooterRed2");
+const inputFooterRed3 = document.getElementById("inputFooterRed3");
+     
 try {
     const configRef = doc(db, "configuracion", "web");
     const configSnap = await getDoc(configRef);
@@ -1715,8 +1761,49 @@ if (inputNavbarLinks && dataConfig.colorNavbarLinks && !inputNavbarLinks.value) 
        if (inputNavbarLogo && dataConfig.colorNavbarLogo && !inputNavbarLogo.value) {
     inputNavbarLogo.value = dataConfig.colorNavbarLogo;
 }
+
+     if (inputFooterDescripcion && dataConfig.footerDescripcion !== undefined) {
+    inputFooterDescripcion.value = dataConfig.footerDescripcion;
+}
+
+if (inputFooterDireccion && dataConfig.footerDireccion !== undefined) {
+    inputFooterDireccion.value = dataConfig.footerDireccion;
+}
+
+if (inputFooterTelefono && dataConfig.footerTelefono !== undefined) {
+    inputFooterTelefono.value = dataConfig.footerTelefono;
+}
+
+if (inputFooterHorario1 && dataConfig.footerHorario1 !== undefined) {
+    inputFooterHorario1.value = dataConfig.footerHorario1;
+}
+
+if (inputFooterHorario2 && dataConfig.footerHorario2 !== undefined) {
+    inputFooterHorario2.value = dataConfig.footerHorario2;
+}
+
+if (inputFooterHorario3 && dataConfig.footerHorario3 !== undefined) {
+    inputFooterHorario3.value = dataConfig.footerHorario3;
+}
+
+if (inputFooterHorario4 && dataConfig.footerHorario4 !== undefined) {
+    inputFooterHorario4.value = dataConfig.footerHorario4;
+}
+
+if (inputFooterRed1 && dataConfig.footerRed1 !== undefined) {
+    inputFooterRed1.value = dataConfig.footerRed1;
+}
+
+if (inputFooterRed2 && dataConfig.footerRed2 !== undefined) {
+    inputFooterRed2.value = dataConfig.footerRed2;
+}
+
+if (inputFooterRed3 && dataConfig.footerRed3 !== undefined) {
+    inputFooterRed3.value = dataConfig.footerRed3;
+}
     }
 
+ 
 } catch (error) {
     console.warn("Error cargando colores navbar en inputs:", error);
 }
@@ -3313,6 +3400,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         console.log("✅ Botón Subir Imagen conectado GLOBAL");
     }
+ const btnGuardarFooter = document.getElementById("btnGuardarFooter");
+
+if (btnGuardarFooter) {
+    btnGuardarFooter.addEventListener("click", guardarFooterAdmin);
+}
+ 
 
     // =========================
     // 🎬 SUBIR VIDEO HERO
