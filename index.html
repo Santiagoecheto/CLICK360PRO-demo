@@ -486,29 +486,45 @@ loading="lazy">
 
 <div class="footer-col">
 
-<h4>Horarios</h4>
+<!-- FOOTER -->
 
-<p>Lunes a Viernes</p>
-<p>09:00 - 19:00</p>
+<footer class="footer" id="contacto">
 
-<p>Sábados</p>
-<p>09:00 - 15:00</p>
+<div class="footer-contenido">
 
+<div class="footer-col">
+<h3 id="footerTitulo"></h3>
+<p id="footerDescripcion">
+Estilo, belleza y cuidado profesional para tu cabello.
+</p>
 </div>
 
 <div class="footer-col">
+<h4>Contacto</h4>
+<p id="footerDireccion">📍 Buenos Aires, Argentina</p>
+<p id="footerTelefono">📞 +54 11 5761-1231</p>
+</div>
 
+<div class="footer-col">
+<h4>Horarios</h4>
+<p id="footerHorario1">Lunes a Viernes</p>
+<p id="footerHorario2">09:00 - 19:00</p>
+<p id="footerHorario3">Sábados</p>
+<p id="footerHorario4">09:00 - 15:00</p>
+</div>
+
+<div class="footer-col">
 <h4>Redes</h4>
-
-<p>Instagram</p>
-<p>Facebook</p>
-<p>TikTok</p>
-
+<p id="footerRed1">Instagram</p>
+<p id="footerRed2">Facebook</p>
+<p id="footerRed3">TikTok</p>
 </div>
 
 </div>
 
-<p class="copyright">© 2026 <span id="footerTituloCopy"></span></p>
+<p class="copyright">
+© 2026 <span id="footerTituloCopy"></span>
+</p>
 
 </footer>
 
@@ -1526,6 +1542,68 @@ async function cargarServiciosDesdeFirebase() {
             if (configSnap.exists()) {
                 dataConfig = configSnap.data() || {};
 
+             // =========================
+// 🔻 FOOTER DINÁMICO
+// =========================
+
+const footerTitulo = document.getElementById("footerTitulo");
+const footerCopy = document.getElementById("footerTituloCopy");
+
+const footerDescripcion = document.getElementById("footerDescripcion");
+const footerDireccion = document.getElementById("footerDireccion");
+const footerTelefono = document.getElementById("footerTelefono");
+
+const footerHorario1 = document.getElementById("footerHorario1");
+const footerHorario2 = document.getElementById("footerHorario2");
+const footerHorario3 = document.getElementById("footerHorario3");
+const footerHorario4 = document.getElementById("footerHorario4");
+
+const footerRed1 = document.getElementById("footerRed1");
+const footerRed2 = document.getElementById("footerRed2");
+const footerRed3 = document.getElementById("footerRed3");
+
+// título
+if (footerTitulo) {
+    footerTitulo.textContent =
+        dataConfig.titulo || "Studio Hair Modern";
+}
+
+if (footerCopy) {
+    footerCopy.textContent =
+        dataConfig.titulo || "Studio Hair Modern";
+}
+
+// descripción
+if (footerDescripcion) {
+    footerDescripcion.textContent =
+        dataConfig.footerDescripcion ||
+        "Estilo, belleza y cuidado profesional para tu cabello.";
+}
+
+// contacto
+if (footerDireccion) {
+    footerDireccion.textContent =
+        dataConfig.footerDireccion ||
+        "📍 Buenos Aires, Argentina";
+}
+
+if (footerTelefono) {
+    footerTelefono.textContent =
+        dataConfig.footerTelefono ||
+        "📞 +54 11 5761-1231";
+}
+
+// horarios
+if (footerHorario1) footerHorario1.textContent = dataConfig.footerHorario1 || "Lunes a Viernes";
+if (footerHorario2) footerHorario2.textContent = dataConfig.footerHorario2 || "09:00 - 19:00";
+if (footerHorario3) footerHorario3.textContent = dataConfig.footerHorario3 || "Sábados";
+if (footerHorario4) footerHorario4.textContent = dataConfig.footerHorario4 || "09:00 - 15:00";
+
+// redes
+if (footerRed1) footerRed1.textContent = dataConfig.footerRed1 || "Instagram";
+if (footerRed2) footerRed2.textContent = dataConfig.footerRed2 || "Facebook";
+if (footerRed3) footerRed3.textContent = dataConfig.footerRed3 || "TikTok";
+
                 // =========================
                 // 🎬 CARGAR VIDEO HERO
                 // =========================
@@ -1618,6 +1696,7 @@ try {
     if (configSnap.exists()) {
         const dataConfig = configSnap.data();
 
+     
 if (inputNavbarLinks && dataConfig.colorNavbarLinks && !inputNavbarLinks.value) {
     inputNavbarLinks.value = dataConfig.colorNavbarLinks;
 }
