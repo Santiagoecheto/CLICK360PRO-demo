@@ -293,7 +293,7 @@ Guardar Footer
   
 <div class="hero-botones">
 
-<a class="boton-whatsapp"
+<a class="boton-whatsapp" data-whatsapp="1"
 href="#"
 onclick="window.open(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)?'https://wa.me/5491158648857?text=Hola%20estoy%20visitando%20la%20pagina%20web%20y%20quisiera%20mas%20informacion':'https://web.whatsapp.com/send?phone=5491158648857&text=Hola%20estoy%20visitando%20la%20pagina%20web%20y%20quisiera%20mas%20informacion','_blank'); return false;">
 📲 Reservar por WhatsApp
@@ -451,7 +451,7 @@ Desliza la barra vertical para ver el antes y después
 
 <div class="cta-botones">
 
-<a class="boton-cta"
+<a class="boton-cta" data-whatsapp="1"
 href="#"
 onclick="window.open(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)?'https://wa.me/5491158648857?text=Hola%20quiero%20reservar%20un%20turno':'https://web.whatsapp.com/send?phone=5491158648857&text=Hola%20quiero%20reservar%20un%20turno','_blank'); return false;">
 📲 Reservar por WhatsApp
@@ -575,8 +575,7 @@ clearInterval(intervalo);
 
 <!-- BOTONES FLOTANTES -->
 
-<a href="#"
-class="whatsapp-float"
+<a href="#" class="whatsapp-float" data-whatsapp="1"
 onclick="window.open(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)?'https://wa.me/5491158648857?text=Hola%20estoy%20visitando%20la%20pagina%20web%20y%20quisiera%20mas%20informacion':'https://web.whatsapp.com/send?phone=5491158648857&text=Hola%20estoy%20visitando%20la%20pagina%20web%20y%20quisiera%20mas%20informacion','_blank'); return false;">
 
 <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" width="30">
@@ -1082,9 +1081,14 @@ alert("Este servicio puede requerir más tiempo del habitual. La duración final
 }
 
 // 👉 ABRIR WHATSAPP
+const telefonoTurnos =
+    window.telefonoCalendario ||
+    window.telefonoWhatsapp ||
+    "5491157611231";
+
 const urlWhatsapp = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
-? `https://wa.me/5491157611231?text=${mensaje}`
-: `https://web.whatsapp.com/send?phone=5491157611231&text=${mensaje}`;
+? `https://wa.me/${telefonoTurnos}?text=${mensaje}`
+: `https://web.whatsapp.com/send?phone=${telefonoTurnos}&text=${mensaje}`;
 
 window.open(urlWhatsapp, "_blank");
 // LIMPIAR FORMULARIO
@@ -1264,6 +1268,9 @@ async function guardarFooterAdmin() {
             footerDireccion: document.getElementById("inputFooterDireccion")?.value.trim() || "",
             footerTelefono: document.getElementById("inputFooterTelefono")?.value.trim() || "",
 
+            telefonoWhatsapp: document.getElementById("inputTelefonoWhatsapp")?.value.trim() || "",
+            telefonoCalendario: document.getElementById("inputTelefonoCalendario")?.value.trim() || "",
+
             footerHorario1: document.getElementById("inputFooterHorario1")?.value.trim() || "",
             footerHorario2: document.getElementById("inputFooterHorario2")?.value.trim() || "",
             footerHorario3: document.getElementById("inputFooterHorario3")?.value.trim() || "",
@@ -1289,7 +1296,7 @@ async function guardarFooterAdmin() {
         alert("Error guardando footer");
     }
 }
-
+ 
  
  
 async function iniciarModoAdmin() {
@@ -1753,6 +1760,8 @@ const inputNavbarLogo = document.getElementById("inputColorNavbarLogo");
 const inputFooterDescripcion = document.getElementById("inputFooterDescripcion");
 const inputFooterDireccion = document.getElementById("inputFooterDireccion");
 const inputFooterTelefono = document.getElementById("inputFooterTelefono");
+const inputTelefonoWhatsapp = document.getElementById("inputTelefonoWhatsapp");
+const inputTelefonoCalendario = document.getElementById("inputTelefonoCalendario");
 
 const inputFooterHorario1 = document.getElementById("inputFooterHorario1");
 const inputFooterHorario2 = document.getElementById("inputFooterHorario2");
@@ -1795,6 +1804,13 @@ if (inputFooterTelefono && dataConfig.footerTelefono !== undefined) {
     inputFooterTelefono.value = dataConfig.footerTelefono;
 }
 
+ if (inputTelefonoWhatsapp && dataConfig.telefonoWhatsapp !== undefined) {
+    inputTelefonoWhatsapp.value = dataConfig.telefonoWhatsapp;
+}
+
+if (inputTelefonoCalendario && dataConfig.telefonoCalendario !== undefined) {
+    inputTelefonoCalendario.value = dataConfig.telefonoCalendario;
+}
 if (inputFooterHorario1 && dataConfig.footerHorario1 !== undefined) {
     inputFooterHorario1.value = dataConfig.footerHorario1;
 }
@@ -3867,6 +3883,31 @@ Ingresar
 
 </div>
 </div>
+
+ <script>
+
+document.querySelectorAll('[data-whatsapp="1"]').forEach(btn => {
+
+    btn.onclick = function(e) {
+        e.preventDefault();
+
+        const telefono =
+            window.telefonoWhatsapp ||
+            "5491157611231";
+
+        const mensaje =
+            "Hola estoy visitando la pagina web y quisiera mas informacion";
+
+        const url = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
+            ? `https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`
+            : `https://web.whatsapp.com/send?phone=${telefono}&text=${encodeURIComponent(mensaje)}`;
+
+        window.open(url, "_blank");
+    };
+
+});
+
+</script>
  
 </body>
 </html>
