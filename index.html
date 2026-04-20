@@ -226,6 +226,28 @@ style="margin-left:10px; padding:5px 10px; background:#ff2d75; color:#fff; borde
 
 </div>
 
+ <hr style="margin:20px 0; border:1px solid #444;">
+
+<div style="display:flex; flex-direction:column; gap:12px;">
+
+    <label style="color:white; font-weight:bold; text-align:center;">
+        🖼 Antes / Después
+    </label>
+
+    <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:12px 18px;">
+        <label style="color:white;">Imagen ANTES:</label>
+        <input type="file" id="inputImagenAntes" accept="image/*">
+        <button type="button" id="btnSubirImagenAntes">Subir ANTES</button>
+    </div>
+
+    <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:12px 18px;">
+        <label style="color:white;">Imagen DESPUÉS:</label>
+        <input type="file" id="inputImagenDespues" accept="image/*">
+        <button type="button" id="btnSubirImagenDespues">Subir DESPUÉS</button>
+    </div>
+
+</div>
+
 <hr style="margin:20px 0; border:1px solid #444;">
 
 <div style="display:flex; flex-direction:column; gap:10px;">
@@ -1672,6 +1694,22 @@ if (footerHorario4) footerHorario4.textContent = dataConfig.footerHorario4 || "0
 if (footerRed1) footerRed1.textContent = dataConfig.footerRed1 || "Instagram";
 if (footerRed2) footerRed2.textContent = dataConfig.footerRed2 || "Facebook";
 if (footerRed3) footerRed3.textContent = dataConfig.footerRed3 || "TikTok";
+
+             // =========================
+// 🖼 ANTES / DESPUÉS DINÁMICO
+// =========================
+
+const imagenAntes = document.getElementById("imagenAntes");
+const imagenDespues = document.getElementById("imagenDespues");
+
+if (imagenAntes && dataConfig.imagenAntesDespuesAntes) {
+    imagenAntes.src = dataConfig.imagenAntesDespuesAntes;
+}
+
+if (imagenDespues && dataConfig.imagenAntesDespuesDespues) {
+    imagenDespues.src = dataConfig.imagenAntesDespuesDespues;
+}
+             
 
                 // =========================
                 // 🎬 CARGAR VIDEO HERO
