@@ -238,7 +238,11 @@ style="margin-left:10px; padding:5px 10px; background:#ff2d75; color:#fff; borde
 
 <input type="text" id="inputFooterDireccion" placeholder="Dirección">
 
-<input type="text" id="inputFooterTelefono" placeholder="Teléfono">
+<input type="text" id="inputFooterTelefono" placeholder="Teléfono footer visible">
+
+<input type="text" id="inputTelefonoWhatsapp" placeholder="WhatsApp botones">
+
+<input type="text" id="inputTelefonoCalendario" placeholder="Calendario turnos">
 
 <input type="text" id="inputFooterHorario1" placeholder="Horario línea 1">
 <input type="text" id="inputFooterHorario2" placeholder="Horario línea 2">
@@ -1627,10 +1631,29 @@ if (footerDireccion) {
 }
 
 if (footerTelefono) {
-    footerTelefono.textContent =
+
+    const telefonoFooter =
         dataConfig.footerTelefono ||
-        "📞 +54 11 5761-1231";
+        dataConfig.telefonoWhatsapp ||
+        "5491157611231";
+
+    footerTelefono.textContent = "📞 " + telefonoFooter;
 }
+
+// =========================
+// ☎ TELEFONOS GLOBALES NUEVOS
+// =========================
+
+window.telefonoWhatsapp =
+    dataConfig.telefonoWhatsapp ||
+    dataConfig.footerTelefono ||
+    "5491157611231";
+
+window.telefonoCalendario =
+    dataConfig.telefonoCalendario ||
+    dataConfig.telefonoWhatsapp ||
+    dataConfig.footerTelefono ||
+    "5491157611231";
 
 // horarios
 if (footerHorario1) footerHorario1.textContent = dataConfig.footerHorario1 || "Lunes a Viernes";
