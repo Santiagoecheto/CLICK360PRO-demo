@@ -1449,11 +1449,33 @@ async function iniciarModoAdmin() {
  
 
  
-async function subirImagenFirebase() {
+async function subirImagenFirebase(opciones = {}) {
     try {
 
-        const input = document.getElementById("inputImagen");
-        const preview = document.getElementById("previewImagen");
+        const {
+            tipo = "general" // general | antes | despues
+        } = opciones;
+
+        let input = null;
+        let preview = document.getElementById("previewImagen");
+        let destinoBackend = "1";
+        let campoConfig = "";
+        let mensajeExito = "Imagen subida correctamente";
+
+        // =========================
+        // 🔀 DEFINIR MODO
+        // =========================
+        if (tipo === "antes") {
+            input = document.getElementById("inputImagenAntes");
+            campoConfig = "imagenAntesDespuesAntes";
+            mensajeExito = "Imagen ANTES subida correctamente";
+        } else if (tipo === "despues") {
+            input = document.getElementById("inputImagenDespues");
+            campoConfig = "imagenAntesDespuesDespues";
+            mensajeExito = "Imagen DESPUÉS subida correctamente";
+        } else {
+            input = document.getElementById("inputImagen");
+        }
 
         // 🔥 VALIDACIÓN FUERTE
         if (!input || !input.files || input.files.length === 0) {
@@ -1475,12 +1497,25 @@ async function subirImagenFirebase() {
             return;
         }
 
-        // 🔥 PREGUNTA DESTINO
-        const destino = prompt("¿Dónde querés guardar la imagen?\n\n1 = Galería\n2 = Servicio");
+        // =========================
+        // 🎯 DESTINO LÓGICO
+        // =========================
+        let destinoLogico = "";
 
-        if (destino !== "1" && destino !== "2") {
-            alert("Operación cancelada");
-            return;
+        if (tipo === "antes") {
+            destinoLogico = "antes";
+        } else if (tipo === "despues") {
+            destinoLogico = "despues";
+        } else {
+            const destino = prompt("¿Dónde querés guardar la imagen?\n\n1 = Galería\n2 = Servicio");
+
+            if (destino !== "1" && destino !== "2") {
+                alert("Operación cancelada");
+                return;
+            }
+
+            destinoBackend = destino;
+            destinoLogico = destino === "1" ? "galeria" : "servicio";
         }
 
         console.log("📤 Enviando imagen al backend...");
@@ -1488,7 +1523,7 @@ async function subirImagenFirebase() {
         // 🔥 ARMAR FORM DATA
         const formData = new FormData();
         formData.append("imagen", archivo);
-        formData.append("destino", destino);
+        formData.append("destino", destinoBackend);
 
         // 🔥 LLAMADA AL BACKEND
         const response = await fetch("/api/subir-imagen", {
@@ -1504,10 +1539,12 @@ async function subirImagenFirebase() {
             throw new Error(data.error || "Error en backend");
         }
 
-        // 🔥 🔥 🔥 NUEVO: GUARDAR EN FIRESTORE
-        if (destino === "1") {
+        // =========================
+        // 💾 GUARDAR SEGÚN DESTINO
+        // =========================
+        if (destinoLogico === "galeria") {
 
-            console.log("💾 Guardando en Firestore...");
+            console.log("💾 Guardando en Firestore colección galeria...");
 
             await addDoc(collection(db, "galeria"), {
                 imagen: data.url,
@@ -1516,19 +1553,48 @@ async function subirImagenFirebase() {
             });
 
             console.log("✅ Guardado en Firestore OK");
+
+        } else if (destinoLogico === "antes" || destinoLogico === "despues") {
+
+            console.log("💾 Guardando imagen Antes/Después en configuracion/web...");
+
+            await setDoc(
+                doc(db, "configuracion", "web"),
+                {
+                    [campoConfig]: data.url
+                },
+                { merge: true }
+            );
+
+            // 🔄 ACTUALIZAR EN VIVO EN LA WEB
+            if (destinoLogico === "antes") {
+                const imagenAntes = document.getElementById("imagenAntes");
+                if (imagenAntes) {
+                    imagenAntes.src = data.url;
+                }
+            }
+
+            if (destinoLogico === "despues") {
+                const imagenDespues = document.getElementById("imagenDespues");
+                if (imagenDespues) {
+                    imagenDespues.src = data.url;
+                }
+            }
+
+            console.log("✅ Imagen Antes/Después guardada en configuracion/web");
         }
 
-        alert("Imagen subida correctamente");
+        alert(mensajeExito);
 
         // 🔥 LIMPIEZA
         input.value = "";
 
-        if (preview) {
+        if (preview && tipo === "general") {
             preview.src = "";
         }
 
         // 🔄 RECARGA GALERÍA
-        if (destino === "1") {
+        if (destinoLogico === "galeria") {
             await cargarGaleriaDesdeFirebase();
         }
 
@@ -1537,7 +1603,7 @@ async function subirImagenFirebase() {
         alert("Error subiendo imagen: " + (error.message || ""));
     }
 }
-
+ 
  
  
   async function cargarServiciosDefinitivos() {
@@ -3462,26 +3528,71 @@ document.addEventListener("DOMContentLoaded", () => {
     // 📸 SUBIR IMAGEN
     // =========================
 
-    const btnSubir = document.getElementById("btnSubirImagen");
+ const btnSubir = document.getElementById("btnSubirImagen");
 
-    if (btnSubir) {
-        btnSubir.addEventListener("click", async () => {
-            try {
-                await subirImagenFirebase();
-            } catch (e) {
-                console.error("❌ Error en botón subir imagen:", e);
-            }
-        });
+if (btnSubir) {
+    btnSubir.addEventListener("click", async () => {
+        try {
+            await subirImagenFirebase();
+        } catch (e) {
+            console.error("❌ Error en botón subir imagen:", e);
+        }
+    });
 
-        console.log("✅ Botón Subir Imagen conectado GLOBAL");
-    }
- const btnGuardarFooter = document.getElementById("btnGuardarFooter");
+    console.log("✅ Botón Subir Imagen conectado GLOBAL");
+}
+
+// =========================
+// 🖼 BOTÓN ANTES
+// =========================
+
+const btnSubirImagenAntes = document.getElementById("btnSubirImagenAntes");
+
+if (btnSubirImagenAntes) {
+    btnSubirImagenAntes.addEventListener("click", async () => {
+        try {
+            await subirImagenFirebase({
+                tipo: "antes"
+            });
+        } catch (e) {
+            console.error("❌ Error subiendo imagen ANTES:", e);
+        }
+    });
+
+    console.log("✅ Botón Imagen ANTES conectado");
+}
+
+// =========================
+// 🖼 BOTÓN DESPUÉS
+// =========================
+
+const btnSubirImagenDespues = document.getElementById("btnSubirImagenDespues");
+
+if (btnSubirImagenDespues) {
+    btnSubirImagenDespues.addEventListener("click", async () => {
+        try {
+            await subirImagenFirebase({
+                tipo: "despues"
+            });
+        } catch (e) {
+            console.error("❌ Error subiendo imagen DESPUÉS:", e);
+        }
+    });
+
+    console.log("✅ Botón Imagen DESPUÉS conectado");
+}
+
+// =========================
+// 🔻 FOOTER
+// =========================
+
+const btnGuardarFooter = document.getElementById("btnGuardarFooter");
 
 if (btnGuardarFooter) {
     btnGuardarFooter.addEventListener("click", guardarFooterAdmin);
 }
- 
 
+ 
     // =========================
     // 🎬 SUBIR VIDEO HERO
     // =========================
