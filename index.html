@@ -2244,7 +2244,7 @@ async function cargarGaleriaDesdeFirebase() {
 }
 
 
- function renderTrabajosRecientes(items) {
+function renderTrabajosRecientes(items) {
 
     const contenedor = document.getElementById("slideTrackTrabajos");
 
@@ -2256,7 +2256,21 @@ async function cargarGaleriaDesdeFirebase() {
         return;
     }
 
-    const listaFinal = [...items, ...items];
+    let repeticiones = 2;
+
+    if (items.length <= 2) {
+        repeticiones = 4;
+    } else if (items.length <= 5) {
+        repeticiones = 3;
+    } else {
+        repeticiones = 2;
+    }
+
+    const listaFinal = [];
+
+    for (let i = 0; i < repeticiones; i++) {
+        listaFinal.push(...items);
+    }
 
     listaFinal.forEach(item => {
 
@@ -2266,6 +2280,7 @@ async function cargarGaleriaDesdeFirebase() {
 
         img.src = item.imagen;
         img.alt = "Trabajo reciente";
+        img.loading = "lazy";
 
         contenedor.appendChild(img);
 
