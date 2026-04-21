@@ -3358,6 +3358,8 @@ async function cargarTituloWeb() {
             const tamanoSub = data.tamanoSubtitulo || "20px";
             const colorTextoGaleria = data.colorTextoGaleria || "#ffffff";
             const textoGaleriaGuardado = data.textoGaleria || "";
+            const textoTrabajosGuardado = data.textoTrabajos || "";
+            const colorTextoTrabajosGuardado = data.colorTextoTrabajos || "#ffffff";
 
             colorFondo = data.colorFondo || "#000000";
 
@@ -3394,6 +3396,21 @@ if (inputTextoGaleria) {
             if (inputColorTextoGaleria) {
                 inputColorTextoGaleria.value = colorTextoGaleria;
             }
+         if (textoTrabajos) {
+    if (textoTrabajosGuardado !== "") {
+        textoTrabajos.textContent = textoTrabajosGuardado;
+    }
+
+    textoTrabajos.style.color = colorTextoTrabajosGuardado;
+}
+
+if (inputTextoTrabajos) {
+    inputTextoTrabajos.value = textoTrabajosGuardado;
+}
+
+if (inputColorTextoTrabajos) {
+    inputColorTextoTrabajos.value = colorTextoTrabajosGuardado;
+}
 
             seccionesConfig.forEach(cfg => {
                 const valorGuardado = data[cfg.campo];
