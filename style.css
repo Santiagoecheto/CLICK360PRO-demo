@@ -140,7 +140,16 @@ letter-spacing:0.5px;
 }
 
 .trabajos h2{
-    margin-bottom:40px;
+    margin-bottom:12px;
+}
+
+.subtitulo-trabajos{
+    max-width:700px;
+    margin:0 auto 35px auto;
+    font-size:16px;
+    line-height:1.6;
+    color:rgba(255,255,255,0.88);
+    opacity:0.95;
 }
 
 .grid-trabajos{
