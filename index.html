@@ -205,6 +205,11 @@ style="margin-left:10px; padding:5px 10px; background:#ff2d75; color:#fff; borde
 <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:12px 18px; margin-bottom:12px;">
 
     <div style="display:flex; align-items:center; gap:8px;">
+        <label style="color:white;">Texto Galería:</label>
+        <input type="text" id="inputTextoGaleria" placeholder="Subtítulo galería">
+    </div>
+
+    <div style="display:flex; align-items:center; gap:8px;">
         <label style="color:white;">Color texto Galería:</label>
         <input type="color" id="inputColorTextoGaleria">
         <button id="btnTextoGaleriaBlanco">Blanco</button>
@@ -3249,9 +3254,10 @@ async function cargarTituloWeb() {
         const inputColorSubtitulo = document.getElementById("inputColorSubtitulo");
         const inputTamanoSubtitulo = document.getElementById("inputTamanoSubtitulo");
 
-       const textoGaleria = document.getElementById("textoGaleria");
-       const inputColorTextoGaleria = document.getElementById("inputColorTextoGaleria");
-       const btnTextoGaleriaBlanco = document.getElementById("btnTextoGaleriaBlanco");
+      const textoGaleria = document.getElementById("textoGaleria");
+      const inputTextoGaleria = document.getElementById("inputTextoGaleria");
+      const inputColorTextoGaleria = document.getElementById("inputColorTextoGaleria");
+      const btnTextoGaleriaBlanco = document.getElementById("btnTextoGaleriaBlanco");
 
        const textoTrabajos = document.getElementById("textoTrabajos");
        const inputTextoTrabajos = document.getElementById("inputTextoTrabajos");
@@ -3351,6 +3357,7 @@ async function cargarTituloWeb() {
             const colorSub = data.colorSubtitulo || "#ffffff";
             const tamanoSub = data.tamanoSubtitulo || "20px";
             const colorTextoGaleria = data.colorTextoGaleria || "#ffffff";
+            const textoGaleriaGuardado = data.textoGaleria || "";
 
             colorFondo = data.colorFondo || "#000000";
 
@@ -3363,9 +3370,17 @@ async function cargarTituloWeb() {
                 subtitulo.style.fontSize = tamanoSub;
             }
 
-            if (textoGaleria) {
-                textoGaleria.style.color = colorTextoGaleria;
-            }
+           if (textoGaleria) {
+    if (textoGaleriaGuardado !== "") {
+        textoGaleria.textContent = textoGaleriaGuardado;
+    }
+
+    textoGaleria.style.color = colorTextoGaleria;
+}
+
+if (inputTextoGaleria) {
+    inputTextoGaleria.value = textoGaleriaGuardado;
+}
 
             aplicarColorFondoGlobal(colorFondo);
 
@@ -3375,6 +3390,7 @@ async function cargarTituloWeb() {
             if (inputColorSubtitulo) inputColorSubtitulo.value = colorSub;
             if (inputTamanoSubtitulo) inputTamanoSubtitulo.value = parseInt(tamanoSub, 10);
 
+         
             if (inputColorTextoGaleria) {
                 inputColorTextoGaleria.value = colorTextoGaleria;
             }
@@ -3471,7 +3487,24 @@ async function cargarTituloWeb() {
                 });
             }
         });
+       
+        if (inputTextoGaleria) {
+    inputTextoGaleria.oninput = async () => {
 
+        const texto = inputTextoGaleria.value.trim();
+
+        if (textoGaleria) {
+            textoGaleria.textContent = texto;
+        }
+
+        try {
+            await guardarCampoWeb({ textoGaleria: texto });
+        } catch (error) {
+            console.error("Error guardando textoGaleria:", error);
+        }
+    };
+}
+     
         if (inputColorTextoGaleria) {
             inputColorTextoGaleria.oninput = async () => {
                 const color = inputColorTextoGaleria.value;
