@@ -210,6 +210,17 @@ style="margin-left:10px; padding:5px 10px; background:#ff2d75; color:#fff; borde
         <button id="btnTextoGaleriaBlanco">Blanco</button>
     </div>
 
+    <div style="display:flex; align-items:center; gap:8px;">
+        <label style="color:white;">Texto Trabajos:</label>
+        <input type="text" id="inputTextoTrabajos" placeholder="Subtítulo trabajos">
+    </div>
+
+    <div style="display:flex; align-items:center; gap:8px;">
+        <label style="color:white;">Color Trabajos:</label>
+        <input type="color" id="inputColorTextoTrabajos">
+        <button id="btnTextoTrabajosBlanco">Blanco</button>
+    </div>
+
 </div>
 
 <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:12px 18px; margin-top:10px;">
@@ -1208,7 +1219,7 @@ async function guardarEstiloTitulo(
             data.tamanoTitulo = tamanoFinal;
         }
 
-        // 🔵 SUBTÍTULO
+        // 🔵 SUBTÍTULO HERO
         if (subtituloTexto !== undefined && subtituloTexto !== null) {
             data.subtitulo = subtituloTexto;
         }
@@ -1224,7 +1235,6 @@ async function guardarEstiloTitulo(
         }
 
         // 🟣 NAVBAR
-
         if (!colorNavbarLinks) {
             const inputLinks = document.getElementById("inputColorNavbarLinks");
             if (inputLinks) colorNavbarLinks = inputLinks.value;
@@ -1244,18 +1254,29 @@ async function guardarEstiloTitulo(
         if (colorNavbarHover) data.colorNavbarHover = colorNavbarHover;
         if (colorNavbarLogo) data.colorNavbarLogo = colorNavbarLogo;
 
+        // 🖼 TRABAJOS RECIENTES
+        const inputTextoTrabajos = document.getElementById("inputTextoTrabajos");
+        const inputColorTextoTrabajos = document.getElementById("inputColorTextoTrabajos");
+
+        if (inputTextoTrabajos) {
+            data.textoTrabajos = inputTextoTrabajos.value.trim();
+        }
+
+        if (inputColorTextoTrabajos) {
+            data.colorTextoTrabajos = inputColorTextoTrabajos.value;
+        }
+
         await setDoc(
             doc(db, "configuracion", "web"),
             data,
             { merge: true }
         );
 
-        // =========================
-        // 💥 APLICAR EN VIVO (CLAVE)
-        // =========================
+        // 💥 APLICAR EN VIVO
 
         const navLinks = document.querySelectorAll(".nav-links a");
         const logoNavbar = document.getElementById("logoNavbar");
+        const textoTrabajos = document.getElementById("textoTrabajos");
 
         if (colorNavbarLinks) {
             navLinks.forEach(link => {
@@ -1278,12 +1299,22 @@ async function guardarEstiloTitulo(
             logoNavbar.style.color = colorNavbarLogo;
         }
 
+        if (textoTrabajos && inputTextoTrabajos) {
+            textoTrabajos.textContent = inputTextoTrabajos.value.trim();
+        }
+
+        if (textoTrabajos && inputColorTextoTrabajos) {
+            textoTrabajos.style.color = inputColorTextoTrabajos.value;
+        }
+
         console.log("Estilo guardado y aplicado en vivo");
 
     } catch (error) {
         console.error("Error guardando estilo:", error);
     }
 }
+
+
  
 async function guardarFooterAdmin() {
     try {
@@ -3214,9 +3245,14 @@ async function cargarTituloWeb() {
         const inputColorSubtitulo = document.getElementById("inputColorSubtitulo");
         const inputTamanoSubtitulo = document.getElementById("inputTamanoSubtitulo");
 
-        const textoGaleria = document.getElementById("textoGaleria");
-        const inputColorTextoGaleria = document.getElementById("inputColorTextoGaleria");
-        const btnTextoGaleriaBlanco = document.getElementById("btnTextoGaleriaBlanco");
+       const textoGaleria = document.getElementById("textoGaleria");
+       const inputColorTextoGaleria = document.getElementById("inputColorTextoGaleria");
+       const btnTextoGaleriaBlanco = document.getElementById("btnTextoGaleriaBlanco");
+
+       const textoTrabajos = document.getElementById("textoTrabajos");
+       const inputTextoTrabajos = document.getElementById("inputTextoTrabajos");
+       const inputColorTextoTrabajos = document.getElementById("inputColorTextoTrabajos");
+       const btnTextoTrabajosBlanco = document.getElementById("btnTextoTrabajosBlanco");
 
         const inputColorFondo = document.getElementById("inputColorFondo");
         const inputColorFondoHex = document.getElementById("inputColorFondoHex");
@@ -3447,6 +3483,61 @@ async function cargarTituloWeb() {
                 }
             };
         }
+
+     if (inputTextoTrabajos) {
+    inputTextoTrabajos.oninput = async () => {
+
+        const texto = inputTextoTrabajos.value.trim();
+
+        if (textoTrabajos) {
+            textoTrabajos.textContent = texto;
+        }
+
+        try {
+            await guardarCampoWeb({ textoTrabajos: texto });
+        } catch (error) {
+            console.error("Error guardando textoTrabajos:", error);
+        }
+    };
+}
+
+if (inputColorTextoTrabajos) {
+    inputColorTextoTrabajos.oninput = async () => {
+
+        const color = inputColorTextoTrabajos.value;
+
+        if (textoTrabajos) {
+            textoTrabajos.style.color = color;
+        }
+
+        try {
+            await guardarCampoWeb({ colorTextoTrabajos: color });
+        } catch (error) {
+            console.error("Error guardando colorTextoTrabajos:", error);
+        }
+    };
+}
+
+if (btnTextoTrabajosBlanco) {
+    btnTextoTrabajosBlanco.onclick = async () => {
+
+        const color = "#ffffff";
+
+        if (textoTrabajos) {
+            textoTrabajos.style.color = color;
+        }
+
+        if (inputColorTextoTrabajos) {
+            inputColorTextoTrabajos.value = color;
+        }
+
+        try {
+            await guardarCampoWeb({ colorTextoTrabajos: color });
+        } catch (error) {
+            console.error("Error guardando colorTextoTrabajos:", error);
+        }
+    };
+}
 
         if (btnTextoGaleriaBlanco) {
             btnTextoGaleriaBlanco.onclick = async () => {
