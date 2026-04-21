@@ -221,11 +221,22 @@ style="margin-left:10px; padding:5px 10px; background:#ff2d75; color:#fff; borde
     </div>
 
 </div>
- 
-    <img id="previewImagen" style="max-width:300px; display:block; margin:10px auto 0 auto;">
+
+<div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:12px 18px; margin-top:10px;">
+
+    <div style="display:flex; align-items:center; gap:8px;">
+        <label style="color:white;">Trabajos recientes:</label>
+        <input type="file" id="inputImagenTrabajo">
+        <button id="btnSubirImagenTrabajo">Subir imagen</button>
+    </div>
 
 </div>
 
+<img id="previewImagen" style="max-width:300px; display:block; margin:10px auto 0 auto;">
+
+</div>
+
+ 
  <hr style="margin:20px 0; border:1px solid #444;">
 
 <div style="display:flex; flex-direction:column; gap:12px;">
@@ -364,31 +375,16 @@ type="button">
 
 <div class="slider">
 
-<div class="slide-track">
+<div class="slide-track" id="slideTrackTrabajos">
 
-<img src="imagenes/foto1.jpg">
-<img src="imagenes/foto2.jpg">
-<img src="imagenes/foto3.jpg">
-<img src="imagenes/foto4.jpg">
-<img src="imagenes/foto5.jpg">
-<img src="imagenes/foto6.jpg">
-<img src="imagenes/foto7.jpg">
-<img src="imagenes/foto8.jpg">
-
-<img src="imagenes/foto1.jpg">
-<img src="imagenes/foto2.jpg">
-<img src="imagenes/foto3.jpg">
-<img src="imagenes/foto4.jpg">
-<img src="imagenes/foto5.jpg">
-<img src="imagenes/foto6.jpg">
-<img src="imagenes/foto7.jpg">
-<img src="imagenes/foto8.jpg">
+<!-- Se carga dinámicamente desde Firebase -->
 
 </div>
 
 </div>
 
-  </section> <!-- 🔥 ESTE ES EL QUE FALTABA -->
+</section>
+ 
 
 <!-- VIDEOS -->
 
@@ -1332,9 +1328,10 @@ async function iniciarModoAdmin() {
             adminAutenticado = true;
             sessionStorage.setItem("admin_ok", "1");
 
-            await cargarServiciosDesdeFirebase();
-            await cargarGaleriaDesdeFirebase();
-            await cargarVideosDesdeFirebase();
+           await cargarServiciosDesdeFirebase();
+           await cargarGaleriaDesdeFirebase();
+           await cargarVideosDesdeFirebase();
+           await cargarTrabajosRecientesDesdeFirebase();
 
             const panel = document.getElementById("panelTituloAdmin");
             if (panel) panel.style.display = "block";
@@ -1418,9 +1415,10 @@ async function iniciarModoAdmin() {
 
                     modal.style.display = "none";
 
-                    await cargarServiciosDesdeFirebase();
-                    await cargarGaleriaDesdeFirebase();
-                    await cargarVideosDesdeFirebase();
+                  await cargarServiciosDesdeFirebase();
+                  await cargarGaleriaDesdeFirebase();
+                  await cargarVideosDesdeFirebase();
+                  await cargarTrabajosRecientesDesdeFirebase();
 
                     const panel = document.getElementById("panelTituloAdmin");
                     if (panel) panel.style.display = "block";
@@ -2161,6 +2159,67 @@ async function cargarGaleriaDesdeFirebase() {
         console.error("❌ Error cargando galería:", error);
     }
 }
+
+
+ async function cargarTrabajosRecientesDesdeFirebase() {
+    try {
+
+        const snapshot = await getDocs(collection(db, "trabajosRecientes"));
+
+        const data = [];
+
+        snapshot.forEach(docSnap => {
+
+            const datos = docSnap.data();
+
+            data.push({
+                id: docSnap.id,
+                ...datos
+            });
+
+        });
+
+        console.log("🖼 Trabajos recientes cargados:", data);
+
+        renderTrabajosRecientes(data);
+
+    } catch (error) {
+        console.error("❌ Error cargando trabajos recientes:", error);
+    }
+}
+
+
+ function renderTrabajosRecientes(items) {
+
+    const contenedor = document.getElementById("slideTrackTrabajos");
+
+    if (!contenedor) return;
+
+    contenedor.innerHTML = "";
+
+    if (!Array.isArray(items) || items.length === 0) {
+        return;
+    }
+
+    const listaFinal = [...items, ...items];
+
+    listaFinal.forEach(item => {
+
+        if (!item.imagen) return;
+
+        const img = document.createElement("img");
+
+        img.src = item.imagen;
+        img.alt = "Trabajo reciente";
+
+        contenedor.appendChild(img);
+
+    });
+
+}
+
+
+ 
 
 async function cargarVideosDesdeFirebase() {
     try {
