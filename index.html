@@ -2324,8 +2324,9 @@ function renderTrabajosRecientes(items) {
 
         const card = document.createElement("div");
         card.style.position = "relative";
-        card.style.display = "inline-block";
-        card.style.marginRight = "20px";
+        card.style.display = "flex";
+        card.style.flex = "0 0 auto";
+        card.style.margin = "0 10px";
 
         const img = document.createElement("img");
         img.src = item.imagen;
