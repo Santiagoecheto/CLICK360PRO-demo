@@ -1603,6 +1603,61 @@ async function subirImagenFirebase(opciones = {}) {
 }
  
  
+ async function subirImagenTrabajoReciente() {
+    try {
+
+        const input = document.getElementById("inputImagenTrabajo");
+
+        if (!input || !input.files || input.files.length === 0) {
+            alert("Seleccioná una imagen");
+            return;
+        }
+
+        const archivo = input.files[0];
+
+        if (!archivo.type.startsWith("image/")) {
+            alert("El archivo no es una imagen válida");
+            return;
+        }
+
+        if (archivo.size > 5 * 1024 * 1024) {
+            alert("La imagen es muy pesada (máx 5MB)");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("imagen", archivo);
+        formData.append("destino", "1");
+
+        const response = await fetch("/api/subir-imagen", {
+            method: "POST",
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || "Error subiendo imagen");
+        }
+
+        await addDoc(collection(db, "trabajosRecientes"), {
+            imagen: data.url,
+            fecha: new Date()
+        });
+
+        input.value = "";
+
+        await cargarTrabajosRecientesDesdeFirebase();
+
+        alert("Imagen subida a Trabajos Recientes");
+
+    } catch (error) {
+        console.error("❌ Error subiendo trabajo reciente:", error);
+        alert("Error subiendo imagen");
+    }
+}
+
+
  
   async function cargarServiciosDefinitivos() {
     try {
@@ -3587,7 +3642,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // 📸 SUBIR IMAGEN
     // =========================
 
- const btnSubir = document.getElementById("btnSubirImagen");
+const btnSubir = document.getElementById("btnSubirImagen");
 
 if (btnSubir) {
     btnSubir.addEventListener("click", async () => {
@@ -3601,6 +3656,21 @@ if (btnSubir) {
     console.log("✅ Botón Subir Imagen conectado GLOBAL");
 }
 
+const btnSubirTrabajo = document.getElementById("btnSubirImagenTrabajo");
+
+if (btnSubirTrabajo) {
+    btnSubirTrabajo.addEventListener("click", async () => {
+        try {
+            await subirImagenTrabajoReciente();
+        } catch (e) {
+            console.error("❌ Error en botón subir trabajo reciente:", e);
+        }
+    });
+
+    console.log("✅ Botón Trabajos Recientes conectado");
+}
+
+ 
 // =========================
 // 🖼 BOTÓN ANTES
 // =========================
