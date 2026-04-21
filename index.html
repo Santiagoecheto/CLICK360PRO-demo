@@ -2334,7 +2334,7 @@ function renderTrabajosRecientes(items) {
 
         card.appendChild(img);
 
-        if (modoEdicion) {
+       if (window.location.search.includes("admin=1")) {
 
             const btnEliminar = document.createElement("button");
             btnEliminar.innerHTML = "🗑";
