@@ -2318,17 +2318,64 @@ function renderTrabajosRecientes(items) {
         listaFinal.push(...items);
     }
 
-    listaFinal.forEach(item => {
+    listaFinal.forEach((item, index) => {
 
         if (!item.imagen) return;
 
-        const img = document.createElement("img");
+        const card = document.createElement("div");
+        card.style.position = "relative";
+        card.style.display = "inline-block";
+        card.style.marginRight = "20px";
 
+        const img = document.createElement("img");
         img.src = item.imagen;
         img.alt = "Trabajo reciente";
         img.loading = "lazy";
 
-        contenedor.appendChild(img);
+        card.appendChild(img);
+
+        if (modoEdicion) {
+
+            const btnEliminar = document.createElement("button");
+            btnEliminar.innerHTML = "🗑";
+            btnEliminar.type = "button";
+
+            btnEliminar.style.position = "absolute";
+            btnEliminar.style.bottom = "10px";
+            btnEliminar.style.left = "10px";
+            btnEliminar.style.zIndex = "50";
+            btnEliminar.style.cursor = "pointer";
+            btnEliminar.style.padding = "6px 8px";
+            btnEliminar.style.border = "none";
+            btnEliminar.style.borderRadius = "8px";
+            btnEliminar.style.background = "#ffffff";
+            btnEliminar.style.fontSize = "16px";
+
+            btnEliminar.onclick = async (e) => {
+                e.stopPropagation();
+
+                const confirmar = confirm("¿Eliminar esta imagen?");
+                if (!confirmar) return;
+
+                try {
+
+                    const nuevosItems = items.filter((_, i) => i !== index);
+
+                    await guardarCampoWeb({
+                        trabajosRecientes: nuevosItems
+                    });
+
+                    renderTrabajosRecientes(nuevosItems);
+
+                } catch (error) {
+                    console.error("Error eliminando imagen:", error);
+                }
+            };
+
+            card.appendChild(btnEliminar);
+        }
+
+        contenedor.appendChild(card);
 
     });
 
