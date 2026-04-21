@@ -470,13 +470,16 @@ cursor:pointer;
 }
 
 .slide-track img{
-width:250px;
-height:200px;
+width:220px;
+height:220px;
 object-fit:cover;
+object-position:center;
 margin-right:20px;
-border-radius:10px;
+border-radius:12px;
 cursor:pointer;
 transition:transform 0.35s ease, box-shadow 0.35s ease;
+flex-shrink:0;
+display:block;
 }
 
 .slide-track img:hover{
