@@ -630,28 +630,30 @@ onclick="window.open(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)?'http
 
 /* VISOR DE IMÁGENES */
 
-const imagenes = document.querySelectorAll(".slide-track img");
 const visor = document.getElementById("visor-imagen");
 const imagenGrande = document.getElementById("imagen-grande");
 
-imagenes.forEach(img => {
+function conectarEventosTrabajosRecientes() {
 
-img.addEventListener("click", () => {
+    const imagenes = document.querySelectorAll(".slide-track img");
 
-visor.style.display = "flex";
-imagenGrande.src = img.src;
+    imagenes.forEach(img => {
 
-});
+        img.style.cursor = "pointer";
 
-});
+        img.onclick = () => {
+            visor.style.display = "flex";
+            imagenGrande.src = img.src;
+        };
+
+    });
+}
 
 visor.addEventListener("click", () => {
-
-visor.style.display = "none";
-
+    visor.style.display = "none";
 });
 
-
+ 
 
 /* COMPARADOR ANTES DESPUÉS */
 
@@ -2286,9 +2288,10 @@ function renderTrabajosRecientes(items) {
 
     });
 
+    conectarEventosTrabajosRecientes();
+
 }
-
-
+ 
  
 
 async function cargarVideosDesdeFirebase() {
