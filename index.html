@@ -1608,7 +1608,7 @@ async function subirImagenFirebase(opciones = {}) {
 
             console.log("💾 Guardando en Firestore colección galeria...");
 
-            await addDoc(collection(db, "galeria"), {
+                await addDoc(collection(db, "clientes", clienteActual, "galeria"), {
                 imagen: data.url,
                 descripcion: "",
                 fecha: new Date()
@@ -1621,7 +1621,7 @@ async function subirImagenFirebase(opciones = {}) {
             console.log("💾 Guardando imagen Antes/Después en configuracion/web...");
 
             await setDoc(
-                doc(db, "configuracion", "web"),
+               doc(db, "clientes", clienteActual, "configuracion", "web")
                 {
                     [campoConfig]: data.url
                 },
@@ -1704,7 +1704,7 @@ async function subirImagenFirebase(opciones = {}) {
             throw new Error(data.error || "Error subiendo imagen");
         }
 
-        await addDoc(collection(db, "trabajosRecientes"), {
+            await addDoc(collection(db, "clientes", clienteActual, "trabajosRecientes"), {
             imagen: data.url,
             fecha: new Date()
         });
@@ -2254,7 +2254,7 @@ if (btnSubtituloBlanco && inputColorSubtitulo) {
 async function cargarGaleriaDesdeFirebase() {
     try {
 
-        const snapshot = await getDocs(collection(db, "galeria"));
+       const snapshot = await getDocs(collection(db, "clientes", clienteActual, "galeria"));
 
         const data = [];
 
@@ -2283,7 +2283,7 @@ async function cargarGaleriaDesdeFirebase() {
  async function cargarTrabajosRecientesDesdeFirebase() {
     try {
 
-        const snapshot = await getDocs(collection(db, "trabajosRecientes"));
+       const snapshot = await getDocs(collection(db, "clientes", clienteActual, "trabajosRecientes"));
 
         const data = [];
 
@@ -2378,7 +2378,7 @@ function renderTrabajosRecientes(items) {
 
                 try {
 
-                  await deleteDoc(doc(db, "trabajosRecientes", item.id));
+                  await deleteDoc(doc(db, "clientes", clienteActual, "trabajosRecientes", item.id));
 
                   await cargarTrabajosRecientesDesdeFirebase();
 
