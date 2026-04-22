@@ -2466,10 +2466,13 @@ async function cargarVideosDesdeFirebase() {
                         if (nuevaDesc === null) return;
 
                         try {
-                               await updateDoc(doc(db, "clientes", clienteActual, "videos", docSnap.id),
+                             await updateDoc(
+                                  doc(db, "clientes", clienteActual, "videos", docSnap.id),
+                         {
                                 titulo: nuevoTitulo.trim() || "Sin título",
                                 descripcion: nuevaDesc.trim() || ""
-                            });
+                        }
+                    );
                         } catch (error) {
                             console.error("Error editando video:", error);
                             alert("Error al editar video");
