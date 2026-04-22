@@ -3166,7 +3166,7 @@ function renderGaleria(data) {
 
                 try {
                     await setDoc(
-                        doc(db, "galeria", item.id),
+                       doc(db, "clientes", clienteActual, "galeria", item.id)
                         { descripcion: texto.textContent || "" },
                         { merge: true }
                     );
@@ -3204,7 +3204,7 @@ function renderGaleria(data) {
                     }
 
                     // ELIMINAR DE FIRESTORE
-                    await deleteDoc(doc(db, "galeria", item.id));
+                   await deleteDoc(doc(db, "clientes", clienteActual, "galeria", item.id));
 
                     console.log("Documento eliminado");
 
@@ -3223,6 +3223,9 @@ function renderGaleria(data) {
         contenedor.appendChild(card);
     });
 }
+
+
+
  
 async function cargarPreciosFirebase() {
     try {
