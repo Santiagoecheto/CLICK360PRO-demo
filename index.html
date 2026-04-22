@@ -2457,27 +2457,30 @@ async function cargarVideosDesdeFirebase() {
                     btnEditar.textContent = "✏️ Editar";
                     btnEditar.style.marginRight = "8px";
 
-                    btnEditar.onclick = async () => {
+                 btnEditar.onclick = async () => {
 
-                        const nuevoTitulo = prompt("Editar título:", data.titulo || "");
-                        if (nuevoTitulo === null) return;
+    const nuevoTitulo = prompt("Editar título:", data.titulo || "");
+    if (nuevoTitulo === null) return;
 
-                        const nuevaDesc = prompt("Editar descripción:", data.descripcion || "");
-                        if (nuevaDesc === null) return;
+    const nuevaDesc = prompt("Editar descripción:", data.descripcion || "");
+    if (nuevaDesc === null) return;
 
-                        try {
-                             await updateDoc(
-                                  doc(db, "clientes", clienteActual, "videos", docSnap.id),
-                         {
-                                titulo: nuevoTitulo.trim() || "Sin título",
-                                descripcion: nuevaDesc.trim() || ""
-                        }
-                    );
-                        } catch (error) {
-                            console.error("Error editando video:", error);
-                            alert("Error al editar video");
-                        }
-                    };
+    try {
+
+        await updateDoc(
+            doc(db, "clientes", clienteActual, "videos", docSnap.id),
+            {
+                titulo: nuevoTitulo.trim() || "Sin título",
+                descripcion: nuevaDesc.trim() || ""
+            }
+        );
+
+    } catch (error) {
+        console.error("Error editando video:", error);
+        alert("Error al editar video");
+    }
+
+};
 
                     // 🗑️ ELIMINAR
                     const btnEliminar = document.createElement("button");
