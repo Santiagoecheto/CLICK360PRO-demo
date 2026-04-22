@@ -2415,7 +2415,7 @@ async function cargarVideosDesdeFirebase() {
 
         // 🔥 QUERY ORDENADA (PRO)
         const q = query(
-           collection(db, "clientes", clienteActual, "videos")
+           collection(db, "clientes", clienteActual, "videos"),
             orderBy("fecha", "desc")
         );
 
