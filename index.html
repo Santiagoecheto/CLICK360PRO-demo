@@ -1293,7 +1293,7 @@ async function guardarEstiloTitulo(
 
      
         await setDoc(
-            doc(db, "clientes", clienteActual, "configuracion", "web")
+            doc(db, "clientes", clienteActual, "configuracion", "web"),
             data,
             { merge: true }
         );
@@ -1364,7 +1364,7 @@ async function guardarFooterAdmin() {
         };
 
         await setDoc(
-          doc(db, "clientes", clienteActual, "configuracion", "web")
+          doc(db, "clientes", clienteActual, "configuracion", "web"),
             data,
             { merge: true }
         );
@@ -1621,7 +1621,7 @@ async function subirImagenFirebase(opciones = {}) {
             console.log("💾 Guardando imagen Antes/Después en configuracion/web...");
 
             await setDoc(
-               doc(db, "clientes", clienteActual, "configuracion", "web")
+               doc(db, "clientes", clienteActual, "configuracion", "web"),
                 {
                     [campoConfig]: data.url
                 },
@@ -2700,14 +2700,14 @@ btnPassword.onclick = async () => {
         const tituloInput = document.getElementById("tituloWeb");
         if (tituloInput) {
             await setDoc(
-                doc(db, "configuracion", "web"),
+               doc(db, "clientes", clienteActual, "configuracion", "web"),
                 { titulo: tituloInput.textContent || "Jenny Estilista Profesional" },
                 { merge: true }
             );
         }
 
         // 🔴 1. TRAER TODO DESDE FIREBASE
-        const snapshot = await getDocs(collection(db, "servicios"));
+        const snapshot = await getDocs(collection(db, "clientes", clienteActual, "servicios"));
         const idsFirebase = snapshot.docs.map(doc => doc.id);
 
         // 🟡 2. ARMAR IDS ACTUALES (UI)
@@ -2724,7 +2724,7 @@ btnPassword.onclick = async () => {
         // 🔴 3. ELIMINAR LOS QUE YA NO EXISTEN
         for (const id of idsFirebase) {
             if (!idsActuales.includes(id)) {
-                await deleteDoc(doc(db, "servicios", id));
+              await deleteDoc(doc(db, "clientes", clienteActual, "servicios", id));
             }
         }
 
@@ -2735,7 +2735,7 @@ btnPassword.onclick = async () => {
                 let idFinal = servicio.id;
 
                 if (!idFinal || idFinal.startsWith("temp_")) {
-                    const docRef = await addDoc(collection(db, "servicios"), {
+                       const docRef = await addDoc(collection(db, "clientes", clienteActual, "servicios"), {
                         categoria: servicio.categoria,
                         titulo: servicio.titulo,
                         corto: Number(servicio.corto) || 0,
@@ -2747,7 +2747,7 @@ btnPassword.onclick = async () => {
                     servicio.id = idFinal;
                 } else {
                     await setDoc(
-                        doc(db, "servicios", idFinal),
+                            doc(db, "clientes", clienteActual, "servicios", idFinal)
                         {
                             categoria: servicio.categoria,
                             titulo: servicio.titulo,
@@ -2806,7 +2806,7 @@ btnPassword.onclick = async () => {
             largo: 0
         };
 
-        const docRef = await addDoc(collection(db, "servicios"), nuevoServicio);
+        const docRef = await addDoc(collection(db, "clientes", clienteActual, "servicios"), nuevoServicio);
 
         console.log("Servicio creado:", docRef.id);
 
@@ -2868,7 +2868,7 @@ data-tipo="titulo"
 
                         try {
                             if (servicio.id && !servicio.id.startsWith("temp_")) {
-                                await deleteDoc(doc(db, "servicios", servicio.id));
+                              await deleteDoc(doc(db, "clientes", clienteActual, "servicios", servicio.id));
                             }
 
                             categoria.servicios = categoria.servicios.filter(s => s.id !== servicio.id);
@@ -3288,21 +3288,6 @@ async function cargarPreciosFirebase() {
 }
   
   
-// 🧪 PRUEBA FIREBASE
-async function guardarPrueba() {
-    try {
-        const docRef = await addDoc(collection(db, "servicios"), {
-            nombre: "Corte de prueba",
-            precio: 1234,
-            fecha: new Date()
-        });
-
-        console.log("✅ Guardado con ID:", docRef.id);
-    } catch (e) {
-        console.error("❌ Error guardando:", e);
-    }
-}
-
  
 async function cargarTituloWeb() {
     try {
@@ -4242,7 +4227,7 @@ if (btnGuardarNuevoServicio) {
 
         console.log("INTENTANDO GUARDAR SERVICIO...");
 
-        await addDoc(collection(db, "servicios"), {
+        await addDoc(collection(db, "clientes", clienteActual, "servicios"), {
             titulo: titulo,
             categoria: categoria,
             corto: 0,
