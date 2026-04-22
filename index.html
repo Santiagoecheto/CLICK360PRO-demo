@@ -1293,7 +1293,7 @@ async function guardarEstiloTitulo(
 
      
         await setDoc(
-            doc(db, "configuracion", "web"),
+            doc(db, "clientes", clienteActual, "configuracion", "web")
             data,
             { merge: true }
         );
@@ -1364,7 +1364,7 @@ async function guardarFooterAdmin() {
         };
 
         await setDoc(
-            doc(db, "configuracion", "web"),
+          doc(db, "clientes", clienteActual, "configuracion", "web")
             data,
             { merge: true }
         );
@@ -2415,7 +2415,7 @@ async function cargarVideosDesdeFirebase() {
 
         // 🔥 QUERY ORDENADA (PRO)
         const q = query(
-            collection(db, "videos"),
+           collection(db, "clientes", clienteActual, "videos")
             orderBy("fecha", "desc")
         );
 
@@ -2466,7 +2466,7 @@ async function cargarVideosDesdeFirebase() {
                         if (nuevaDesc === null) return;
 
                         try {
-                            await updateDoc(doc(db, "videos", docSnap.id), {
+                               await updateDoc(doc(db, "clientes", clienteActual, "videos", docSnap.id),
                                 titulo: nuevoTitulo.trim() || "Sin título",
                                 descripcion: nuevaDesc.trim() || ""
                             });
@@ -2486,7 +2486,7 @@ async function cargarVideosDesdeFirebase() {
                         if (!confirmar) return;
 
                         try {
-                            await deleteDoc(doc(db, "videos", docSnap.id));
+                          await deleteDoc(doc(db, "clientes", clienteActual, "videos", docSnap.id));
                         } catch (error) {
                             console.error("Error eliminando video:", error);
                             alert("Error al eliminar video");
@@ -2559,7 +2559,7 @@ window.agregarVideoFirebase = async function() {
         // 🔴 VALIDAR DUPLICADOS POR ID
         if (videoId) {
 
-            const snapshot = await getDocs(collection(db, "videos"));
+          const snapshot = await getDocs(collection(db, "clientes", clienteActual, "videos"));
 
             let existe = false;
 
@@ -2578,7 +2578,7 @@ window.agregarVideoFirebase = async function() {
         }
 
         // ✅ GUARDAR
-        await addDoc(collection(db, "videos"), {
+            await addDoc(collection(db, "clientes", clienteActual, "videos"), {
             url: url,
             titulo: titulo || "Sin título",
             descripcion: descripcion || "",
