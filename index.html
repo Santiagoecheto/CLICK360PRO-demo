@@ -2752,17 +2752,17 @@ btnPassword.onclick = async () => {
                     idFinal = docRef.id;
                     servicio.id = idFinal;
                 } else {
-                    await setDoc(
-                            doc(db, "clientes", clienteActual, "servicios", idFinal)
-                        {
-                            categoria: servicio.categoria,
-                            titulo: servicio.titulo,
-                            corto: Number(servicio.corto) || 0,
-                            medio: Number(servicio.medio) || 0,
-                            largo: Number(servicio.largo) || 0
-                        },
-                        { merge: true }
-                    );
+                  await setDoc(
+                         doc(db, "clientes", clienteActual, "servicios", idFinal),
+               {
+                         categoria: servicio.categoria,
+                         titulo: servicio.titulo,
+                         corto: Number(servicio.corto) || 0,
+                         medio: Number(servicio.medio) || 0,
+                         largo: Number(servicio.largo) || 0
+              },
+                       { merge: true }
+                  );
                 }
             }
         }
