@@ -1290,6 +1290,8 @@ async function guardarEstiloTitulo(
             data.colorTextoTrabajos = inputColorTextoTrabajos.value;
         }
 
+
+     
         await setDoc(
             doc(db, "configuracion", "web"),
             data,
@@ -1789,7 +1791,7 @@ async function cargarServiciosDesdeFirebase() {
         let dataConfig = {};
 
         try {
-            const configRef = doc(db, "configuracion", "web");
+            const configRef = doc(db, "clientes", clienteActual, "configuracion", "web");
             const configSnap = await getDoc(configRef);
 
             if (configSnap.exists()) {
