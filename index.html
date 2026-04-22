@@ -3172,7 +3172,7 @@ function renderGaleria(data) {
 
                 try {
                     await setDoc(
-                       doc(db, "clientes", clienteActual, "galeria", item.id)
+                       doc(db, "clientes", clienteActual, "galeria", item.id),
                         { descripcion: texto.textContent || "" },
                         { merge: true }
                     );
