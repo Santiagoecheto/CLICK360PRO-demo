@@ -1196,10 +1196,26 @@ const auth = getAuth(app);
 let unsubscribeVideos = null;
 
 const params = new URLSearchParams(window.location.search);
+
 const esAdmin = params.get("admin") === "1";
 
-let adminAutenticado = false;
+/* ======================================
+   SISTEMA MULTICLIENTE
+====================================== */
 
+const clienteParam = params.get("cliente");
+
+const clienteActual =
+(
+    clienteParam &&
+    clienteParam.trim() !== ""
+)
+? clienteParam.trim().toLowerCase()
+: "demo";
+
+/* ====================================== */
+
+let adminAutenticado = false;
 
 
  
