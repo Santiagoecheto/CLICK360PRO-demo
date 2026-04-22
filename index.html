@@ -1797,7 +1797,7 @@ async function cargarServiciosDesdeFirebase() {
             if (configSnap.exists()) {
                 dataConfig = configSnap.data() || {};
 
-             // =========================
+ // =========================
 // 🔻 FOOTER DINÁMICO
 // =========================
 
@@ -1964,7 +1964,7 @@ if (imagenDespues && dataConfig.imagenAntesDespuesDespues) {
         // 🔽 TU LÓGICA EXISTENTE
         // =========================
 
-        const snapshot = await getDocs(collection(db, "servicios"));
+        const snapshot = await getDocs(collection(db, "clientes", clienteActual, "servicios"));
 
         const inputColor = document.getElementById("inputColorTitulo");
         const inputTamano = document.getElementById("inputTamanoTitulo");
@@ -1994,7 +1994,7 @@ const inputFooterRed2 = document.getElementById("inputFooterRed2");
 const inputFooterRed3 = document.getElementById("inputFooterRed3");
      
 try {
-    const configRef = doc(db, "configuracion", "web");
+    const configRef = doc(db, "clientes", clienteActual, "configuracion", "web");
     const configSnap = await getDoc(configRef);
 
     if (configSnap.exists()) {
