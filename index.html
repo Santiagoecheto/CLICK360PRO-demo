@@ -4054,7 +4054,7 @@ setTimeout(() => {
 
         titulo.addEventListener("input", function () {
             setDoc(
-                ,
+               doc(db, "clientes", clienteActual, "configuracion", "web"),
                 { titulo: titulo.textContent || "Jenny Estilista Profesional" },
                 { merge: true }
             );
