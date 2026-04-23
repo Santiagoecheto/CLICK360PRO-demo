@@ -2981,6 +2981,7 @@ function renderServicios(data) {
         contenedor.appendChild(btnAgregar);
     }
 
+    console.log("SERVICIOS DATA:", data);
     data.categorias.forEach(categoria => {
 
         categoria.servicios.forEach(servicio => {
@@ -3014,7 +3015,7 @@ function renderServicios(data) {
 
                     try {
 
-                        await updateDoc(doc(db, "servicios", servicio.id), {
+                            await updateDoc(doc(db, "clientes", clienteActual, "servicios", servicio.id), {
                             titulo: nuevoTitulo
                         });
 
@@ -3038,7 +3039,7 @@ function renderServicios(data) {
 
                     try {
 
-                        await deleteDoc(doc(db, "servicios", servicio.id));
+                       await deleteDoc(doc(db, "clientes", clienteActual, "servicios", servicio.id));
 
                         await cargarServiciosDesdeFirebase();
 
