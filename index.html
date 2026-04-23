@@ -4003,7 +4003,7 @@ if (btnVideoHero) {
 
             // 🔥 GUARDAR EN FIRESTORE
             await setDoc(
-                 doc(db, "clientes", clienteActual, "configuracion", "web");
+                 doc(db, "clientes", clienteActual, "configuracion", "web"),
                 { videoHero: url },
                 { merge: true }
             );
