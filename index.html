@@ -2211,17 +2211,29 @@ snapshot.forEach(docSnap => {
 
 });
 
-        const serviciosUnicos = [];
-        const clavesVistas = new Set();
+      const serviciosUnicos = [];
+const clavesVistas = new Set();
 
-        servicios.forEach(servicio => {
-            const clave = (servicio.categoria || "") + "_" + (servicio.titulo || "");
+servicios.forEach((servicio, index) => {
 
-            if (!clavesVistas.has(clave)) {
-                clavesVistas.add(clave);
-                serviciosUnicos.push(servicio);
-            }
+    const tituloFinal =
+        servicio.titulo &&
+        servicio.titulo.toString().trim() !== ""
+            ? servicio.titulo.toString().trim()
+            : "Servicio " + (index + 1);
+
+    const clave = servicio.id || tituloFinal + "_" + index;
+
+    if (!clavesVistas.has(clave)) {
+        clavesVistas.add(clave);
+
+        serviciosUnicos.push({
+            ...servicio,
+            titulo: tituloFinal
         });
+    }
+
+});
 
         let categoriasMap = {};
 
