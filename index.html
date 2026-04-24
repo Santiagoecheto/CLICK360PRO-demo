@@ -2225,13 +2225,25 @@ snapshot.forEach(docSnap => {
 
         let categoriasMap = {};
 
-        serviciosUnicos.forEach(servicio => {
-            if (!categoriasMap[servicio.categoria]) {
-                categoriasMap[servicio.categoria] = [];
-            }
+      serviciosUnicos.forEach(servicio => {
 
-            categoriasMap[servicio.categoria].push(servicio);
-        });
+    const categoriaFinal =
+        servicio.categoria &&
+        servicio.categoria.toString().trim() !== ""
+            ? servicio.categoria.toString().trim()
+            : "Servicios";
+
+    if (!categoriasMap[categoriaFinal]) {
+        categoriasMap[categoriaFinal] = [];
+    }
+
+    categoriasMap[categoriaFinal].push({
+        ...servicio,
+        categoria: categoriaFinal
+    });
+
+});
+     
 
         const data = {
             categorias: Object.keys(categoriasMap).map(cat => ({
