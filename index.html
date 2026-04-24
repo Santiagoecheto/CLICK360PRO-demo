@@ -2178,86 +2178,41 @@ if (btnSubtituloBlanco && inputColorSubtitulo) {
 
 snapshot.forEach(docSnap => {
 
-    const dataDoc = docSnap.data() || {};
-
-    const categoria =
-        dataDoc.categoria ||
-        dataDoc.tipo ||
-        dataDoc.rubro ||
-        "Servicios";
-
-    const titulo =
-        dataDoc.titulo ||
-        dataDoc.nombre ||
-        dataDoc.servicio ||
-        "Servicio";
-
-    const descripcion =
-        dataDoc.descripcion ||
-        dataDoc.detalle ||
-        "";
-
-    const precio =
-        dataDoc.precio || "";
+    const item = docSnap.data() || {};
 
     servicios.push({
         id: docSnap.id,
-        ...dataDoc,
-        categoria,
-        titulo,
-        descripcion,
-        precio
+        categoria: (item.categoria || "Servicios").toString().trim(),
+        titulo: (
+            item.titulo ||
+            item.nombre ||
+            item.servicio ||
+            docSnap.id
+        ).toString().trim(),
+        corto: Number(item.corto || 0),
+        medio: Number(item.medio || 0),
+        largo: Number(item.largo || 0),
+        ...item
     });
 
 });
 
-      const serviciosUnicos = [];
-const clavesVistas = new Set();
+const categoriasMap = {};
 
-servicios.forEach((servicio, index) => {
+servicios.forEach(servicio => {
 
-    const tituloFinal =
-        servicio.titulo &&
-        servicio.titulo.toString().trim() !== ""
-            ? servicio.titulo.toString().trim()
-            : "Servicio " + (index + 1);
+    const categoria = servicio.categoria || "Servicios";
 
-    const clave = servicio.id || tituloFinal + "_" + index;
-
-    if (!clavesVistas.has(clave)) {
-        clavesVistas.add(clave);
-
-        serviciosUnicos.push({
-            ...servicio,
-            titulo: tituloFinal
-        });
+    if (!categoriasMap[categoria]) {
+        categoriasMap[categoria] = [];
     }
+
+    categoriasMap[categoria].push(servicio);
 
 });
 
-        let categoriasMap = {};
-
-      serviciosUnicos.forEach(servicio => {
-
-    const categoriaFinal =
-        servicio.categoria &&
-        servicio.categoria.toString().trim() !== ""
-            ? servicio.categoria.toString().trim()
-            : "Servicios";
-
-    if (!categoriasMap[categoriaFinal]) {
-        categoriasMap[categoriaFinal] = [];
-    }
-
-    categoriasMap[categoriaFinal].push({
-        ...servicio,
-        categoria: categoriaFinal
-    });
-
-});
-     
-
-        const data = {
+const data = {
+ 
             categorias: Object.keys(categoriasMap).map(cat => ({
                 nombre: cat,
                 servicios: categoriasMap[cat]
