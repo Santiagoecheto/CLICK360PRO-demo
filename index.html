@@ -138,7 +138,31 @@ style="margin-left:10px; padding:5px 10px; background:#ff2d75; color:#fff; borde
 </button>
 
 <br><br>
- 
+
+ <hr style="margin:20px 0; border:1px solid #444;">
+
+<div style="display:flex; flex-direction:column; gap:14px;">
+
+<label style="color:white; text-align:center; font-weight:bold;">
+📍 Mapa
+</label>
+
+<div style="display:flex; align-items:center; gap:8px; justify-content:center; flex-wrap:wrap;">
+<label style="color:white;">Título:</label>
+<input type="text" id="inputTituloMapa" placeholder="Visítanos en nuestro salón">
+</div>
+
+<div style="display:flex; align-items:center; gap:8px; justify-content:center; flex-wrap:wrap;">
+<label style="color:white;">Dirección:</label>
+<input type="text" id="inputDireccionMapa" placeholder="Av. Pueyrredón 776">
+</div>
+
+<div style="display:flex; align-items:center; gap:8px; justify-content:center; flex-wrap:wrap;">
+<label style="color:white;">URL Google Maps:</label>
+<input type="text" id="inputUrlMapa" placeholder="https://www.google.com/maps?q=...">
+</div>
+
+</div>
 
 <!-- 🟣 NAVBAR -->
 <hr style="margin:20px 0; border:1px solid #444;">
@@ -533,12 +557,11 @@ type="button">
 
 <h2>Cómo encontrarnos</h2>
 
-<h3>Visítanos en nuestro salón</h3>
-<p>Av. Pueyrredón 776 – Buenos Aires</p>
-
+<h3 id="tituloMapa">Visítanos en nuestro salón</h3>
+<p id="direccionMapa">Av. Pueyrredón 776 – Buenos Aires</p>
 <div class="mapa-contenedor">
 
-<iframe
+<iframe id="iframeMapa"
 src="https://www.google.com/maps?q=Av%20Pueyrredon%20776%20Buenos%20Aires&output=embed"
 width="100%"
 height="350"
@@ -1334,6 +1357,23 @@ async function guardarEstiloTitulo(
             data.imagenAntesDespuesDespues = inputImagenDespues.value.trim();
         }
 
+        // 📍 MAPA
+const inputTituloMapa = document.getElementById("inputTituloMapa");
+const inputDireccionMapa = document.getElementById("inputDireccionMapa");
+const inputUrlMapa = document.getElementById("inputUrlMapa");
+
+if (inputTituloMapa) {
+    data.tituloMapa = inputTituloMapa.value.trim();
+}
+
+if (inputDireccionMapa) {
+    data.direccionMapa = inputDireccionMapa.value.trim();
+}
+
+if (inputUrlMapa) {
+    data.urlMapa = inputUrlMapa.value.trim();
+}
+     
         await setDoc(
             doc(db, "clientes", clienteActual, "configuracion", "web"),
             data,
@@ -1840,14 +1880,30 @@ async function cargarServiciosDesdeFirebase() {
         // ⚙ CARGAR CONFIGURACIÓN WEB
         // =========================
 
-        let dataConfig = {};
+     let dataConfig = {};
 
-        try {
-            const configRef = doc(db, "clientes", clienteActual, "configuracion", "web");
-            const configSnap = await getDoc(configRef);
+try {
+    const configRef = doc(db, "clientes", clienteActual, "configuracion", "web");
+    const configSnap = await getDoc(configRef);
 
-            if (configSnap.exists()) {
-                dataConfig = configSnap.data() || {};
+    if (configSnap.exists()) {
+        dataConfig = configSnap.data() || {};
+
+        const tituloMapa = document.getElementById("tituloMapa");
+        const direccionMapa = document.getElementById("direccionMapa");
+        const iframeMapa = document.getElementById("iframeMapa");
+
+        if (tituloMapa && dataConfig.tituloMapa) {
+            tituloMapa.textContent = dataConfig.tituloMapa;
+        }
+
+        if (direccionMapa && dataConfig.direccionMapa) {
+            direccionMapa.textContent = dataConfig.direccionMapa;
+        }
+
+        if (iframeMapa && dataConfig.urlMapa) {
+            iframeMapa.src = dataConfig.urlMapa;
+        }
 
  // =========================
 // 🔻 FOOTER DINÁMICO
