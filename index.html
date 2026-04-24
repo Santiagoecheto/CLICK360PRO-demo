@@ -1964,7 +1964,39 @@ if (imagenDespues && dataConfig.imagenAntesDespuesDespues) {
         // 🔽 TU LÓGICA EXISTENTE
         // =========================
 
-        const snapshot = await getDocs(collection(db, "clientes", clienteActual, "servicios"));
+      let snapshot = await getDocs(
+    collection(db, "clientes", clienteActual, "servicios")
+);
+
+// 🔥 SI NO HAY SERVICIOS DEL CLIENTE → COPIAR DESDE GLOBAL
+if (snapshot.empty) {
+
+    console.log("Cliente vacío. Migrando servicios...");
+
+    const globalSnapshot = await getDocs(
+        collection(db, "servicios")
+    );
+
+    for (const docSnap of globalSnapshot.docs) {
+
+        await setDoc(
+            doc(
+                db,
+                "clientes",
+                clienteActual,
+                "servicios",
+                docSnap.id
+            ),
+            docSnap.data()
+        );
+    }
+
+    console.log("Migración terminada");
+
+    snapshot = await getDocs(
+        collection(db, "clientes", clienteActual, "servicios")
+    );
+}
 
         const inputColor = document.getElementById("inputColorTitulo");
         const inputTamano = document.getElementById("inputTamanoTitulo");
