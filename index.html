@@ -2480,19 +2480,52 @@ async function cargarVideosDesdeFirebase() {
 
         if (!contenedor) return;
 
-        // 🔥 CANCELAR SUSCRIPCIÓN ANTERIOR (CLAVE PRO)
+        // 🔥 CANCELAR SUSCRIPCIÓN ANTERIOR
         if (unsubscribeVideos) {
             unsubscribeVideos();
             unsubscribeVideos = null;
         }
 
-        // 🔥 QUERY ORDENADA (PRO)
+        // ==================================================
+        // 🔥 MIGRACIÓN AUTOMÁTICA SI CLIENTE NO TIENE VIDEOS
+        // ==================================================
+        const snapshotInicial = await getDocs(
+            collection(db, "clientes", clienteActual, "videos")
+        );
+
+        if (snapshotInicial.empty) {
+
+            console.log("📦 Cliente sin videos. Migrando...");
+
+            const globalSnapshot = await getDocs(
+                collection(db, "videos")
+            );
+
+            for (const docSnap of globalSnapshot.docs) {
+
+                await setDoc(
+                    doc(
+                        db,
+                        "clientes",
+                        clienteActual,
+                        "videos",
+                        docSnap.id
+                    ),
+                    docSnap.data()
+                );
+            }
+
+            console.log("✅ Videos migrados");
+        }
+
+        // ==================================================
+        // 🔥 QUERY TIEMPO REAL
+        // ==================================================
         const q = query(
-           collection(db, "clientes", clienteActual, "videos"),
+            collection(db, "clientes", clienteActual, "videos"),
             orderBy("fecha", "desc")
         );
 
-        // 🔥 NUEVA SUSCRIPCIÓN
         unsubscribeVideos = onSnapshot(q, (snapshot) => {
 
             contenedor.innerHTML = "";
@@ -2525,37 +2558,35 @@ async function cargarVideosDesdeFirebase() {
                     const contenedorBotones = document.createElement("div");
                     contenedorBotones.style.marginTop = "10px";
 
-                    // ✏️ EDITAR
                     const btnEditar = document.createElement("button");
                     btnEditar.textContent = "✏️ Editar";
                     btnEditar.style.marginRight = "8px";
 
-                 btnEditar.onclick = async () => {
+                    btnEditar.onclick = async () => {
 
-    const nuevoTitulo = prompt("Editar título:", data.titulo || "");
-    if (nuevoTitulo === null) return;
+                        const nuevoTitulo = prompt("Editar título:", data.titulo || "");
+                        if (nuevoTitulo === null) return;
 
-    const nuevaDesc = prompt("Editar descripción:", data.descripcion || "");
-    if (nuevaDesc === null) return;
+                        const nuevaDesc = prompt("Editar descripción:", data.descripcion || "");
+                        if (nuevaDesc === null) return;
 
-    try {
+                        try {
 
-        await updateDoc(
-            doc(db, "clientes", clienteActual, "videos", docSnap.id),
-            {
-                titulo: nuevoTitulo.trim() || "Sin título",
-                descripcion: nuevaDesc.trim() || ""
-            }
-        );
+                            await updateDoc(
+                                doc(db, "clientes", clienteActual, "videos", docSnap.id),
+                                {
+                                    titulo: nuevoTitulo.trim() || "Sin título",
+                                    descripcion: nuevaDesc.trim() || ""
+                                }
+                            );
 
-    } catch (error) {
-        console.error("Error editando video:", error);
-        alert("Error al editar video");
-    }
+                        } catch (error) {
+                            console.error("Error editando video:", error);
+                            alert("Error al editar video");
+                        }
 
-};
+                    };
 
-                    // 🗑️ ELIMINAR
                     const btnEliminar = document.createElement("button");
                     btnEliminar.textContent = "🗑 Eliminar";
 
@@ -2565,7 +2596,11 @@ async function cargarVideosDesdeFirebase() {
                         if (!confirmar) return;
 
                         try {
-                          await deleteDoc(doc(db, "clientes", clienteActual, "videos", docSnap.id));
+
+                            await deleteDoc(
+                                doc(db, "clientes", clienteActual, "videos", docSnap.id)
+                            );
+
                         } catch (error) {
                             console.error("Error eliminando video:", error);
                             alert("Error al eliminar video");
@@ -2590,7 +2625,8 @@ async function cargarVideosDesdeFirebase() {
         console.error("❌ Error cargando videos:", error);
     }
 }
- 
+
+
  
 window.agregarVideoFirebase = async function() {
     try {
