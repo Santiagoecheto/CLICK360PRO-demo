@@ -3106,19 +3106,14 @@ const titulo = document.createElement("h3");
 titulo.textContent = servicio.titulo || "Servicio";
 card.appendChild(titulo);
 
-// PRECIOS
-const precioCorto = document.createElement("p");
-precioCorto.textContent = "Corto: $" + (servicio.corto || 0);
+// CATEGORÍA (opcional visual)
+const subtitulo = document.createElement("p");
+subtitulo.textContent = servicio.categoria || "";
+subtitulo.style.opacity = "0.7";
+subtitulo.style.fontSize = "14px";
+subtitulo.style.marginTop = "8px";
 
-const precioMedio = document.createElement("p");
-precioMedio.textContent = "Medio: $" + (servicio.medio || 0);
-
-const precioLargo = document.createElement("p");
-precioLargo.textContent = "Largo: $" + (servicio.largo || 0);
-
-card.appendChild(precioCorto);
-card.appendChild(precioMedio);
-card.appendChild(precioLargo);
+card.appendChild(subtitulo);
 
             // ===============================
             // 🔐 MODO ADMIN
