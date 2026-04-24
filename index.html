@@ -234,6 +234,22 @@ style="margin-left:10px; padding:5px 10px; background:#ff2d75; color:#fff; borde
 
 <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:12px 18px; margin-top:10px;">
 
+ <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:12px 18px; margin-top:10px;">
+
+    <div style="display:flex; align-items:center; gap:8px;">
+        <label style="color:white;">Texto Transformaciones:</label>
+        <input type="text" id="inputTextoTransformaciones" placeholder="Título transformaciones">
+    </div>
+
+    <div style="display:flex; align-items:center; gap:8px;">
+        <label style="color:white;">Color Transformaciones:</label>
+        <input type="color" id="inputColorTextoTransformaciones">
+        <button id="btnTextoTransformacionesBlanco">Blanco</button>
+    </div>
+
+</div>
+ 
+
     <div style="display:flex; align-items:center; gap:8px;">
         <label style="color:white;">Subir imagen a galería:</label>
         <input type="file" id="inputImagen">
@@ -1215,7 +1231,7 @@ const clienteActual =
 
 /* ====================================== */
 
-let adminAutenticado = true;
+let adminAutenticado = false;
 
 
  
@@ -1237,9 +1253,11 @@ async function guardarEstiloTitulo(
 
         if (tamano) {
             let tamanoFinal = tamano.toString().trim();
+
             if (!tamanoFinal.endsWith("px")) {
                 tamanoFinal += "px";
             }
+
             data.tamanoTitulo = tamanoFinal;
         }
 
@@ -1252,9 +1270,11 @@ async function guardarEstiloTitulo(
 
         if (tamanoSubtitulo) {
             let tamanoSubFinal = tamanoSubtitulo.toString().trim();
+
             if (!tamanoSubFinal.endsWith("px")) {
                 tamanoSubFinal += "px";
             }
+
             data.tamanoSubtitulo = tamanoSubFinal;
         }
 
@@ -1290,8 +1310,30 @@ async function guardarEstiloTitulo(
             data.colorTextoTrabajos = inputColorTextoTrabajos.value;
         }
 
+        // 🔥 TRANSFORMACIONES
+        const inputTextoTransformaciones = document.getElementById("inputTextoTransformaciones");
+        const inputColorTextoTransformaciones = document.getElementById("inputColorTextoTransformaciones");
 
-     
+        if (inputTextoTransformaciones) {
+            data.textoTransformaciones = inputTextoTransformaciones.value.trim();
+        }
+
+        if (inputColorTextoTransformaciones) {
+            data.colorTextoTransformaciones = inputColorTextoTransformaciones.value;
+        }
+
+        // 🖼 ANTES / DESPUÉS
+        const inputImagenAntes = document.getElementById("inputImagenAntes");
+        const inputImagenDespues = document.getElementById("inputImagenDespues");
+
+        if (inputImagenAntes && inputImagenAntes.value.trim() !== "") {
+            data.imagenAntesDespuesAntes = inputImagenAntes.value.trim();
+        }
+
+        if (inputImagenDespues && inputImagenDespues.value.trim() !== "") {
+            data.imagenAntesDespuesDespues = inputImagenDespues.value.trim();
+        }
+
         await setDoc(
             doc(db, "clientes", clienteActual, "configuracion", "web"),
             data,
@@ -1299,10 +1341,10 @@ async function guardarEstiloTitulo(
         );
 
         // 💥 APLICAR EN VIVO
-
         const navLinks = document.querySelectorAll(".nav-links a");
         const logoNavbar = document.getElementById("logoNavbar");
         const textoTrabajos = document.getElementById("textoTrabajos");
+        const tituloTransformaciones = document.querySelector(".antes-despues h2");
 
         if (colorNavbarLinks) {
             navLinks.forEach(link => {
@@ -1315,6 +1357,7 @@ async function guardarEstiloTitulo(
                 link.onmouseenter = () => {
                     link.style.color = colorNavbarHover;
                 };
+
                 link.onmouseleave = () => {
                     link.style.color = colorNavbarLinks || "";
                 };
@@ -1333,14 +1376,23 @@ async function guardarEstiloTitulo(
             textoTrabajos.style.color = inputColorTextoTrabajos.value;
         }
 
+        if (tituloTransformaciones && inputTextoTransformaciones) {
+            tituloTransformaciones.textContent =
+                inputTextoTransformaciones.value.trim() || "Transformaciones";
+        }
+
+        if (tituloTransformaciones && inputColorTextoTransformaciones) {
+            tituloTransformaciones.style.color =
+                inputColorTextoTransformaciones.value;
+        }
+
         console.log("Estilo guardado y aplicado en vivo");
 
     } catch (error) {
         console.error("Error guardando estilo:", error);
     }
 }
-
-
+ 
  
 async function guardarFooterAdmin() {
     try {
@@ -1884,6 +1936,8 @@ if (footerRed3) footerRed3.textContent = dataConfig.footerRed3 || "TikTok";
 
 const imagenAntes = document.getElementById("imagenAntes");
 const imagenDespues = document.getElementById("imagenDespues");
+ const tituloTransformaciones =
+    document.querySelector(".antes-despues h2");            
 
 if (imagenAntes && dataConfig.imagenAntesDespuesAntes) {
     imagenAntes.src = dataConfig.imagenAntesDespuesAntes;
@@ -1893,6 +1947,15 @@ if (imagenDespues && dataConfig.imagenAntesDespuesDespues) {
     imagenDespues.src = dataConfig.imagenAntesDespuesDespues;
 }
              
+    if (tituloTransformaciones && dataConfig.textoTransformaciones) {
+    tituloTransformaciones.textContent =
+        dataConfig.textoTransformaciones;
+}
+
+if (tituloTransformaciones && dataConfig.colorTextoTransformaciones) {
+    tituloTransformaciones.style.color =
+        dataConfig.colorTextoTransformaciones;
+}         
 
                 // =========================
                 // 🎬 CARGAR VIDEO HERO
@@ -2355,17 +2418,47 @@ async function cargarGaleriaDesdeFirebase() {
  async function cargarTrabajosRecientesDesdeFirebase() {
     try {
 
-       const snapshot = await getDocs(collection(db, "clientes", clienteActual, "trabajosRecientes"));
+        let snapshot = await getDocs(
+            collection(db, "clientes", clienteActual, "trabajosRecientes")
+        );
+
+        // 🔥 SI ESTÁ VACÍA → MIGRAR DESDE GLOBAL
+        if (snapshot.empty) {
+
+            console.log("Cliente sin trabajos recientes. Migrando...");
+
+            const globalSnapshot = await getDocs(
+                collection(db, "trabajosRecientes")
+            );
+
+            for (const docSnap of globalSnapshot.docs) {
+
+                await setDoc(
+                    doc(
+                        db,
+                        "clientes",
+                        clienteActual,
+                        "trabajosRecientes",
+                        docSnap.id
+                    ),
+                    docSnap.data()
+                );
+            }
+
+            console.log("✅ Trabajos recientes migrados");
+
+            snapshot = await getDocs(
+                collection(db, "clientes", clienteActual, "trabajosRecientes")
+            );
+        }
 
         const data = [];
 
         snapshot.forEach(docSnap => {
 
-            const datos = docSnap.data();
-
             data.push({
                 id: docSnap.id,
-                ...datos
+                ...docSnap.data()
             });
 
         });
@@ -2426,7 +2519,7 @@ function renderTrabajosRecientes(items) {
 
         card.appendChild(img);
 
-       if (window.location.search.includes("admin=1")) {
+        if (adminAutenticado) {
 
             const btnEliminar = document.createElement("button");
             btnEliminar.innerHTML = "🗑";
