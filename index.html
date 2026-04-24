@@ -2174,16 +2174,42 @@ if (btnSubtituloBlanco && inputColorSubtitulo) {
 }
      
      
-        let servicios = [];
+    let servicios = [];
 
-        snapshot.forEach(docSnap => {
-            const dataDoc = docSnap.data();
+snapshot.forEach(docSnap => {
 
-            servicios.push({
-                id: docSnap.id,
-                ...dataDoc
-            });
-        });
+    const dataDoc = docSnap.data() || {};
+
+    const categoria =
+        dataDoc.categoria ||
+        dataDoc.tipo ||
+        dataDoc.rubro ||
+        "Servicios";
+
+    const titulo =
+        dataDoc.titulo ||
+        dataDoc.nombre ||
+        dataDoc.servicio ||
+        "Servicio";
+
+    const descripcion =
+        dataDoc.descripcion ||
+        dataDoc.detalle ||
+        "";
+
+    const precio =
+        dataDoc.precio || "";
+
+    servicios.push({
+        id: docSnap.id,
+        ...dataDoc,
+        categoria,
+        titulo,
+        descripcion,
+        precio
+    });
+
+});
 
         const serviciosUnicos = [];
         const clavesVistas = new Set();
