@@ -3081,6 +3081,8 @@ function renderServicios(data) {
     }
 
     console.log("SERVICIOS DATA:", data);
+    console.log("CATEGORIAS:", data.categorias);
+    console.log("TOTAL:", data.categorias.length);
     data.categorias.forEach(categoria => {
 
         categoria.servicios.forEach(servicio => {
