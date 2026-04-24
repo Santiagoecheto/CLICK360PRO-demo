@@ -3111,14 +3111,27 @@ function renderServicios(data) {
 
         categoria.servicios.forEach(servicio => {
 
-            const card = document.createElement("div");
-            card.classList.add("servicio");
+          const card = document.createElement("div");
+card.classList.add("servicio");
 
-            // 🔹 SOLO TÍTULO (SIN IMAGEN)
-            const titulo = document.createElement("h3");
-            titulo.textContent = servicio.titulo || "Servicio";
+// TÍTULO
+const titulo = document.createElement("h3");
+titulo.textContent = servicio.titulo || "Servicio";
+card.appendChild(titulo);
 
-            card.appendChild(titulo);
+// PRECIOS
+const precioCorto = document.createElement("p");
+precioCorto.textContent = "Corto: $" + (servicio.corto || 0);
+
+const precioMedio = document.createElement("p");
+precioMedio.textContent = "Medio: $" + (servicio.medio || 0);
+
+const precioLargo = document.createElement("p");
+precioLargo.textContent = "Largo: $" + (servicio.largo || 0);
+
+card.appendChild(precioCorto);
+card.appendChild(precioMedio);
+card.appendChild(precioLargo);
 
             // ===============================
             // 🔐 MODO ADMIN
