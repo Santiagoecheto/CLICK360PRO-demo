@@ -2254,7 +2254,41 @@ if (btnSubtituloBlanco && inputColorSubtitulo) {
 async function cargarGaleriaDesdeFirebase() {
     try {
 
-       const snapshot = await getDocs(collection(db, "clientes", clienteActual, "galeria"));
+        let snapshot = await getDocs(
+            collection(db, "clientes", clienteActual, "galeria")
+        );
+
+        // 🔥 SI ESTÁ VACÍA → MIGRAR DESDE GLOBAL
+        if (snapshot.empty) {
+
+            console.log("Cliente sin galería. Migrando colección global...");
+
+            const globalSnapshot = await getDocs(
+                collection(db, "galeria")
+            );
+
+            for (const docSnap of globalSnapshot.docs) {
+
+                const dataGaleria = docSnap.data();
+
+                await setDoc(
+                    doc(
+                        db,
+                        "clientes",
+                        clienteActual,
+                        "galeria",
+                        docSnap.id
+                    ),
+                    dataGaleria
+                );
+            }
+
+            console.log("Migración galería completada");
+
+            snapshot = await getDocs(
+                collection(db, "clientes", clienteActual, "galeria")
+            );
+        }
 
         const data = [];
 
@@ -2262,7 +2296,6 @@ async function cargarGaleriaDesdeFirebase() {
 
             const datos = docSnap.data();
 
-            // 🔥 IMPORTANTE: incluir ID del documento
             data.push({
                 id: docSnap.id,
                 ...datos
@@ -2280,6 +2313,8 @@ async function cargarGaleriaDesdeFirebase() {
 }
 
 
+
+ 
  async function cargarTrabajosRecientesDesdeFirebase() {
     try {
 
@@ -2714,8 +2749,45 @@ btnPassword.onclick = async () => {
         }
 
         // 🔴 1. TRAER TODO DESDE FIREBASE
-        const snapshot = await getDocs(collection(db, "clientes", clienteActual, "servicios"));
+       
         const idsFirebase = snapshot.docs.map(doc => doc.id);
+        let snapshot = await getDocs(
+    collection(db, "clientes", clienteActual, "servicios")
+);
+
+// 🔥 SI NO HAY SERVICIOS DEL CLIENTE → MIGRAR DESDE GLOBAL
+if (snapshot.empty) {
+
+    console.log("Cliente sin servicios. Migrando colección global...");
+
+    const globalSnapshot = await getDocs(
+        collection(db, "servicios")
+    );
+
+    for (const docSnap of globalSnapshot.docs) {
+
+        const dataServicio = docSnap.data();
+
+        await setDoc(
+            doc(
+                db,
+                "clientes",
+                clienteActual,
+                "servicios",
+                docSnap.id
+            ),
+            dataServicio
+        );
+    }
+
+    console.log("Migración servicios completada");
+
+    // volver a leer cliente ya migrado
+    snapshot = await getDocs(
+        collection(db, "clientes", clienteActual, "servicios")
+    );
+}
+     
 
         // 🟡 2. ARMAR IDS ACTUALES (UI)
         const idsActuales = [];
