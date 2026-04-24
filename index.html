@@ -3108,12 +3108,19 @@ card.appendChild(titulo);
 
 // CATEGORÍA (opcional visual)
 const subtitulo = document.createElement("p");
-subtitulo.textContent = servicio.categoria || "";
+
+subtitulo.textContent =
+    servicio.descripcion ||
+    servicio.detalle ||
+    "";
+
 subtitulo.style.opacity = "0.7";
 subtitulo.style.fontSize = "14px";
 subtitulo.style.marginTop = "8px";
 
-card.appendChild(subtitulo);
+if (subtitulo.textContent.trim() !== "") {
+    card.appendChild(subtitulo);
+}
 
             // ===============================
             // 🔐 MODO ADMIN
