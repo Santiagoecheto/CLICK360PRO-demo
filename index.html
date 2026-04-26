@@ -1476,7 +1476,17 @@ async function guardarFooterAdmin() {
  
 async function iniciarModoAdmin() {
 
-    if (!esAdmin) return true;
+    const panel = document.getElementById("panelTituloAdmin");
+
+    // 🔒 Siempre oculto por defecto
+    if (panel) {
+        panel.style.display = "none";
+    }
+
+    // Si no viene ?admin=1 nunca mostrar panel
+    if (!esAdmin) {
+        return true;
+    }
 
     try {
 
@@ -1485,13 +1495,14 @@ async function iniciarModoAdmin() {
             adminAutenticado = true;
             sessionStorage.setItem("admin_ok", "1");
 
-           await cargarServiciosDesdeFirebase();
-           await cargarGaleriaDesdeFirebase();
-           await cargarVideosDesdeFirebase();
-           await cargarTrabajosRecientesDesdeFirebase();
+            await cargarServiciosDesdeFirebase();
+            await cargarGaleriaDesdeFirebase();
+            await cargarVideosDesdeFirebase();
+            await cargarTrabajosRecientesDesdeFirebase();
 
-            const panel = document.getElementById("panelTituloAdmin");
-            if (panel) panel.style.display = "block";
+            if (panel) {
+                panel.style.display = "block";
+            }
 
             return true;
         }
@@ -1505,8 +1516,6 @@ async function iniciarModoAdmin() {
             const error = document.getElementById("loginAdminError");
             const linkReset = document.getElementById("linkResetAdmin");
 
-     
-
             if (!modal || !inputEmail || !inputPassword || !btnLogin || !error) {
                 alert("No se pudo abrir login admin");
                 resolve(false);
@@ -1516,6 +1525,7 @@ async function iniciarModoAdmin() {
             modal.style.display = "flex";
             inputEmail.focus();
             error.textContent = "";
+            error.style.color = "#ff6b6b";
 
             if (linkReset) {
 
@@ -1572,13 +1582,14 @@ async function iniciarModoAdmin() {
 
                     modal.style.display = "none";
 
-                  await cargarServiciosDesdeFirebase();
-                  await cargarGaleriaDesdeFirebase();
-                  await cargarVideosDesdeFirebase();
-                  await cargarTrabajosRecientesDesdeFirebase();
+                    await cargarServiciosDesdeFirebase();
+                    await cargarGaleriaDesdeFirebase();
+                    await cargarVideosDesdeFirebase();
+                    await cargarTrabajosRecientesDesdeFirebase();
 
-                    const panel = document.getElementById("panelTituloAdmin");
-                    if (panel) panel.style.display = "block";
+                    if (panel) {
+                        panel.style.display = "block";
+                    }
 
                     resolve(true);
 
