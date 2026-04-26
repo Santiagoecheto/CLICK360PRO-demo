@@ -8,13 +8,18 @@ body{
 
 .hero{
     position:relative;
-    min-height:90vh; /* 🔥 CAMBIO CLAVE */
+    min-height:100vh;
     display:flex;
     justify-content:center;
-    align-items:flex-start; /* 🔥 CAMBIO CLAVE */
+    align-items:center;
     text-align:center;
-    padding-top:100px; /* 🔥 DA AIRE PARA QUE NO QUEDE PEGADO ARRIBA */
-    padding-bottom:40px; /* 🔥 evita que quede cortado abajo */
+
+    padding-top:90px;
+    padding-bottom:40px;
+    padding-left:20px;
+    padding-right:20px;
+
+    overflow:hidden;
 }
 
 
