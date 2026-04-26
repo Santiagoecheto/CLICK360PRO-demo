@@ -47,7 +47,6 @@
 
 <!-- HERO -->
 
-
  <section class="hero" id="inicio">
 
 <video autoplay muted loop>
@@ -59,10 +58,28 @@
 <h1 id="tituloWeb">Cargando...</h1>
 
 <p id="subtituloWeb">Estilo, belleza y cuidado profesional para tu cabello</p>
-
  
-  
-<div id="panelTituloAdmin" style="display:none; margin-top:10px;">
+
+   
+<div class="hero-botones">
+<a class="boton-whatsapp" data-whatsapp="1"
+href="#"
+onclick="window.open(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)?'https://wa.me/5491158648857?text=Hola%20estoy%20visitando%20la%20pagina%20web%20y%20quisiera%20mas%20informacion':'https://web.whatsapp.com/send?phone=5491158648857&text=Hola%20estoy%20visitando%20la%20pagina%20web%20y%20quisiera%20mas%20informacion','_blank'); return false;">
+📲 Reservar por WhatsApp
+</a>
+
+<button class="boton-whatsapp boton-calendario"
+id="abrirTurnosHero"
+type="button">
+📅 Elegir día y hora
+</button>
+</div>
+
+<div class="flecha">↓</div>
+</div>
+</section>
+
+  <div id="panelTituloAdmin" style="display:none; margin-top:10px;">
 
     <!-- 🎨 FONDO GLOBAL -->
  <label style="color:white;">Color Fondo Global:</label>
@@ -256,8 +273,6 @@ style="margin-left:10px; padding:5px 10px; background:#ff2d75; color:#fff; borde
 
 </div>
 
-<div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:12px 18px; margin-top:10px;">
-
  <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:12px 18px; margin-top:10px;">
 
     <div style="display:flex; align-items:center; gap:8px;">
@@ -383,29 +398,7 @@ Guardar Footer
  </div> 
  </div> 
  
-   
-<div class="hero-botones">
-
-<a class="boton-whatsapp" data-whatsapp="1"
-href="#"
-onclick="window.open(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)?'https://wa.me/5491158648857?text=Hola%20estoy%20visitando%20la%20pagina%20web%20y%20quisiera%20mas%20informacion':'https://web.whatsapp.com/send?phone=5491158648857&text=Hola%20estoy%20visitando%20la%20pagina%20web%20y%20quisiera%20mas%20informacion','_blank'); return false;">
-📲 Reservar por WhatsApp
-</a>
-
-<button class="boton-whatsapp boton-calendario"
-id="abrirTurnosHero"
-type="button">
-📅 Elegir día y hora
-</button>
-
-</div>
-
-<div class="flecha">↓</div>
-
-</div>
-
-</section>
-
+ 
  <!-- SERVICIOS -->
 <section class="servicios" id="servicios">
 
