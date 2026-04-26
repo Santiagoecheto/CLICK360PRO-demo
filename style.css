@@ -415,9 +415,11 @@ ANIMACIÓN SCROLL
 
 section{
     opacity:0;
-    transform: none;
-    transition:all 0.8s ease;
-    will-change: auto;
+    transition:all .8s ease;
+}
+
+.hero{
+    opacity:1 !important;
 }
 
 /* 🔥 FIX MODAL (MUY IMPORTANTE) */
