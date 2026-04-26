@@ -11,15 +11,14 @@ body{
     min-height:100vh;
 
     display:flex;
-    justify-content:center;
+    justify-content:flex-start;
     align-items:center;
+
     text-align:center;
 
-    padding:55px 20px 110px 20px;
+    padding:110px 20px 40px 20px;
 
     overflow:hidden;
-
-    opacity:1 !important;
 }
 
 .hero::after{
