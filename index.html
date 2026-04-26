@@ -3719,6 +3719,34 @@ async function cargarTituloWeb() {
         if (docSnap.exists()) {
             const data = docSnap.data();
 
+         const telefonoWhatsapp = (data.telefonoWhatsapp || "").trim();
+         const telefonoCalendario = (data.telefonoCalendario || "").trim();
+
+          window.telefonoWhatsapp = telefonoWhatsapp;
+          window.telefonoCalendario = telefonoCalendario;
+
+          // Actualizar TODOS los botones WhatsApp dinámicos
+          document.querySelectorAll("[data-whatsapp='1']").forEach(btn => {
+
+           btn.onclick = function (e) {
+                e.preventDefault();
+
+            const telefono =
+               window.telefonoWhatsapp ||
+               "5491157611231";
+
+             const mensaje =
+               "Hola, estoy visitando la página web y quisiera más información";
+
+             const url = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
+                ? `https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`
+                : `https://web.whatsapp.com/send?phone=${telefono}&text=${encodeURIComponent(mensaje)}`;
+
+                      window.open(url, "_blank");
+               };
+
+          });
+
             const texto = (data.titulo || "").trim();
             const color = data.colorTitulo || "#ffffff";
             const tamano = data.tamanoTitulo || "48px";
