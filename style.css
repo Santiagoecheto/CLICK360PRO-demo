@@ -50,9 +50,6 @@ z-index:0;
 .hero-box{
     position:relative;
     z-index:2;
-    background:rgba(0,0,0,.45);
-    padding:40px;
-    border-radius:14px;
 
     width:90%;
     max-width:900px;
@@ -62,9 +59,11 @@ z-index:0;
     display:flex;
     flex-direction:column;
     align-items:center;
-    justify-content:center;
+    justify-content:flex-start;
 
-    gap:22px;
+    gap:18px;
+
+    padding:0;
 }
 
 .hero h1{
