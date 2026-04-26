@@ -9,17 +9,21 @@ body{
 .hero{
     position:relative;
     min-height:100vh;
+    height:auto;
+
     display:flex;
     justify-content:center;
     align-items:center;
+    flex-direction:column;
+
     text-align:center;
 
-    padding-top:90px;
-    padding-bottom:40px;
-    padding-left:20px;
-    padding-right:20px;
+    padding:20px 20px 40px 20px;
 
     overflow:hidden;
+
+    opacity:1;
+    transform:none;
 }
 
 
@@ -418,9 +422,6 @@ section{
     transition:all .8s ease;
 }
 
-.hero{
-    opacity:1 !important;
-}
 
 /* 🔥 FIX MODAL (MUY IMPORTANTE) */
 .modal-precios{
@@ -686,11 +687,6 @@ font-size:14px;
 
 @media (max-width: 768px){
 
-.hero{
-height:auto;
-min-height:100vh;
-padding:60px 20px;
-}
 
 .hero-box{
 padding:30px 20px;
