@@ -9,23 +9,16 @@ body{
 .hero{
     position:relative;
     min-height:100vh;
-    height:auto;
-
     display:flex;
     justify-content:center;
     align-items:center;
-    flex-direction:column;
-
     text-align:center;
 
-    padding:20px 20px 40px 20px;
+    padding:110px 20px 120px 20px;
 
     overflow:hidden;
-
-    opacity:1;
-    transform:none;
+    opacity:1 !important;
 }
-
 
 .hero::after{
 content:"";
