@@ -1480,24 +1480,3 @@ text-align:center;
 }
 
 }
-/* ===== ADMIN FIX REAL ===== */
-
-#panelTituloAdmin{
-    max-width: 1180px;
-    margin: 40px auto;
-    padding: 0 20px;
-    box-sizing: border-box;
-}
-
-#panelTituloAdmin details{
-    max-width: 100%;
-}
-
-#panelTituloAdmin summary{
-    text-align: center;
-}
-
-#panelTituloAdmin details > div{
-    max-width: 100%;
-    overflow-x: auto;
-}
