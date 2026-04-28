@@ -81,78 +81,103 @@ type="button">
 
   <div id="panelTituloAdmin" style="display:none; margin-top:10px;">
 
-    <!-- 🎨 FONDO GLOBAL -->
- <label style="color:white;">Color Fondo Global:</label>
-<input type="color" id="inputColorFondo" style="margin-right:10px;">
-<input type="text" id="inputColorFondoHex" placeholder="#ffffff" style="width:100px; margin-right:5px;">
-<button type="button" id="btnColorBlanco">Blanco</button>
+<!-- 🎨 FONDO GLOBAL -->
 
-<button type="button" id="btnAplicarGlobalTodo"
-style="margin-left:10px; padding:5px 10px; background:#ff2d75; color:#fff; border:none; border-radius:6px; cursor:pointer;">
-    Aplicar a todo
-</button>
-<br><br>
+<div style="display:flex; flex-direction:column; gap:14px; align-items:center;">
 
-<!-- 🎨 FONDOS POR SECCIÓN -->
-<label style="color:white;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fondo Servicios:</label>
-<input type="color" id="inputColorFondoServicios" style="margin-right:5px;">
-<button type="button" id="btnBlancoServicios" style="margin-right:15px; padding:5px 10px; background:#fff; color:#000; border-radius:6px; border:none; cursor:pointer;">
-    Blanco
-</button>
+    <!-- FILA GLOBAL -->
+    <div style="display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:10px;">
 
-<label style="color:white; margin-left:10px;">Fondo Galería:</label>
-<input type="color" id="inputColorFondoGaleria" style="margin-right:5px;">
-<button type="button" id="btnBlancoGaleria" style="margin-right:15px; padding:5px 10px; background:#fff; color:#000; border-radius:6px; border:none; cursor:pointer;">
-    Blanco
-</button>
+        <label style="color:white;">Color Fondo Global:</label>
 
-<br><br>
+        <input type="color" id="inputColorFondo">
 
-<label style="color:white;">Fondo Trabajos:</label>
-<input type="color" id="inputColorFondoTrabajos" style="margin-right:5px;">
-<button type="button" id="btnBlancoTrabajos" style="margin-right:15px; padding:5px 10px; background:#fff; color:#000; border-radius:6px; border:none; cursor:pointer;">
-    Blanco
-</button>
+        <input type="text"
+               id="inputColorFondoHex"
+               placeholder="#ffffff"
+               style="width:100px;">
 
-<label style="color:white; margin-left:10px;">Fondo Videos:</label>
-<input type="color" id="inputColorFondoVideos" style="margin-right:5px;">
-<button type="button" id="btnBlancoVideos" style="margin-right:15px; padding:5px 10px; background:#fff; color:#000; border-radius:6px; border:none; cursor:pointer;">
-    Blanco
-</button>
+        <button type="button" id="btnColorBlanco">
+            Blanco
+        </button>
 
-<br><br>
+        <button type="button"
+                id="btnAplicarGlobalTodo"
+                style="padding:5px 10px; background:#ff2d75; color:#fff; border:none; border-radius:6px; cursor:pointer;">
+            Aplicar a todo
+        </button>
 
-<div style="margin-bottom:10px;">
+    </div>
 
-    <span style="color:white;">Fondo Transformaciones:</span>
-    <input type="color" id="inputColorFondoAntesDespues" style="margin-right:5px;">
-    <button type="button" id="btnBlancoAntesDespues"
-    style="margin-right:20px; padding:5px 10px; background:#fff; color:#000; border-radius:6px; border:none; cursor:pointer;">
-        Blanco
-    </button>
+    <!-- FILA 1 -->
+    <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:20px;">
 
-    <span style="color:white;">Fondo Testimonios:</span>
-    <input type="color" id="inputColorFondoTestimonios" style="margin-right:5px;">
-    <button type="button" id="btnBlancoTestimonios"
-    style="padding:5px 10px; background:#fff; color:#000; border-radius:6px; border:none; cursor:pointer;">
-        Blanco
-    </button>
+        <div>
+            <label style="color:white;">Fondo Servicios:</label>
+            <input type="color" id="inputColorFondoServicios">
+            <button type="button" id="btnBlancoServicios">Blanco</button>
+        </div>
+
+        <div>
+            <label style="color:white;">Fondo Galería:</label>
+            <input type="color" id="inputColorFondoGaleria">
+            <button type="button" id="btnBlancoGaleria">Blanco</button>
+        </div>
+
+    </div>
+
+    <!-- FILA 2 -->
+    <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:20px;">
+
+        <div>
+            <label style="color:white;">Fondo Trabajos:</label>
+            <input type="color" id="inputColorFondoTrabajos">
+            <button type="button" id="btnBlancoTrabajos">Blanco</button>
+        </div>
+
+        <div>
+            <label style="color:white;">Fondo Videos:</label>
+            <input type="color" id="inputColorFondoVideos">
+            <button type="button" id="btnBlancoVideos">Blanco</button>
+        </div>
+
+    </div>
+
+    <!-- FILA 3 -->
+    <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:20px;">
+
+        <div>
+            <label style="color:white;">Fondo Transformaciones:</label>
+            <input type="color" id="inputColorFondoAntesDespues">
+            <button type="button" id="btnBlancoAntesDespues">Blanco</button>
+        </div>
+
+        <div>
+            <label style="color:white;">Fondo Testimonios:</label>
+            <input type="color" id="inputColorFondoTestimonios">
+            <button type="button" id="btnBlancoTestimonios">Blanco</button>
+        </div>
+
+    </div>
+
+    <!-- FILA 4 -->
+    <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:20px;">
+
+        <div>
+            <label style="color:white;">Fondo Mapa:</label>
+            <input type="color" id="inputColorFondoMapa">
+            <button type="button" id="btnBlancoMapa">Blanco</button>
+        </div>
+
+        <div>
+            <label style="color:white;">Fondo Footer:</label>
+            <input type="color" id="inputColorFondoFooter">
+            <button type="button" id="btnBlancoFooter">Blanco</button>
+        </div>
+
+    </div>
 
 </div>
-
-<br><br>
-
-<label style="color:white;">Fondo Mapa:</label>
-<input type="color" id="inputColorFondoMapa" style="margin-right:5px;">
-<button type="button" id="btnBlancoMapa" style="margin-right:15px; padding:5px 10px; background:#fff; color:#000; border-radius:6px; border:none; cursor:pointer;">
-    Blanco
-</button>
-
-<label style="color:white; margin-left:10px;">Fondo Footer:</label>
-<input type="color" id="inputColorFondoFooter" style="margin-right:5px;">
-<button type="button" id="btnBlancoFooter" style="margin-right:15px; padding:5px 10px; background:#fff; color:#000; border-radius:6px; border:none; cursor:pointer;">
-    Blanco
-</button>
 
 <br><br>
 
