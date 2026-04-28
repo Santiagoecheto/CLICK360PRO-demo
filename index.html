@@ -1432,13 +1432,37 @@ if (inputUrlMapa) {
 async function guardarFooterAdmin() {
     try {
 
+        const limpiarTelefono = (valor) => {
+            return (valor || "")
+                .replace(/\D/g, "")
+                .trim();
+        };
+
+        const telefonoWhatsapp = limpiarTelefono(
+            document.getElementById("inputTelefonoWhatsapp")?.value
+        );
+
+        const telefonoCalendario = limpiarTelefono(
+            document.getElementById("inputTelefonoCalendario")?.value
+        );
+
+        if (telefonoWhatsapp !== "" && telefonoWhatsapp.length < 10) {
+            alert("El teléfono de WhatsApp no es válido");
+            return;
+        }
+
+        if (telefonoCalendario !== "" && telefonoCalendario.length < 10) {
+            alert("El teléfono de Calendario no es válido");
+            return;
+        }
+
         const data = {
             footerDescripcion: document.getElementById("inputFooterDescripcion")?.value.trim() || "",
             footerDireccion: document.getElementById("inputFooterDireccion")?.value.trim() || "",
             footerTelefono: document.getElementById("inputFooterTelefono")?.value.trim() || "",
 
-            telefonoWhatsapp: document.getElementById("inputTelefonoWhatsapp")?.value.trim() || "",
-            telefonoCalendario: document.getElementById("inputTelefonoCalendario")?.value.trim() || "",
+            telefonoWhatsapp: telefonoWhatsapp,
+            telefonoCalendario: telefonoCalendario,
 
             footerHorario1: document.getElementById("inputFooterHorario1")?.value.trim() || "",
             footerHorario2: document.getElementById("inputFooterHorario2")?.value.trim() || "",
@@ -1451,10 +1475,13 @@ async function guardarFooterAdmin() {
         };
 
         await setDoc(
-          doc(db, "clientes", clienteActual, "configuracion", "web"),
+            doc(db, "clientes", clienteActual, "configuracion", "web"),
             data,
             { merge: true }
         );
+
+        window.telefonoWhatsapp = telefonoWhatsapp;
+        window.telefonoCalendario = telefonoCalendario;
 
         alert("Footer guardado correctamente");
 
@@ -2413,8 +2440,7 @@ const data = {
 }
  
 
- 
-async function cargarGaleriaDesdeFirebase() {
+ {
     try {
 
         let snapshot = await getDocs(
