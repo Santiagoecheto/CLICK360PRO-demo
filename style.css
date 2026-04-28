@@ -1480,3 +1480,46 @@ text-align:center;
 }
 
 }
+
+/* ===== PANEL ADMIN FIX GLOBAL ===== */
+
+#panelTituloAdmin{
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+#panelTituloAdmin > div,
+#panelTituloAdmin section,
+#panelTituloAdmin .bloque-admin{
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto 25px auto;
+    box-sizing: border-box;
+}
+
+#panelTituloAdmin input,
+#panelTituloAdmin select,
+#panelTituloAdmin textarea{
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+#panelTituloAdmin button{
+    max-width: 100%;
+}
+
+#panelTituloAdmin h2,
+#panelTituloAdmin h3,
+#panelTituloAdmin h4{
+    text-align: center;
+}
+
+/* FOOTER FIX */
+#panelTituloAdmin details,
+#panelTituloAdmin details > div{
+    max-width: 100%;
+    overflow: hidden;
+}
