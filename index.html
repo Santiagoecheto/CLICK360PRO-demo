@@ -4409,7 +4409,14 @@ window.open(url, "_blank");
     } catch (e) {
         console.error("❌ Error videos:", e);
     }
-
+ 
+try {
+    await cargarTrabajosRecientesDesdeFirebase();
+    console.log("✅ Trabajos recientes cargados");
+} catch (e) {
+    console.error("❌ Error trabajos recientes:", e);
+}
+ 
     console.log("🏁 FIN CARGA APP");
 };
 document.addEventListener("DOMContentLoaded", () => {
