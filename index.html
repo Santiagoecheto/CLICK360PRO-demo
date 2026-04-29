@@ -1524,19 +1524,112 @@ async function iniciarModoAdmin() {
 
     const panel = document.getElementById("panelTituloAdmin");
 
-    // 🔒 Siempre oculto por defecto
+    function crearBotonNuevoCliente() {
+
+        if (document.getElementById("btnNuevoClienteAdmin")) {
+            return;
+        }
+
+        if (!panel) {
+            return;
+        }
+
+        const btn = document.createElement("button");
+
+        btn.id = "btnNuevoClienteAdmin";
+        btn.type = "button";
+        btn.textContent = "➕ Nuevo Cliente";
+
+        btn.style.margin = "0 0 20px 0";
+        btn.style.padding = "12px 18px";
+        btn.style.background = "#16a34a";
+        btn.style.color = "#ffffff";
+        btn.style.border = "none";
+        btn.style.borderRadius = "8px";
+        btn.style.cursor = "pointer";
+        btn.style.fontWeight = "bold";
+
+        btn.onclick = async () => {
+
+            try {
+
+                let nombre = prompt("Nombre interno del cliente\nEj: jenny");
+
+                if (!nombre) return;
+
+                nombre = nombre
+                    .trim()
+                    .toLowerCase()
+                    .replace(/\s+/g, "-")
+                    .replace(/[^a-z0-9\-]/g, "");
+
+                if (!nombre) {
+                    alert("Nombre inválido");
+                    return;
+                }
+
+                btn.disabled = true;
+                btn.textContent = "Creando...";
+
+                const refBase = doc(
+                    db,
+                    "clientes",
+                    nombre,
+                    "configuracion",
+                    "web"
+                );
+
+                const snap = await getDoc(refBase);
+
+                if (snap.exists()) {
+                    alert("Ese cliente ya existe");
+                    return;
+                }
+
+                await setDoc(refBase, {
+                    titulo: nombre,
+                    subtitulo: "Bienvenido",
+                    creado: new Date().toISOString()
+                });
+
+                const urlFinal =
+                    window.location.origin +
+                    window.location.pathname +
+                    "?cliente=" +
+                    nombre;
+
+                alert(
+                    "Cliente creado correctamente:\n\n" +
+                    nombre +
+                    "\n\nURL:\n" +
+                    urlFinal
+                );
+
+            } catch (error) {
+
+                console.error(error);
+                alert("Error creando cliente");
+
+            } finally {
+
+                btn.disabled = false;
+                btn.textContent = "➕ Nuevo Cliente";
+            }
+        };
+
+        panel.prepend(btn);
+    }
+
     if (panel) {
         panel.style.display = "none";
     }
 
-    // Si no viene ?admin=1 nunca mostrar panel
     if (!esAdmin) {
         return true;
     }
 
     try {
 
-        // 🔥 Si ya está logueado reutilizar sesión
         if (auth.currentUser) {
 
             adminAutenticado = true;
@@ -1551,6 +1644,8 @@ async function iniciarModoAdmin() {
                 panel.style.display = "block";
             }
 
+            crearBotonNuevoCliente();
+
             return true;
         }
 
@@ -1563,7 +1658,6 @@ async function iniciarModoAdmin() {
             const error = document.getElementById("loginAdminError");
             const linkReset = document.getElementById("linkResetAdmin");
 
-            // 🔥 Si el modal todavía no cargó NO romper la web
             if (!modal || !inputEmail || !inputPassword || !btnLogin || !error) {
                 console.warn("Login admin aún no disponible en DOM");
                 resolve(false);
@@ -1639,6 +1733,8 @@ async function iniciarModoAdmin() {
                         panel.style.display = "block";
                     }
 
+                    crearBotonNuevoCliente();
+
                     resolve(true);
 
                 } catch (e) {
@@ -1659,6 +1755,7 @@ async function iniciarModoAdmin() {
         return false;
     }
 }
+ 
  
 
  
