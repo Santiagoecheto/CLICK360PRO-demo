@@ -1526,24 +1526,17 @@ async function iniciarModoAdmin() {
 
     function crearBotonNuevoCliente() {
 
-        if (document.getElementById("btnNuevoClienteAdmin")) {
-            return;
-        }
-
-        if (!panel) {
-            return;
-        }
+        if (document.getElementById("btnNuevoClienteAdmin")) return;
+        if (!panel) return;
 
         const btn = document.createElement("button");
-
         btn.id = "btnNuevoClienteAdmin";
-        btn.type = "button";
         btn.textContent = "➕ Nuevo Cliente";
 
         btn.style.margin = "0 0 20px 0";
         btn.style.padding = "12px 18px";
         btn.style.background = "#16a34a";
-        btn.style.color = "#ffffff";
+        btn.style.color = "#fff";
         btn.style.border = "none";
         btn.style.borderRadius = "8px";
         btn.style.cursor = "pointer";
@@ -1554,12 +1547,9 @@ async function iniciarModoAdmin() {
             try {
 
                 let nombre = prompt("Nombre interno del cliente\nEj: jenny");
-
                 if (!nombre) return;
 
-                nombre = nombre
-                    .trim()
-                    .toLowerCase()
+                nombre = nombre.trim().toLowerCase()
                     .replace(/\s+/g, "-")
                     .replace(/[^a-z0-9\-]/g, "");
 
@@ -1571,26 +1561,56 @@ async function iniciarModoAdmin() {
                 btn.disabled = true;
                 btn.textContent = "Creando...";
 
-                const refBase = doc(
-                    db,
-                    "clientes",
-                    nombre,
-                    "configuracion",
-                    "web"
-                );
+                const refConfigDestino = doc(db, "clientes", nombre, "configuracion", "web");
+                const snapDestino = await getDoc(refConfigDestino);
 
-                const snap = await getDoc(refBase);
-
-                if (snap.exists()) {
+                if (snapDestino.exists()) {
                     alert("Ese cliente ya existe");
                     return;
                 }
 
-                await setDoc(refBase, {
-                    titulo: nombre,
-                    subtitulo: "Bienvenido",
-                    creado: new Date().toISOString()
-                });
+                // ================================
+                // 🔥 COPIA CONFIGURACION
+                // ================================
+
+                const refConfigOrigen = doc(db, "clientes", "demo", "configuracion", "web");
+                const snapOrigen = await getDoc(refConfigOrigen);
+
+                if (!snapOrigen.exists()) {
+                    alert("No existe cliente demo base");
+                    return;
+                }
+
+                await setDoc(refConfigDestino, snapOrigen.data());
+
+                // ================================
+                // 🔥 FUNCION GENERICA CLONAR
+                // ================================
+
+                async function clonarColeccion(nombreColeccion) {
+
+                    const colOrigen = collection(db, "clientes", "demo", nombreColeccion);
+                    const colDestino = collection(db, "clientes", nombre, nombreColeccion);
+
+                    const snap = await getDocs(colOrigen);
+
+                    for (const docSnap of snap.docs) {
+                        await addDoc(colDestino, docSnap.data());
+                    }
+                }
+
+                // ================================
+                // 🔥 CLONADO COMPLETO
+                // ================================
+
+                await clonarColeccion("servicios");
+                await clonarColeccion("galeria");
+                await clonarColeccion("trabajosRecientes");
+                await clonarColeccion("videos");
+
+                // ================================
+                // ✅ FINAL
+                // ================================
 
                 const urlFinal =
                     window.location.origin +
@@ -1599,7 +1619,7 @@ async function iniciarModoAdmin() {
                     nombre;
 
                 alert(
-                    "Cliente creado correctamente:\n\n" +
+                    "Cliente PRO creado:\n\n" +
                     nombre +
                     "\n\nURL:\n" +
                     urlFinal
@@ -1620,13 +1640,8 @@ async function iniciarModoAdmin() {
         panel.prepend(btn);
     }
 
-    if (panel) {
-        panel.style.display = "none";
-    }
-
-    if (!esAdmin) {
-        return true;
-    }
+    if (panel) panel.style.display = "none";
+    if (!esAdmin) return true;
 
     try {
 
@@ -1640,9 +1655,7 @@ async function iniciarModoAdmin() {
             await cargarVideosDesdeFirebase();
             await cargarTrabajosRecientesDesdeFirebase();
 
-            if (panel) {
-                panel.style.display = "block";
-            }
+            if (panel) panel.style.display = "block";
 
             crearBotonNuevoCliente();
 
@@ -1656,53 +1669,15 @@ async function iniciarModoAdmin() {
             const inputPassword = document.getElementById("adminPassword");
             const btnLogin = document.getElementById("btnLoginAdmin");
             const error = document.getElementById("loginAdminError");
-            const linkReset = document.getElementById("linkResetAdmin");
 
             if (!modal || !inputEmail || !inputPassword || !btnLogin || !error) {
-                console.warn("Login admin aún no disponible en DOM");
                 resolve(false);
                 return;
             }
 
             modal.style.display = "flex";
-            inputEmail.focus();
-            error.textContent = "";
-            error.style.color = "#ff6b6b";
-
-            if (linkReset) {
-
-                linkReset.onclick = async (ev) => {
-
-                    ev.preventDefault();
-                    error.textContent = "";
-
-                    const email = inputEmail.value.trim().toLowerCase();
-
-                    if (!email) {
-                        error.textContent = "Ingresá tu email para recuperar contraseña";
-                        inputEmail.focus();
-                        return;
-                    }
-
-                    try {
-
-                        await sendPasswordResetEmail(auth, email);
-
-                        error.style.color = "#44ff88";
-                        error.textContent = "Te enviamos un correo para restablecer contraseña";
-
-                    } catch (resetError) {
-
-                        error.style.color = "#ff6b6b";
-                        error.textContent = "No se pudo enviar el correo de recuperación";
-                    }
-                };
-            }
 
             btnLogin.onclick = async () => {
-
-                error.style.color = "#ff6b6b";
-                error.textContent = "";
 
                 const email = inputEmail.value.trim().toLowerCase();
                 const password = inputPassword.value.trim();
@@ -1711,9 +1686,6 @@ async function iniciarModoAdmin() {
                     error.textContent = "Completá email y contraseña";
                     return;
                 }
-
-                btnLogin.disabled = true;
-                btnLogin.textContent = "Ingresando...";
 
                 try {
 
@@ -1729,9 +1701,7 @@ async function iniciarModoAdmin() {
                     await cargarVideosDesdeFirebase();
                     await cargarTrabajosRecientesDesdeFirebase();
 
-                    if (panel) {
-                        panel.style.display = "block";
-                    }
+                    if (panel) panel.style.display = "block";
 
                     crearBotonNuevoCliente();
 
@@ -1740,11 +1710,6 @@ async function iniciarModoAdmin() {
                 } catch (e) {
 
                     error.textContent = "Email o contraseña incorrectos";
-
-                } finally {
-
-                    btnLogin.disabled = false;
-                    btnLogin.textContent = "Ingresar";
                 }
             };
         });
@@ -1755,7 +1720,6 @@ async function iniciarModoAdmin() {
         return false;
     }
 }
- 
  
 
  
