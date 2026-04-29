@@ -2752,32 +2752,8 @@ function activarAdminTestimonios() {
         panel.style.display = "block";
     }
 
-    btn.onclick = async () => {
-
-        const nombre = prompt("Nombre del cliente");
-        if (!nombre) return;
-
-        const texto = prompt("Escribí el testimonio");
-        if (!texto) return;
-
-        try {
-
-            await addDoc(
-                collection(db, "clientes", clienteActual, "testimonios"),
-                {
-                    nombre: nombre.trim(),
-                    texto: texto.trim(),
-                    fecha: new Date().toISOString()
-                }
-            );
-
-            await cargarTestimoniosDesdeFirebase();
-
-        } catch (e) {
-            console.error(e);
-            alert("Error guardando testimonio");
-        }
-    };
+    // ❌ ELIMINADO: btn.onclick viejo (prompt)
+    // ✅ Ahora el botón se maneja con addEventListener global
 }
 
  
