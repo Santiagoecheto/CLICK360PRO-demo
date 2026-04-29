@@ -4482,6 +4482,14 @@ if (btnSubir) {
     console.log("✅ Botón Subir Imagen conectado GLOBAL");
 }
 
+ // ⭐ BOTÓN TESTIMONIO
+const btnAgregarTestimonio = document.getElementById("btnAgregarTestimonio");
+
+if (btnAgregarTestimonio) {
+    console.log("✅ Botón Testimonio conectado");
+    btnAgregarTestimonio.addEventListener("click", agregarTestimonio);
+}
+
 const btnSubirTrabajo = document.getElementById("btnSubirImagenTrabajo");
 
 if (btnSubirTrabajo) {
@@ -4717,22 +4725,7 @@ if (btnAgregarVideo) {
     btnAgregarVideo.onclick = agregarVideoFirebase;
 }
 
- // ⭐ BOTÓN TESTIMONIO
-const btnAgregarTestimonio = document.getElementById("btnAgregarTestimonio");
-
-if (btnAgregarTestimonio) {
-    console.log("✅ Botón Testimonio conectado");
-    btnAgregarTestimonio.addEventListener("click", agregarTestimonio);
-}
  
-
- // ⭐ BOTÓN TESTIMONIO
-const btnAgregarTestimonio = document.getElementById("btnAgregarTestimonio");
-
-if (btnAgregarTestimonio) {
-    btnAgregarTestimonio.addEventListener("click", agregarTestimonio);
-}
-
 // 🔵 EVENTOS TÍTULO
 if (inputColor && inputTamano) {
 
