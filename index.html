@@ -2693,6 +2693,53 @@ const data = {
     }
 }
 
+
+async function agregarTestimonio() {
+
+    try {
+
+        const inputNombre = document.getElementById("inputNombreTestimonio");
+        const inputTexto = document.getElementById("inputTextoTestimonio");
+
+        if (!inputNombre || !inputTexto) {
+            console.warn("Inputs de testimonios no encontrados");
+            return;
+        }
+
+        const nombre = inputNombre.value.trim();
+        const texto = inputTexto.value.trim();
+
+        if (!nombre || !texto) {
+            alert("Completá nombre y testimonio");
+            return;
+        }
+
+        const ref = collection(db, "clientes", clienteActual, "testimonios");
+
+        await addDoc(ref, {
+            nombre: nombre,
+            texto: texto,
+            fecha: new Date()
+        });
+
+        // limpiar inputs
+        inputNombre.value = "";
+        inputTexto.value = "";
+
+        // recargar testimonios
+        await cargarTestimoniosDesdeFirebase();
+
+        alert("✅ Testimonio agregado correctamente");
+
+    } catch (e) {
+
+        console.error("Error agregando testimonio:", e);
+        alert("❌ Error al guardar testimonio");
+    }
+}
+
+ 
+ 
 function activarAdminTestimonios() {
 
     const panel = document.getElementById("panelTestimoniosAdmin");
@@ -4660,11 +4707,20 @@ if (btnSubir) {
     });
 }
 
+
+ 
 // 🔥 BOTÓN VIDEO
 const btnAgregarVideo = document.getElementById("btnAgregarVideo");
 
 if (btnAgregarVideo) {
     btnAgregarVideo.onclick = agregarVideoFirebase;
+}
+
+ // ⭐ BOTÓN TESTIMONIO
+const btnAgregarTestimonio = document.getElementById("btnAgregarTestimonio");
+
+if (btnAgregarTestimonio) {
+    btnAgregarTestimonio.addEventListener("click", agregarTestimonio);
 }
 
 // 🔵 EVENTOS TÍTULO
