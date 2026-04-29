@@ -521,7 +521,7 @@ Desliza la barra vertical para ver el antes y después
         Cientos de clientas ya confiaron en nuestro trabajo
     </p>
 
-    <div class="contenedor-testimonios">
+   <div class="contenedor-testimonios" id="contenedorTestimonios">
 
         <div class="testimonio-card">
             <div class="estrellas">★★★★★</div>
@@ -2683,7 +2683,8 @@ const data = {
 
             const estrellas = document.createElement("div");
             estrellas.className = "testimonio-estrellas";
-            estrellas.textContent = "★★★★★";
+            const cantidad = data.estrellas || 5;
+             estrellas.textContent = "★".repeat(cantidad);
 
             const texto = document.createElement("div");
             texto.className = "testimonio-texto";
