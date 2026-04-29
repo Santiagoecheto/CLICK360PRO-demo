@@ -1654,6 +1654,8 @@ async function iniciarModoAdmin() {
             await cargarGaleriaDesdeFirebase();
             await cargarVideosDesdeFirebase();
             await cargarTrabajosRecientesDesdeFirebase();
+            await cargarTestimoniosDesdeFirebase();
+             activarAdminTestimonios();
 
             if (panel) panel.style.display = "block";
 
@@ -1700,6 +1702,9 @@ async function iniciarModoAdmin() {
                     await cargarGaleriaDesdeFirebase();
                     await cargarVideosDesdeFirebase();
                     await cargarTrabajosRecientesDesdeFirebase();
+                    await cargarTestimoniosDesdeFirebase();
+                    activarAdminTestimonios();
+                  
 
                     if (panel) panel.style.display = "block";
 
@@ -1877,7 +1882,8 @@ async function subirImagenFirebase(opciones = {}) {
         alert("Error subiendo imagen: " + (error.message || ""));
     }
 }
- 
+
+
  
  async function subirImagenTrabajoReciente() {
     try {
@@ -2646,6 +2652,89 @@ const data = {
     } catch (error) {
         console.error("❌ Error cargando trabajos recientes:", error);
     }
+}
+
+
+
+ async function cargarTestimoniosDesdeFirebase() {
+    try {
+
+        const contenedor = document.getElementById("contenedorTestimonios");
+        if (!contenedor) return;
+
+        contenedor.innerHTML = "";
+
+        const ref = collection(db, "clientes", clienteActual, "testimonios");
+        const snap = await getDocs(ref);
+
+        snap.forEach(docSnap => {
+
+            const data = docSnap.data();
+
+            const card = document.createElement("div");
+            card.className = "testimonio-card";
+
+            const nombre = document.createElement("div");
+            nombre.className = "testimonio-nombre";
+            nombre.textContent = data.nombre || "Cliente";
+
+            const estrellas = document.createElement("div");
+            estrellas.className = "testimonio-estrellas";
+            estrellas.textContent = "★★★★★";
+
+            const texto = document.createElement("div");
+            texto.className = "testimonio-texto";
+            texto.textContent = data.texto || "";
+
+            card.appendChild(nombre);
+            card.appendChild(estrellas);
+            card.appendChild(texto);
+
+            contenedor.appendChild(card);
+        });
+
+    } catch (e) {
+        console.error("Error cargando testimonios:", e);
+    }
+}
+
+function activarAdminTestimonios() {
+
+    const panel = document.getElementById("panelTestimoniosAdmin");
+    const btn = document.getElementById("btnAgregarTestimonio");
+
+    if (!panel || !btn) return;
+
+    if (adminAutenticado) {
+        panel.style.display = "block";
+    }
+
+    btn.onclick = async () => {
+
+        const nombre = prompt("Nombre del cliente");
+        if (!nombre) return;
+
+        const texto = prompt("Escribí el testimonio");
+        if (!texto) return;
+
+        try {
+
+            await addDoc(
+                collection(db, "clientes", clienteActual, "testimonios"),
+                {
+                    nombre: nombre.trim(),
+                    texto: texto.trim(),
+                    fecha: new Date().toISOString()
+                }
+            );
+
+            await cargarTestimoniosDesdeFirebase();
+
+        } catch (e) {
+            console.error(e);
+            alert("Error guardando testimonio");
+        }
+    };
 }
 
  
