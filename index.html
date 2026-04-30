@@ -1648,8 +1648,7 @@ async function iniciarModoAdmin() {
             await cargarGaleriaDesdeFirebase();
             await cargarVideosDesdeFirebase();
             await cargarTrabajosRecientesDesdeFirebase();
-            await cargarTestimoniosDesdeFirebase();
-             activarAdminTestimonios();
+                 activarAdminTestimonios();
 
             if (panel) panel.style.display = "block";
 
@@ -1696,8 +1695,7 @@ async function iniciarModoAdmin() {
                     await cargarGaleriaDesdeFirebase();
                     await cargarVideosDesdeFirebase();
                     await cargarTrabajosRecientesDesdeFirebase();
-                    await cargarTestimoniosDesdeFirebase();
-                    activarAdminTestimonios();
+                          activarAdminTestimonios();
                   
 
                     if (panel) panel.style.display = "block";
@@ -4484,7 +4482,7 @@ try {
 }
 
  try {
-    await cargarTestimoniosDesdeFirebase();
+   
     console.log("✅ Testimonios cargados");
 } catch (e) {
     console.error("❌ Error testimonios:", e);
