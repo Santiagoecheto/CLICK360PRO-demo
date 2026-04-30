@@ -2666,7 +2666,7 @@ async function cargarTestimoniosDesdeFirebase() {
             const data = docSnap.data();
 
             const card = document.createElement("div");
-            card.className = "testimonio"; // 🔥 IMPORTANTE: ahora usa tu CSS PRO
+            card.className = "testimonio";
 
             // 🔹 NOMBRE
             const nombre = document.createElement("span");
@@ -2682,23 +2682,36 @@ async function cargarTestimoniosDesdeFirebase() {
             const texto = document.createElement("p");
             texto.textContent = data.texto || "";
 
-            // 🔹 APPEND
             card.appendChild(estrellas);
             card.appendChild(texto);
             card.appendChild(nombre);
 
-            // 🔴 BOTÓN ELIMINAR (SOLO ADMIN)
+            // 🔴 BOTÓN ELIMINAR (VISIBLE PRO)
             if (esAdmin) {
 
                 const btnEliminar = document.createElement("button");
                 btnEliminar.textContent = "🗑";
+
+                // 🔥 ESTILO CLAVE (ANTES FALTABA ESTO)
                 btnEliminar.style.position = "absolute";
                 btnEliminar.style.top = "10px";
                 btnEliminar.style.right = "10px";
-                btnEliminar.style.background = "transparent";
-                btnEliminar.style.border = "none";
+                btnEliminar.style.background = "rgba(0,0,0,0.6)";
+                btnEliminar.style.border = "1px solid rgba(255,255,255,0.2)";
+                btnEliminar.style.borderRadius = "6px";
                 btnEliminar.style.cursor = "pointer";
-                btnEliminar.style.fontSize = "16px";
+                btnEliminar.style.fontSize = "14px";
+                btnEliminar.style.padding = "4px 6px";
+                btnEliminar.style.color = "#fff";
+                btnEliminar.style.zIndex = "10";
+
+                btnEliminar.onmouseenter = () => {
+                    btnEliminar.style.background = "#ff2d75";
+                };
+
+                btnEliminar.onmouseleave = () => {
+                    btnEliminar.style.background = "rgba(0,0,0,0.6)";
+                };
 
                 btnEliminar.onclick = async () => {
 
@@ -2707,7 +2720,7 @@ async function cargarTestimoniosDesdeFirebase() {
 
                     try {
                         await deleteDoc(doc(db, "clientes", clienteActual, "testimonios", docSnap.id));
-                        await cargarTestimoniosDesdeFirebase(); // 🔄 refresco automático
+                        await cargarTestimoniosDesdeFirebase();
                     } catch (err) {
                         console.error("Error eliminando:", err);
                         alert("Error al eliminar");
