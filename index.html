@@ -4686,7 +4686,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // 📸 SUBIR IMAGEN
     // =========================
 
-const btnSubir = document.getElementById("btnSubirImagen");
+ const btnSubir = document.getElementById("btnSubirImagen");
  const btnGuardarCTA = document.getElementById("btnGuardarCTA");
 
 if (btnGuardarCTA) {
@@ -4696,11 +4696,26 @@ if (btnGuardarCTA) {
         console.log("🔥 CLICK CTA");
         await guardarCTA();
     });
-
+ 
 } else {
     console.error("❌ Botón CTA NO encontrado");
 }
 
+ const btnCtaBlanco = document.getElementById("btnCtaBlanco");
+
+if (btnCtaBlanco) {
+    btnCtaBlanco.addEventListener("click", () => {
+
+        const inputColorTitulo = document.getElementById("inputColorCtaTitulo");
+        const inputColorSubtitulo = document.getElementById("inputColorCtaSubtitulo");
+
+        if (inputColorTitulo) inputColorTitulo.value = "#ffffff";
+        if (inputColorSubtitulo) inputColorSubtitulo.value = "#ffffff";
+
+        console.log("🎨 CTA blanco aplicado (inputs)");
+    });
+}
+ 
 if (btnSubir) {
     btnSubir.addEventListener("click", async () => {
         try {
