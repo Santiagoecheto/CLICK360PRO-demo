@@ -4222,7 +4222,7 @@ async function cargarTituloWeb() {
 
        if (ctaSubtitulo) {
             ctaSubtitulo.textContent = textoCtaSub !== "" ? textoCtaSub : "Reservá tu turno hoy mismo y dejá tu cabello en manos profesionales";
-            ctaSubtitulo.style.color = colorCtaSubtitulo;
+          ctaSubtitulo.style.setProperty("color", colorCtaSubtitulo, "important");
        }
 
          
