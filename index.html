@@ -2079,16 +2079,22 @@ async function cargarCtaDesdeFirebase() {
 
         if (!snap.exists()) return;
 
-        const data = snap.data();
+const data = snap.data();
 
-        // 🔹 TEXTO
-        if (data.ctaTitulo) {
-            titulo.textContent = data.ctaTitulo;
-        }
+// 🔹 TEXTO
+if (data.ctaTitulo) {
+    titulo.textContent = data.ctaTitulo;
 
-        if (data.ctaSubtitulo) {
-            subtitulo.textContent = data.ctaSubtitulo;
-        }
+    // 🔥 SINCRONIZAR NAVBAR
+    const logoNavbar = document.getElementById("logoNavbar");
+    if (logoNavbar) {
+        logoNavbar.textContent = data.ctaTitulo;
+    }
+}
+
+if (data.ctaSubTitulo) {
+    subtitulo.textContent = data.ctaSubTitulo;
+}
 
         // 🔹 COLORES (preparado para el siguiente paso)
         if (data.ctaTituloColor) {
