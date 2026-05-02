@@ -4480,8 +4480,8 @@ try {
     console.error("❌ Error trabajos recientes:", e);
 }
 
- try {
-   
+try {
+    await cargarTestimoniosDesdeFirebase();
     console.log("✅ Testimonios cargados");
 } catch (e) {
     console.error("❌ Error testimonios:", e);
