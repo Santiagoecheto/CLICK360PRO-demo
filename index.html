@@ -203,9 +203,44 @@ type="button">
 <label style="color:white;">URL Google Maps:</label>
 <input type="text" id="inputUrlMapa" placeholder="https://www.google.com/maps?q=...">
 </div>
+ 
+</div>
+
+
+ <!-- 🔥 CTA EDITABLE -->
+<div style="margin-top:30px; border-top:1px solid #333; padding-top:20px;">
+
+    <h3 style="margin-bottom:10px;">CTA (Sección Turnos)</h3>
+
+    <!-- TITULO -->
+    <input id="inputCtaTitulo"
+           placeholder="Título CTA"
+           style="width:100%; padding:10px; margin-bottom:8px;" />
+
+    <!-- SUBTITULO -->
+    <input id="inputCtaSubtitulo"
+           placeholder="Subtítulo CTA"
+           style="width:100%; padding:10px; margin-bottom:8px;" />
+
+    <!-- COLORES -->
+    <div style="display:flex; gap:10px; justify-content:center; margin-bottom:10px;">
+
+        <input type="color" id="colorCtaTitulo" />
+        <input type="color" id="colorCtaSubtitulo" />
+
+        <button id="btnCtaBlanco">Blanco</button>
+
+    </div>
+
+    <!-- GUARDAR -->
+    <button id="btnGuardarCta"
+            style="padding:10px 20px; background:#ff2d75; color:#fff; border:none; border-radius:6px; cursor:pointer;">
+        Guardar CTA
+    </button>
 
 </div>
 
+ 
 <!-- 🟣 NAVBAR -->
 <hr style="margin:20px 0; border:1px solid #444;">
 
@@ -540,9 +575,9 @@ Desliza la barra vertical para ver el antes y después
 
 <section class="cta">
 
-<h2>¿Lista para un cambio de look?</h2>
+<h2 id="ctaTitulo">¿Lista para un cambio de look?</h2>
 
-<p>Reservá tu turno hoy mismo y dejá tu cabello en manos profesionales</p>
+<p id="ctaSubtitulo">Reservá tu turno hoy mismo y dejá tu cabello en manos profesionales</p>
 
 <div class="cta-botones">
 
@@ -1692,6 +1727,7 @@ async function iniciarModoAdmin() {
             await cargarGaleriaDesdeFirebase();
             await cargarVideosDesdeFirebase();
             await cargarTrabajosRecientesDesdeFirebase();
+            await cargarCtaDesdeFirebase();
                  activarAdminTestimonios();
 
             if (panel) panel.style.display = "block";
@@ -1740,6 +1776,7 @@ async function iniciarModoAdmin() {
                     await cargarGaleriaDesdeFirebase();
                     await cargarVideosDesdeFirebase();
                     await cargarTrabajosRecientesDesdeFirebase();
+                    await cargarCtaDesdeFirebase();
                           activarAdminTestimonios();
                   
 
@@ -1978,7 +2015,45 @@ async function subirImagenFirebase(opciones = {}) {
     }
 }
 
+async function cargarCtaDesdeFirebase() {
+    try {
 
+        const titulo = document.getElementById("ctaTitulo");
+        const subtitulo = document.getElementById("ctaSubtitulo");
+
+        if (!titulo || !subtitulo) return;
+
+        const ref = doc(db, "clientes", clienteActual, "configuracion", "web");
+        const snap = await getDoc(ref);
+
+        if (!snap.exists()) return;
+
+        const data = snap.data();
+
+        // 🔹 TEXTO
+        if (data.ctaTitulo) {
+            titulo.textContent = data.ctaTitulo;
+        }
+
+        if (data.ctaSubtitulo) {
+            subtitulo.textContent = data.ctaSubtitulo;
+        }
+
+        // 🔹 COLORES (preparado para el siguiente paso)
+        if (data.ctaTituloColor) {
+            titulo.style.color = data.ctaTituloColor;
+        }
+
+        if (data.ctaSubtituloColor) {
+            subtitulo.style.color = data.ctaSubtituloColor;
+        }
+
+    } catch (e) {
+        console.error("Error cargando CTA:", e);
+    }
+}
+
+ 
  
   async function cargarServiciosDefinitivos() {
     try {
@@ -3934,6 +4009,8 @@ async function cargarTituloWeb() {
 
         const titulo = document.getElementById("tituloWeb");
         const subtitulo = document.getElementById("subtituloWeb");
+        const ctaTitulo = document.getElementById("ctaTitulo");
+        const ctaSubtitulo = document.getElementById("ctaSubtitulo");
 
         const inputColor = document.getElementById("inputColorTitulo");
         const inputTamano = document.getElementById("inputTamanoTitulo");
@@ -4067,6 +4144,8 @@ async function cargarTituloWeb() {
 
             const texto = (data.titulo || "").trim();
             const color = data.colorTitulo || "#ffffff";
+            const textoCta = (data.ctaTitulo || "").trim();
+            const textoCtaSub = (data.ctaSubtitulo || "").trim();
             const tamano = data.tamanoTitulo || "48px";
 
             const colorSub = data.colorSubtitulo || "#ffffff";
@@ -4080,8 +4159,17 @@ async function cargarTituloWeb() {
 
             titulo.textContent = texto !== "" ? texto : "Jenny Estilista Profesional";
             titulo.style.color = color;
-            titulo.style.fontSize = tamano;
+            titulo.style.fontSize = tamano; 
+         
+        if (ctaTitulo) {
+             ctaTitulo.textContent = textoCta !== "" ? textoCta : "¿Lista para un cambio de look?";
+        }
 
+       if (ctaSubtitulo) {
+            ctaSubtitulo.textContent = textoCtaSub !== "" ? textoCtaSub : "Reservá tu turno hoy mismo y dejá tu cabello en manos profesionales";
+       }
+
+         
             if (subtitulo) {
                 subtitulo.style.color = colorSub;
                 subtitulo.style.fontSize = tamanoSub;
