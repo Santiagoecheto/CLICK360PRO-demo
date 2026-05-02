@@ -2086,10 +2086,11 @@ if (data.titulo) {
    titulo.textContent = data.titulo;
 
     // 🔥 SINCRONIZAR NAVBAR
-    const logoNavbar = document.getElementById("logoNavbar");
-    if (logoNavbar) {
-      logoNavbar.textContent = data.titulo || "";
-    }
+ const logoNavbar = document.getElementById("logoNavbar");
+
+if (logoNavbar) {
+    logoNavbar.textContent = data.titulo || "";
+}
 }
 
 if (data.ctaSubTitulo) {
@@ -2332,7 +2333,7 @@ if (tituloTransformaciones && dataConfig.colorTextoTransformaciones) {
                 if (logoNavbar) {
                     const tituloConfig = (dataConfig.titulo || "").toString().trim();
 
-                    logoNavbar.textContent = tituloConfig || "Studio Hair";
+                      logoNavbar.textContent = "";
                 }
 
                 // =========================
