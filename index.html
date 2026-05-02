@@ -1635,6 +1635,49 @@ async function iniciarModoAdmin() {
         panel.prepend(btn);
     }
 
+
+ function crearBotonLogout() {
+
+    if (document.getElementById("btnLogoutAdmin")) return;
+    if (!panel) return;
+
+    const btn = document.createElement("button");
+    btn.id = "btnLogoutAdmin";
+    btn.textContent = "🚪 Cerrar sesión";
+
+    btn.style.margin = "0 0 20px 10px";
+    btn.style.padding = "12px 18px";
+    btn.style.background = "#dc2626";
+    btn.style.color = "#fff";
+    btn.style.border = "none";
+    btn.style.borderRadius = "8px";
+    btn.style.cursor = "pointer";
+    btn.style.fontWeight = "bold";
+
+    btn.onclick = async () => {
+
+        const confirmar = confirm("¿Cerrar sesión administrador?");
+        if (!confirmar) return;
+
+        try {
+
+            await signOut(auth);
+
+            sessionStorage.removeItem("admin_ok");
+
+            location.reload();
+
+        } catch (e) {
+
+            console.error("Error cerrando sesión:", e);
+            alert("Error al cerrar sesión");
+        }
+    };
+
+    panel.prepend(btn);
+}
+ 
+ 
     if (panel) panel.style.display = "none";
     if (!esAdmin) return true;
 
@@ -1652,8 +1695,9 @@ async function iniciarModoAdmin() {
                  activarAdminTestimonios();
 
             if (panel) panel.style.display = "block";
-
+         
             crearBotonNuevoCliente();
+            crearBotonLogout();
 
             return true;
         }
@@ -1717,6 +1761,8 @@ async function iniciarModoAdmin() {
         console.error("Error iniciando admin:", error);
         return false;
     }
+
+ 
 }
  
 
