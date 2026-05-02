@@ -1483,6 +1483,48 @@ if (inputUrlMapa) {
     }
 }
  
+async function guardarCTA() {
+    try {
+
+        const inputTitulo = document.getElementById("inputCtaTitulo");
+        const inputSubtitulo = document.getElementById("inputCtaSubtitulo");
+
+        if (!inputTitulo || !inputSubtitulo) {
+            console.error("CTA inputs no encontrados");
+            return;
+        }
+
+        const titulo = inputTitulo.value.trim();
+        const subtitulo = inputSubtitulo.value.trim();
+
+        await setDoc(
+            doc(db, "clientes", clienteActual, "configuracion", "web"),
+            {
+                ctaTitulo: titulo,
+                ctaSubtitulo: subtitulo
+            },
+            { merge: true }
+        );
+
+        // 🔥 ACTUALIZAR EN VIVO
+        const ctaTitulo = document.getElementById("ctaTitulo");
+        const ctaSubtitulo = document.getElementById("ctaSubtitulo");
+
+        if (ctaTitulo) {
+            ctaTitulo.textContent = titulo;
+        }
+
+        if (ctaSubtitulo) {
+            ctaSubtitulo.textContent = subtitulo;
+        }
+
+        console.log("✅ CTA guardado");
+
+    } catch (error) {
+        console.error("❌ Error guardando CTA:", error);
+    }
+}
+ 
  
 async function guardarFooterAdmin() {
     try {
@@ -4717,6 +4759,11 @@ if (btnGuardarFooter) {
     btnGuardarFooter.addEventListener("click", guardarFooterAdmin);
 }
 
+ const btnGuardarCTA = document.getElementById("btnGuardarCTA");
+
+if (btnGuardarCTA) {
+    btnGuardarCTA.addEventListener("click", guardarCTA);
+}
  
     // =========================
     // 🎬 SUBIR VIDEO HERO
