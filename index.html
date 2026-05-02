@@ -4688,19 +4688,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // =========================
 
 const btnSubir = document.getElementById("btnSubirImagen");
-
-if (btnSubir) {
-    btnSubir.addEventListener("click", async () => {
-        try {
-            await subirImagenFirebase();
-        } catch (e) {
-            console.error("❌ Error en botón subir imagen:", e);
-        }
-    });
-
-    console.log("✅ Botón Subir Imagen conectado GLOBAL");
-}
-
  const btnGuardarCTA = document.getElementById("btnGuardarCTA");
 
 if (btnGuardarCTA) {
@@ -4714,6 +4701,20 @@ if (btnGuardarCTA) {
 } else {
     console.error("❌ Botón CTA NO encontrado");
 }
+
+if (btnSubir) {
+    btnSubir.addEventListener("click", async () => {
+        try {
+            await subirImagenFirebase();
+        } catch (e) {
+            console.error("❌ Error en botón subir imagen:", e);
+        }
+    });
+
+    console.log("✅ Botón Subir Imagen conectado GLOBAL");
+}
+
+
  
  // ⭐ BOTÓN TESTIMONIO
 const btnAgregarTestimonio = document.getElementById("btnAgregarTestimonio");
