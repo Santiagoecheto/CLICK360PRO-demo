@@ -2082,8 +2082,8 @@ async function cargarCtaDesdeFirebase() {
 const data = snap.data();
 
 // 🔹 TEXTO
-if (data.ctaTitulo) {
-    titulo.textContent = data.ctaTitulo;
+if (data.titulo) {
+   titulo.textContent = data.titulo;
 
     // 🔥 SINCRONIZAR NAVBAR
     const logoNavbar = document.getElementById("logoNavbar");
