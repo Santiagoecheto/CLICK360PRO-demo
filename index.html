@@ -2067,57 +2067,50 @@ async function subirImagenFirebase(opciones = {}) {
 }
 
 async function cargarCtaDesdeFirebase() {
-    try {
+try {
 
-        const titulo = document.getElementById("ctaTitulo");
-        const subtitulo = document.getElementById("ctaSubtitulo");
 
-        if (!titulo || !subtitulo) return;
+    const titulo = document.getElementById("ctaTitulo");
+    const subtitulo = document.getElementById("ctaSubtitulo");
 
-        const ref = doc(db, "clientes", clienteActual, "configuracion", "web");
-        const snap = await getDoc(ref);
+    if (!titulo || !subtitulo) return;
 
-        if (!snap.exists()) return;
+    const ref = doc(db, "clientes", clienteActual, "configuracion", "web");
+    const snap = await getDoc(ref);
 
-const data = snap.data();
+    if (!snap.exists()) return;
 
-// 🔹 TEXTO
-if (data.titulo) {
-    titulo.textContent = data.titulo;
+    const data = snap.data();
 
-    const logoNavbar = document.getElementById("logoNavbar");
-    if (logoNavbar) {
-        logoNavbar.textContent = data.titulo;
-    }
-}
+    // 🔹 TEXTO
+    if (data.titulo) {
+        titulo.textContent = data.titulo;
 
-    // 🔥 SINCRONIZAR NAVBAR
- const logoNavbar = document.getElementById("logoNavbar");
-
-if (logoNavbar) {
-    logoNavbar.textContent = data.titulo || "";
-}
-}
-
-if (data.ctaSubTitulo) {
-    subtitulo.textContent = data.ctaSubTitulo;
-}
-
-        // 🔹 COLORES (preparado para el siguiente paso)
-        if (data.ctaTituloColor) {
-            titulo.style.color = data.ctaTituloColor;
+        const logoNavbar = document.getElementById("logoNavbar");
+        if (logoNavbar) {
+            logoNavbar.textContent = data.titulo;
         }
-
-        if (data.ctaSubtituloColor) {
-            subtitulo.style.color = data.ctaSubtituloColor;
-        }
-
-    } catch (e) {
-        console.error("Error cargando CTA:", e);
     }
+
+    if (data.ctaSubTitulo) {
+        subtitulo.textContent = data.ctaSubTitulo;
+    }
+
+    // 🔹 COLORES
+    if (data.ctaTituloColor) {
+        titulo.style.color = data.ctaTituloColor;
+    }
+
+    if (data.ctaSubtituloColor) {
+        subtitulo.style.color = data.ctaSubtituloColor;
+    }
+
+} catch (e) {
+    console.error("Error cargando CTA:", e);
 }
 
- 
+}
+
  
   async function cargarServiciosDefinitivos() {
     try {
