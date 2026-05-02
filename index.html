@@ -225,8 +225,8 @@ type="button">
     <!-- COLORES -->
     <div style="display:flex; gap:10px; justify-content:center; margin-bottom:10px;">
 
-        <input type="color" id="colorCtaTitulo" />
-        <input type="color" id="colorCtaSubtitulo" />
+      <input type="color" id="inputColorCtaTitulo" />
+      <input type="color" id="inputColorCtaSubtitulo" />
 
         <button id="btnCtaBlanco">Blanco</button>
 
@@ -1488,6 +1488,8 @@ async function guardarCTA() {
 
         const inputTitulo = document.getElementById("inputCtaTitulo");
         const inputSubtitulo = document.getElementById("inputCtaSubtitulo");
+        const inputColorTitulo = document.getElementById("inputColorCtaTitulo");
+        const inputColorSubtitulo = document.getElementById("inputColorCtaSubtitulo");
 
         if (!inputTitulo || !inputSubtitulo) {
             console.error("CTA inputs no encontrados");
@@ -1497,33 +1499,41 @@ async function guardarCTA() {
         const titulo = inputTitulo.value.trim();
         const subtitulo = inputSubtitulo.value.trim();
 
+        const colorTitulo = inputColorTitulo ? inputColorTitulo.value : "#ffffff";
+        const colorSubtitulo = inputColorSubtitulo ? inputColorSubtitulo.value : "#ffffff";
+
         await setDoc(
             doc(db, "clientes", clienteActual, "configuracion", "web"),
             {
                 ctaTitulo: titulo,
-                ctaSubtitulo: subtitulo
+                ctaSubtitulo: subtitulo,
+                ctaColorTitulo: colorTitulo,
+                ctaColorSubtitulo: colorSubtitulo
             },
             { merge: true }
         );
 
         // 🔥 ACTUALIZAR EN VIVO
-        const ctaTitulo = document.getElementById("ctaTitulo");
-        const ctaSubtitulo = document.getElementById("ctaSubtitulo");
+        const ctaTituloEl = document.getElementById("ctaTitulo");
+        const ctaSubtituloEl = document.getElementById("ctaSubtitulo");
 
-        if (ctaTitulo) {
-            ctaTitulo.textContent = titulo;
+        if (ctaTituloEl) {
+            ctaTituloEl.textContent = titulo;
+            ctaTituloEl.style.color = colorTitulo;
         }
 
-        if (ctaSubtitulo) {
-            ctaSubtitulo.textContent = subtitulo;
+        if (ctaSubtituloEl) {
+            ctaSubtituloEl.textContent = subtitulo;
+            ctaSubtituloEl.style.color = colorSubtitulo;
         }
 
-        console.log("✅ CTA guardado");
+        console.log("✅ CTA guardado correctamente");
 
     } catch (error) {
         console.error("❌ Error guardando CTA:", error);
     }
 }
+
  
  
 async function guardarFooterAdmin() {
