@@ -4701,6 +4701,20 @@ if (btnSubir) {
     console.log("✅ Botón Subir Imagen conectado GLOBAL");
 }
 
+ const btnGuardarCTA = document.getElementById("btnGuardarCTA");
+
+if (btnGuardarCTA) {
+    console.log("✅ Botón CTA encontrado");
+
+    btnGuardarCTA.addEventListener("click", async () => {
+        console.log("🔥 CLICK CTA");
+        await guardarCTA();
+    });
+
+} else {
+    console.error("❌ Botón CTA NO encontrado");
+}
+ 
  // ⭐ BOTÓN TESTIMONIO
 const btnAgregarTestimonio = document.getElementById("btnAgregarTestimonio");
 
