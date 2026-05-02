@@ -2088,7 +2088,7 @@ if (data.ctaTitulo) {
     // 🔥 SINCRONIZAR NAVBAR
     const logoNavbar = document.getElementById("logoNavbar");
     if (logoNavbar) {
-        logoNavbar.textContent = data.ctaTitulo;
+      logoNavbar.textContent = data.titulo || "";
     }
 }
 
