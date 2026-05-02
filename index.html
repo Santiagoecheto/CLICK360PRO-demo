@@ -2083,7 +2083,13 @@ const data = snap.data();
 
 // 🔹 TEXTO
 if (data.titulo) {
-   titulo.textContent = data.titulo;
+    titulo.textContent = data.titulo;
+
+    const logoNavbar = document.getElementById("logoNavbar");
+    if (logoNavbar) {
+        logoNavbar.textContent = data.titulo;
+    }
+}
 
     // 🔥 SINCRONIZAR NAVBAR
  const logoNavbar = document.getElementById("logoNavbar");
