@@ -4213,12 +4213,17 @@ async function cargarTituloWeb() {
             titulo.style.color = color;
             titulo.style.fontSize = tamano; 
          
+        const colorCtaTitulo = data.ctaColorTitulo || "#ffffff";
+        const colorCtaSubtitulo = data.ctaColorSubtitulo || "#ffffff";
+
         if (ctaTitulo) {
              ctaTitulo.textContent = textoCta !== "" ? textoCta : "¿Lista para un cambio de look?";
-        }
+              ctaTitulo.style.color = colorCtaTitulo;
+       }
 
        if (ctaSubtitulo) {
             ctaSubtitulo.textContent = textoCtaSub !== "" ? textoCtaSub : "Reservá tu turno hoy mismo y dejá tu cabello en manos profesionales";
+            ctaSubtitulo.style.color = colorCtaSubtitulo;
        }
 
          
