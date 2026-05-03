@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Studio Hair Modern</title>
+<title id="tituloPagina">Mi Negocio</title>
 
 <link rel="stylesheet" href="style.css">
 
@@ -4168,6 +4168,17 @@ async function cargarTituloWeb() {
         if (docSnap.exists()) {
             const data = docSnap.data();
 
+         const tituloPagina = document.getElementById("tituloPagina");
+
+const tituloFinal =
+    document.getElementById("tituloweb")?.textContent?.trim() ||
+    data.titulo ||
+    "Mi Negocio";
+
+if (tituloPagina) {
+    tituloPagina.textContent = tituloFinal;
+}
+
          // 🔥 SINCRONIZAR INPUTS NAVBAR (PANEL ADMIN)
 
 const inputLinks = document.getElementById("inputColorNavbarLinks");
@@ -4584,9 +4595,8 @@ async function cargarSubtituloWeb() {
         const subtitulo = document.getElementById("subtituloWeb");
 
         if (!subtitulo) return;
-
+     
         if (docSnap.exists()) {
-
             const data = docSnap.data();
 
             let texto = (data.subtitulo || "").trim();
