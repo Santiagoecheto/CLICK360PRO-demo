@@ -2223,14 +2223,16 @@ const footerRed2 = document.getElementById("footerRed2");
 const footerRed3 = document.getElementById("footerRed3");
 
 // título
+const tituloReal = document.getElementById("tituloweb")?.textContent?.trim();
+
 if (footerTitulo) {
     footerTitulo.textContent =
-        dataConfig.titulo || "Studio Hair Modern";
+        tituloReal || dataConfig.titulo || "";
 }
 
 if (footerCopy) {
     footerCopy.textContent =
-        dataConfig.titulo || "Studio Hair Modern";
+        tituloReal || dataConfig.titulo || "";
 }
 
 // descripción
