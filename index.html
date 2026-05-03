@@ -4166,6 +4166,24 @@ async function cargarTituloWeb() {
         if (docSnap.exists()) {
             const data = docSnap.data();
 
+         // 🔥 SINCRONIZAR INPUTS NAVBAR (PANEL ADMIN)
+
+const inputLinks = document.getElementById("inputColorNavbarLinks");
+const inputHover = document.getElementById("inputColorNavbarHover");
+const inputLogo = document.getElementById("inputColorNavbarLogo");
+
+if (inputLinks && data.colorNavbarLinks) {
+    inputLinks.value = data.colorNavbarLinks;
+}
+
+if (inputHover && data.colorNavbarHover) {
+    inputHover.value = data.colorNavbarHover;
+}
+
+if (inputLogo && data.colorNavbarLogo) {
+    inputLogo.value = data.colorNavbarLogo;
+}
+
          const telefonoWhatsapp = (data.telefonoWhatsapp || "").trim();
          const telefonoCalendario = (data.telefonoCalendario || "").trim();
 
