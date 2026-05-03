@@ -4214,9 +4214,18 @@ async function cargarTituloWeb() {
 
             colorFondo = data.colorFondo || "#000000";
 
-            titulo.textContent = texto !== "" ? texto : "Jenny Estilista Profesional";
-            titulo.style.color = color;
-            titulo.style.fontSize = tamano; 
+           const textoFinal = texto !== "" ? texto : "Jenny Estilista Profesional";
+
+titulo.textContent = textoFinal;
+titulo.style.color = color;
+titulo.style.fontSize = tamano;
+
+// 🔥 SINCRONIZAR NAVBAR (MISMO MOMENTO)
+const logoNavbar = document.getElementById("logoNavbar");
+
+if (logoNavbar) {
+    logoNavbar.textContent = textoFinal;
+}
          
         const colorCtaTitulo = data.ctaColorTitulo || "#ffffff";
         const colorCtaSubtitulo = data.ctaColorSubtitulo || "#ffffff";
