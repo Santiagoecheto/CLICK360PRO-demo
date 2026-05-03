@@ -8,6 +8,8 @@
 
 <title id="tituloPagina">Mi Negocio</title>
 
+<link id="faviconLink" rel="icon" href="">
+
 <link rel="stylesheet" href="style.css">
 
 </head>
@@ -694,7 +696,7 @@ clearInterval(intervalo);
 
 }
 
-}, 500);
+}, 100);
 
 });
 </script>
@@ -4168,6 +4170,13 @@ async function cargarTituloWeb() {
         if (docSnap.exists()) {
             const data = docSnap.data();
 
+         // 🔥 FAVICON DINÁMICO
+const faviconLink = document.getElementById("faviconLink");
+
+if (faviconLink && data.faviconUrl) {
+    faviconLink.href = data.faviconUrl;
+}
+         
          const tituloPagina = document.getElementById("tituloPagina");
 
 const tituloFinal =
