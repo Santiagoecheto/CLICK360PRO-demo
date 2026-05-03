@@ -75,7 +75,7 @@ letter-spacing:2px;
 display:inline-block;
 margin-top:25px;
 padding:16px 32px;
-background:#ff2d75;
+background:#25D366;
 color:white;
 text-decoration:none;
 border-radius:40px;
@@ -1439,7 +1439,7 @@ flex-shrink: 0;
 }
 
 .boton-calendario{
-background:#7c3aed;
+background: #3b82f6;
 }
 
 .boton-calendario:hover{
@@ -1470,9 +1470,9 @@ flex-wrap:wrap;
 margin-top:30px;
 }
 
-.boton-cta-calendario{
-background:#ffffff;
-color:#7c3aed;
+.boton-cta-calendario {
+    background: #3b82f6;
+    color: #ffffff;
 }
 
 .boton-cta-calendario:hover{
