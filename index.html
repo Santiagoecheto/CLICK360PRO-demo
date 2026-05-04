@@ -1911,7 +1911,7 @@ async function subirImagenFirebase(opciones = {}) {
             campoConfig = "imagenAntesDespuesDespues";
             mensajeExito = "Imagen DESPUÉS subida correctamente";
         } else if (tipo === "favicon") {
-            input = document.getElementById("inputFavicon"); // ⚠️ ESTE LO VAS A CREAR EN EL HTML
+            input = document.getElementById("inputFavicon");
             campoConfig = "favicon";
             mensajeExito = "Favicon actualizado correctamente";
         } else {
@@ -1949,7 +1949,7 @@ async function subirImagenFirebase(opciones = {}) {
             destinoLogico = "despues";
         } else if (tipo === "favicon") {
             destinoLogico = "favicon";
-            destinoBackend = "1"; // lo mandamos como imagen normal
+            destinoBackend = "1";
         } else {
             const destino = prompt("¿Dónde querés guardar la imagen?\n\n1 = Galería\n2 = Servicio");
 
@@ -2034,10 +2034,10 @@ async function subirImagenFirebase(opciones = {}) {
                 { merge: true }
             );
 
-            // 🔥 ACTUALIZAR EN VIVO
+            // 🔥 ACTUALIZAR EN VIVO + CACHE BUSTER
             const faviconLink = document.getElementById("favicon-dinamico");
             if (faviconLink) {
-                faviconLink.href = data.url;
+                faviconLink.href = data.url + "?v=" + Date.now();
             }
 
             console.log("✅ Favicon actualizado en vivo");
@@ -2060,6 +2060,7 @@ async function subirImagenFirebase(opciones = {}) {
         alert("Error subiendo imagen: " + (error.message || ""));
     }
 }
+
  
  
  async function subirImagenTrabajoReciente() {
