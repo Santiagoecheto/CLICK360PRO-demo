@@ -360,9 +360,7 @@ type="button">
  <div style="display:flex; align-items:center; gap:8px; margin-top:10px;">
     <label style="color:white;">Favicon (icono de la pestaña):</label>
     <input type="file" id="inputFavicon" accept="image/*">
-  <button id="btnSubirFavicon">Subir favicon</button>
-        Subir favicon
-    </button>
+    <button id="btnSubirFavicon">Subir favicon</button>
 </div>
  
 </div>
@@ -4866,12 +4864,15 @@ if (btnSubirTrabajo) {
 const btnSubirFavicon = document.getElementById("btnSubirFavicon");
 
 if (btnSubirFavicon) {
-    console.log("🧩 Botón Favicon conectado");
-
     btnSubirFavicon.addEventListener("click", async () => {
-        console.log("🎯 CLICK FAVICON");
-        await subirImagenFirebase({ tipo: "favicon" });
+        try {
+            await subirImagenFirebase({ tipo: "favicon" });
+        } catch (e) {
+            console.error("❌ Error subiendo favicon:", e);
+        }
     });
+
+    console.log("✅ Botón Favicon conectado");
 }
 
  
