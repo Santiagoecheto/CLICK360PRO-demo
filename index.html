@@ -4862,6 +4862,19 @@ if (btnSubirTrabajo) {
     console.log("✅ Botón Trabajos Recientes conectado");
 }
 
+ // 🔥 BOTÓN FAVICON
+const btnSubirFavicon = document.getElementById("btnSubirFavicon");
+
+if (btnSubirFavicon) {
+    console.log("🧩 Botón Favicon conectado");
+
+    btnSubirFavicon.addEventListener("click", async () => {
+        console.log("🎯 CLICK FAVICON");
+        await subirImagenFirebase({ tipo: "favicon" });
+    });
+}
+
+ 
  
 // =========================
 // 🖼 BOTÓN ANTES
