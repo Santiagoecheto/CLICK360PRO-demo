@@ -7,9 +7,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- FAVICON PRO -->
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=1">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png?v=1">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=1">
 
 <!-- fallback -->
 <link id="favicon-dinamico" rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=1">
@@ -1316,28 +1313,19 @@ function aplicarFaviconDinamico() {
         const favicon = document.getElementById("favicon-dinamico");
         if (!favicon) return;
 
-        let rutaFavicon = "/favicon-32x32.png";
+        // ⚠️ IMPORTANTE:
+        // Este método depende de que exista dataConfig
+        // con la configuración cargada desde Firebase
 
-        switch (clienteActual) {
-            case "jenny":
-                rutaFavicon = "/favicon-jenny.png";
-                break;
-
-            case "maria":
-                rutaFavicon = "/favicon-maria.png";
-                break;
-
-            case "demo":
-            default:
-                rutaFavicon = "/favicon-demo.png";
-                break;
+        if (typeof dataConfig !== "undefined" && dataConfig && dataConfig.favicon) {
+            favicon.href = dataConfig.favicon + "?v=" + new Date().getTime();
+        } else {
+            // fallback seguro
+            favicon.href = "/favicon-32x32.png?v=" + new Date().getTime();
         }
 
-        // Forzar refresh
-        favicon.href = rutaFavicon + "?v=" + new Date().getTime();
-
     } catch (error) {
-        console.error("Error aplicando favicon dinámico:", error);
+        console.error("Error favicon dinámico:", error);
     }
 }
  
@@ -2102,50 +2090,61 @@ async function subirImagenFirebase(opciones = {}) {
 }
 
 async function cargarCtaDesdeFirebase() {
-try {
+    try {
 
+        const titulo = document.getElementById("ctaTitulo");
+        const subtitulo = document.getElementById("ctaSubtitulo");
 
-    const titulo = document.getElementById("ctaTitulo");
-    const subtitulo = document.getElementById("ctaSubtitulo");
+        if (!titulo || !subtitulo) return;
 
-    if (!titulo || !subtitulo) return;
+        const ref = doc(db, "clientes", clienteActual, "configuracion", "web");
+        const snap = await getDoc(ref);
 
-    const ref = doc(db, "clientes", clienteActual, "configuracion", "web");
-    const snap = await getDoc(ref);
+        if (!snap.exists()) return;
 
-    if (!snap.exists()) return;
+        const data = snap.data();
 
-    const data = snap.data();
+        // 🔹 TEXTO
+        if (data.titulo) {
+            titulo.textContent = data.titulo;
 
-    // 🔹 TEXTO
-    if (data.titulo) {
-        titulo.textContent = data.titulo;
-
-        const logoNavbar = document.getElementById("logoNavbar");
-        if (logoNavbar) {
-            logoNavbar.textContent = data.titulo;
+            const logoNavbar = document.getElementById("logoNavbar");
+            if (logoNavbar) {
+                logoNavbar.textContent = data.titulo;
+            }
         }
-    }
 
-    if (data.ctaSubTitulo) {
-        subtitulo.textContent = data.ctaSubTitulo;
-    }
+        if (data.ctaSubTitulo) {
+            subtitulo.textContent = data.ctaSubTitulo;
+        }
 
-    // 🔹 COLORES
-    if (data.ctaTituloColor) {
-        titulo.style.color = data.ctaTituloColor;
-    }
+        // 🔹 COLORES
+        if (data.ctaTituloColor) {
+            titulo.style.color = data.ctaTituloColor;
+        }
 
-    if (data.ctaSubtituloColor) {
-        subtitulo.style.color = data.ctaSubtituloColor;
-    }
+        if (data.ctaSubtituloColor) {
+            subtitulo.style.color = data.ctaSubtituloColor;
+        }
 
-} catch (e) {
-    console.error("Error cargando CTA:", e);
+        // 🔥 NUEVO — FAVICON DESDE FIREBASE
+        try {
+            const favicon = document.getElementById("favicon-dinamico");
+
+            if (favicon && data.favicon) {
+                favicon.href = data.favicon + "?v=" + new Date().getTime();
+                console.log("✅ Favicon aplicado desde Firebase");
+            }
+
+        } catch (errFav) {
+            console.error("❌ Error favicon:", errFav);
+        }
+
+    } catch (e) {
+        console.error("Error cargando CTA:", e);
+    }
 }
-
-}
-
+ 
  
   async function cargarServiciosDefinitivos() {
     try {
