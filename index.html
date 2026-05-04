@@ -12,7 +12,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=1">
 
 <!-- fallback -->
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=1">
+<link id="favicon-dinamico" rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=1">
 <title id="tituloPagina">Mi Negocio</title>
 
 <link rel="stylesheet" href="style.css">
@@ -1311,7 +1311,36 @@ const clienteActual =
  
 let adminAutenticado = false;
 
+function aplicarFaviconDinamico() {
+    try {
+        const favicon = document.getElementById("favicon-dinamico");
+        if (!favicon) return;
 
+        let rutaFavicon = "/favicon-32x32.png";
+
+        switch (clienteActual) {
+            case "jenny":
+                rutaFavicon = "/favicon-jenny.png";
+                break;
+
+            case "maria":
+                rutaFavicon = "/favicon-maria.png";
+                break;
+
+            case "demo":
+            default:
+                rutaFavicon = "/favicon-demo.png";
+                break;
+        }
+
+        // Forzar refresh
+        favicon.href = rutaFavicon + "?v=" + new Date().getTime();
+
+    } catch (error) {
+        console.error("Error aplicando favicon dinámico:", error);
+    }
+}
+ 
  
 async function guardarEstiloTitulo(
     color,
@@ -4735,6 +4764,7 @@ try {
 };
 document.addEventListener("DOMContentLoaded", () => {
 
+ aplicarFaviconDinamico();
     // =========================
     // 📸 SUBIR IMAGEN
     // =========================
