@@ -1302,12 +1302,42 @@ const esAdmin = params.get("admin") === "1";
 
 const clienteParam = params.get("cliente");
 
+// 🔥 DETECTAR CLIENTE POR DOMINIO (PRODUCCIÓN)
+let clientePorDominio = null;
+
+try {
+    const host = window.location.hostname.toLowerCase();
+
+    // ⚠️ ignorar localhost y vercel
+    if (
+        host &&
+        !host.includes("localhost") &&
+        !host.includes("vercel.app")
+    ) {
+        // ejemplo: claudiaestilista.com → claudia
+        clientePorDominio = host.split(".")[0];
+    }
+
+} catch (e) {
+    console.warn("No se pudo detectar cliente por dominio");
+}
+
+// 🔥 PRIORIDAD:
+// 1. ?cliente=
+// 2. dominio
+// 3. demo
+
 const clienteActual =
 (
     clienteParam &&
     clienteParam.trim() !== ""
 )
 ? clienteParam.trim().toLowerCase()
+: (
+    clientePorDominio &&
+    clientePorDominio.trim() !== ""
+)
+? clientePorDominio
 : "demo";
 
 /* ====================================== */
