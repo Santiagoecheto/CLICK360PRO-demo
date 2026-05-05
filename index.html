@@ -317,8 +317,22 @@ type="button">
             <input type="number" id="inputTamanoSubtitulo" min="10" max="100" style="width:60px;"> 
             <span style="color:white;">px</span>
         </div>
+      </div>
+ 
+<div style="display:flex; align-items:center; gap:8px; margin-top:6px;">
+    <label style="color:white;">Texto Subtítulo:</label>
+ 
+    <input type="text"
+           id="inputSubtituloWeb"
+           placeholder="Subtítulo del negocio"
+           style="padding:6px; width:220px;">
 
-    </div>
+    <button id="btnGuardarSubtitulo"
+            style="padding:6px 12px; cursor:pointer;">
+        Guardar
+    </button>
+</div>
+   
 
 <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:12px 18px; margin-bottom:12px;">
 
@@ -2538,6 +2552,7 @@ if (snapshot.empty) {
         const inputTamanoSubtitulo = document.getElementById("inputTamanoSubtitulo");
      const btnGuardarTitulo = document.getElementById("btnGuardarTitulo");
 
+     
 if (btnGuardarTitulo) {
 btnGuardarTitulo.onclick = async () => {
 
@@ -2578,6 +2593,45 @@ btnGuardarTitulo.onclick = async () => {
 };
 }
 
+     const btnGuardarSubtitulo = document.getElementById("btnGuardarSubtitulo");
+
+if (btnGuardarSubtitulo) {
+    btnGuardarSubtitulo.onclick = async () => {
+
+        const nuevoSubtitulo = document.getElementById("inputSubtituloWeb")?.value || "";
+        const nuevoColorSub = document.getElementById("inputColorSubtitulo")?.value;
+        const nuevoTamanoSub = document.getElementById("inputTamanoSubtitulo")?.value;
+
+        await guardarEstiloTitulo(
+            inputColor?.value,
+            inputTamano?.value,
+            nuevoSubtitulo,
+            nuevoColorSub,
+            nuevoTamanoSub,
+            document.getElementById("inputColorNavbarLinks")?.value,
+            document.getElementById("inputColorNavbarHover")?.value,
+            document.getElementById("inputColorNavbarLogo")?.value
+        );
+
+        const subtitulo = document.getElementById("subtituloWeb");
+
+        if (subtitulo) {
+
+            if (nuevoSubtitulo.trim() !== "") {
+                subtitulo.textContent = nuevoSubtitulo;
+            }
+
+            if (nuevoColorSub) {
+                subtitulo.style.color = nuevoColorSub;
+            }
+
+            if (nuevoTamanoSub) {
+                subtitulo.style.fontSize = nuevoTamanoSub + "px";
+            }
+        }
+
+    };
+}
      
 // =========================
 // 🟣 SETEAR VALORES NAVBAR EN INPUTS
