@@ -2539,22 +2539,40 @@ if (snapshot.empty) {
      const btnGuardarTitulo = document.getElementById("btnGuardarTitulo");
 
 if (btnGuardarTitulo) {
- btnGuardarTitulo.onclick = async () => {
+btnGuardarTitulo.onclick = async () => {
 
+    const nuevoTitulo = document.getElementById("inputTituloWeb")?.value || "";
+    const nuevoColor = inputColor?.value;
+    const nuevoTamano = inputTamano?.value;
+
+    // 🔥 GUARDAR EN FIREBASE
     await guardarEstiloTitulo(
-        inputColor?.value,
-        inputTamano?.value,
+        nuevoColor,
+        nuevoTamano,
         document.getElementById("subtituloWeb")?.textContent || "",
-        document.getElementById("inputColorSubtitulo")?.value,
-        document.getElementById("inputTamanoSubtitulo")?.value,
+        inputColorSubtitulo?.value,
+        inputTamanoSubtitulo?.value,
         document.getElementById("inputColorNavbarLinks")?.value,
         document.getElementById("inputColorNavbarHover")?.value,
         document.getElementById("inputColorNavbarLogo")?.value
     );
 
-    // 🔥 FORZAR ACTUALIZACIÓN EN VIVO
-    if (typeof cargarTituloWeb === "function") {
-        await cargarTituloWeb();
+    // 🔥 APLICAR EN VIVO (CLAVE)
+    const titulo = document.getElementById("tituloWeb");
+
+    if (titulo) {
+
+        if (nuevoTitulo.trim() !== "") {
+            titulo.textContent = nuevoTitulo;
+        }
+
+        if (nuevoColor) {
+            titulo.style.color = nuevoColor;
+        }
+
+        if (nuevoTamano) {
+            titulo.style.fontSize = nuevoTamano + "px";
+        }
     }
 
 };
