@@ -2325,6 +2325,45 @@ try {
     if (configSnap.exists()) {
         dataConfig = configSnap.data() || {};
 
+     // =========================
+// 🔥 CARGAR INPUTS ADMIN (TÍTULO / SUBTÍTULO)
+// =========================
+
+const inputTituloWeb = document.getElementById("inputTituloWeb");
+const inputSubtituloWeb = document.getElementById("inputSubtituloWeb");
+
+const inputColorTitulo = document.getElementById("inputColorTitulo");
+const inputTamanoTitulo = document.getElementById("inputTamanoTitulo");
+
+const inputColorSubtitulo = document.getElementById("inputColorSubtitulo");
+const inputTamanoSubtitulo = document.getElementById("inputTamanoSubtitulo");
+
+// 🟢 TÍTULO
+if (inputTituloWeb && dataConfig.titulo) {
+    inputTituloWeb.value = dataConfig.titulo;
+}
+
+if (inputColorTitulo && dataConfig.colorTitulo) {
+    inputColorTitulo.value = dataConfig.colorTitulo;
+}
+
+if (inputTamanoTitulo && dataConfig.tamanoTitulo != null) {
+    inputTamanoTitulo.value = parseInt(dataConfig.tamanoTitulo);
+}
+
+// 🟢 SUBTÍTULO
+if (inputSubtituloWeb && dataConfig.subtitulo) {
+    inputSubtituloWeb.value = dataConfig.subtitulo;
+}
+
+if (inputColorSubtitulo && dataConfig.colorSubtitulo) {
+    inputColorSubtitulo.value = dataConfig.colorSubtitulo;
+}
+
+if (inputTamanoSubtitulo && dataConfig.tamanoSubtitulo != null) {
+    inputTamanoSubtitulo.value = parseInt(dataConfig.tamanoSubtitulo);
+}
+
         const tituloMapa = document.getElementById("tituloMapa");
         const direccionMapa = document.getElementById("direccionMapa");
         const iframeMapa = document.getElementById("iframeMapa");
@@ -2554,7 +2593,7 @@ if (snapshot.empty) {
         const inputTamano = document.getElementById("inputTamanoTitulo");
         const inputColorSubtitulo = document.getElementById("inputColorSubtitulo");
         const inputTamanoSubtitulo = document.getElementById("inputTamanoSubtitulo");
-     const btnGuardarTitulo = document.getElementById("btnGuardarTitulo");
+        const btnGuardarTitulo = document.getElementById("btnGuardarTitulo");
 
      
 if (btnGuardarTitulo) {
