@@ -1653,100 +1653,105 @@ async function iniciarModoAdmin() {
         btn.style.cursor = "pointer";
         btn.style.fontWeight = "bold";
 
-        btn.onclick = async () => {
+     btn.onclick = async () => {
 
-            try {
+    try {
 
-                let nombre = prompt("Nombre interno del cliente\nEj: jenny");
-                if (!nombre) return;
+        let nombre = prompt("Nombre interno del cliente\nEj: jenny");
+        if (!nombre) return;
 
-                nombre = nombre.trim().toLowerCase()
-                    .replace(/\s+/g, "-")
-                    .replace(/[^a-z0-9\-]/g, "");
+        // 🔹 NORMALIZAR
+        nombre = nombre.trim().toLowerCase()
+            .replace(/\s+/g, "-")
+            .replace(/[^a-z0-9\-]/g, "");
 
-                if (!nombre) {
-                    alert("Nombre inválido");
-                    return;
-                }
+        if (!nombre || nombre.length < 3) {
+            alert("Nombre inválido (mínimo 3 caracteres)");
+            return;
+        }
 
-                btn.disabled = true;
-                btn.textContent = "Creando...";
+        btn.disabled = true;
+        btn.textContent = "Creando...";
 
-                const refConfigDestino = doc(db, "clientes", nombre, "configuracion", "web");
-                const snapDestino = await getDoc(refConfigDestino);
+        const refConfigDestino = doc(db, "clientes", nombre, "configuracion", "web");
+        const snapDestino = await getDoc(refConfigDestino);
 
-                if (snapDestino.exists()) {
-                    alert("Ese cliente ya existe");
-                    return;
-                }
+        if (snapDestino.exists()) {
+            alert("Ese cliente ya existe");
+            return;
+        }
 
-                // ================================
-                // 🔥 COPIA CONFIGURACION
-                // ================================
+        // ================================
+        // 🔥 COPIA CONFIGURACION BASE
+        // ================================
 
-                const refConfigOrigen = doc(db, "clientes", "demo", "configuracion", "web");
-                const snapOrigen = await getDoc(refConfigOrigen);
+        const refConfigOrigen = doc(db, "clientes", "demo", "configuracion", "web");
+        const snapOrigen = await getDoc(refConfigOrigen);
 
-                if (!snapOrigen.exists()) {
-                    alert("No existe cliente demo base");
-                    return;
-                }
+        if (!snapOrigen.exists()) {
+            alert("No existe cliente demo base");
+            return;
+        }
 
-                await setDoc(refConfigDestino, snapOrigen.data());
+        await setDoc(refConfigDestino, snapOrigen.data());
 
-                // ================================
-                // 🔥 FUNCION GENERICA CLONAR
-                // ================================
+        // ================================
+        // 🔥 FUNCION CLONAR COLECCION
+        // ================================
 
-                async function clonarColeccion(nombreColeccion) {
+        async function clonarColeccion(nombreColeccion) {
 
-                    const colOrigen = collection(db, "clientes", "demo", nombreColeccion);
-                    const colDestino = collection(db, "clientes", nombre, nombreColeccion);
+            const colOrigen = collection(db, "clientes", "demo", nombreColeccion);
+            const colDestino = collection(db, "clientes", nombre, nombreColeccion);
 
-                    const snap = await getDocs(colOrigen);
+            const snap = await getDocs(colOrigen);
 
-                    for (const docSnap of snap.docs) {
-                        await addDoc(colDestino, docSnap.data());
-                    }
-                }
-
-                // ================================
-                // 🔥 CLONADO COMPLETO
-                // ================================
-
-                await clonarColeccion("servicios");
-                await clonarColeccion("galeria");
-                await clonarColeccion("trabajosRecientes");
-                await clonarColeccion("videos");
-
-                // ================================
-                // ✅ FINAL
-                // ================================
-
-                const urlFinal =
-                    window.location.origin +
-                    window.location.pathname +
-                    "?cliente=" +
-                    nombre;
-
-                alert(
-                    "Cliente PRO creado:\n\n" +
-                    nombre +
-                    "\n\nURL:\n" +
-                    urlFinal
-                );
-
-            } catch (error) {
-
-                console.error(error);
-                alert("Error creando cliente");
-
-            } finally {
-
-                btn.disabled = false;
-                btn.textContent = "➕ Nuevo Cliente";
+            for (const docSnap of snap.docs) {
+                await addDoc(colDestino, docSnap.data());
             }
-        };
+        }
+
+        // ================================
+        // 🔥 CLONADO COMPLETO
+        // ================================
+
+        await clonarColeccion("servicios");
+        await clonarColeccion("galeria");
+        await clonarColeccion("trabajosRecientes");
+        await clonarColeccion("videos");
+        await clonarColeccion("testimonios");
+
+        // ================================
+        // 🚀 REDIRECCIÓN AUTOMÁTICA
+        // ================================
+
+        const urlFinal =
+            window.location.origin +
+            window.location.pathname +
+            "?cliente=" +
+            nombre +
+            "&admin=1";
+
+        alert(
+            "Cliente creado correctamente:\n\n" +
+            nombre +
+            "\n\nRedirigiendo..."
+        );
+
+        window.location.href = urlFinal;
+
+    } catch (error) {
+
+        console.error(error);
+        alert("Error creando cliente");
+
+    } finally {
+
+        btn.disabled = false;
+        btn.textContent = "➕ Nuevo Cliente";
+    }
+};
+     
 
         panel.prepend(btn);
     }
