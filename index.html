@@ -282,12 +282,18 @@ type="button">
             <button id="btnTituloBlanco">Blanco</button>
         </div>
 
-     <div style="display:flex; align-items:center; gap:8px; margin-top:6px;">
+  <div style="display:flex; align-items:center; gap:8px; margin-top:6px;">
     <label style="color:white;">Texto Título:</label>
+
     <input type="text"
            id="inputTituloWeb"
            placeholder="Nombre del negocio"
            style="padding:6px; width:220px;">
+
+    <button id="btnGuardarTitulo"
+            style="padding:6px 12px; cursor:pointer;">
+        Guardar
+    </button>
 </div>
      
         <div style="display:flex; align-items:center; gap:8px;">
@@ -2530,7 +2536,26 @@ if (snapshot.empty) {
         const inputTamano = document.getElementById("inputTamanoTitulo");
         const inputColorSubtitulo = document.getElementById("inputColorSubtitulo");
         const inputTamanoSubtitulo = document.getElementById("inputTamanoSubtitulo");
+     const btnGuardarTitulo = document.getElementById("btnGuardarTitulo");
 
+if (btnGuardarTitulo) {
+    btnGuardarTitulo.onclick = async () => {
+
+        await guardarEstiloTitulo(
+            inputColor?.value,
+            inputTamano?.value,
+            document.getElementById("subtituloWeb")?.textContent || "",
+            document.getElementById("inputColorSubtitulo")?.value,
+            document.getElementById("inputTamanoSubtitulo")?.value,
+            document.getElementById("inputColorNavbarLinks")?.value,
+            document.getElementById("inputColorNavbarHover")?.value,
+            document.getElementById("inputColorNavbarLogo")?.value
+        );
+
+    };
+}
+
+     
 // =========================
 // 🟣 SETEAR VALORES NAVBAR EN INPUTS
 // =========================
