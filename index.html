@@ -2595,6 +2595,86 @@ if (snapshot.empty) {
         const inputTamanoSubtitulo = document.getElementById("inputTamanoSubtitulo");
         const btnGuardarTitulo = document.getElementById("btnGuardarTitulo");
 
+     // =========================
+// 🔥 AUTO-GUARDADO (DEBOUNCE)
+// =========================
+
+let timeoutGuardado = null;
+
+function autoGuardarCambios() {
+
+    if (timeoutGuardado) {
+        clearTimeout(timeoutGuardado);
+    }
+
+  timeoutGuardado = setTimeout(async () => {
+
+    const nuevoTitulo = document.getElementById("inputTituloWeb")?.value || "";
+    const nuevoSubtitulo = document.getElementById("inputSubtituloWeb")?.value || "";
+
+    const nuevoColor = inputColor?.value;
+    const nuevoTamano = inputTamano?.value;
+
+    const nuevoColorSub = inputColorSubtitulo?.value;
+    const nuevoTamanoSub = inputTamanoSubtitulo?.value;
+
+    await guardarEstiloTitulo(
+        nuevoColor,
+        nuevoTamano,
+        nuevoSubtitulo,
+        nuevoColorSub,
+        nuevoTamanoSub,
+        document.getElementById("inputColorNavbarLinks")?.value,
+        document.getElementById("inputColorNavbarHover")?.value,
+        document.getElementById("inputColorNavbarLogo")?.value
+    );
+
+    // 🔥 APLICAR EN VIVO
+
+    const titulo = document.getElementById("tituloWeb");
+    if (titulo) {
+        if (nuevoTitulo.trim() !== "") {
+            titulo.textContent = nuevoTitulo;
+        }
+        if (nuevoColor) {
+            titulo.style.color = nuevoColor;
+        }
+        if (nuevoTamano) {
+            titulo.style.fontSize = nuevoTamano + "px";
+        }
+    }
+
+    const subtitulo = document.getElementById("subtituloWeb");
+    if (subtitulo) {
+        if (nuevoSubtitulo.trim() !== "") {
+            subtitulo.textContent = nuevoSubtitulo;
+        }
+        if (nuevoColorSub) {
+            subtitulo.style.color = nuevoColorSub;
+        }
+        if (nuevoTamanoSub) {
+            subtitulo.style.fontSize = nuevoTamanoSub + "px";
+        }
+    }
+
+    console.log("🔥 Auto-guardado + render en vivo OK");
+
+}, 500);
+}
+
+     // 🔥 EVENTOS AUTO-GUARDADO
+
+if (inputColor) inputColor.oninput = autoGuardarCambios;
+if (inputTamano) inputTamano.oninput = autoGuardarCambios;
+
+if (inputColorSubtitulo) inputColorSubtitulo.oninput = autoGuardarCambios;
+if (inputTamanoSubtitulo) inputTamanoSubtitulo.oninput = autoGuardarCambios;
+
+const inputSubtituloWeb = document.getElementById("inputSubtituloWeb");
+if (inputSubtituloWeb) inputSubtituloWeb.oninput = autoGuardarCambios;
+
+const inputTituloWeb = document.getElementById("inputTituloWeb");
+if (inputTituloWeb) inputTituloWeb.oninput = autoGuardarCambios;
      
 if (btnGuardarTitulo) {
 btnGuardarTitulo.onclick = async () => {
@@ -4328,7 +4408,6 @@ async function cargarTituloWeb() {
 
         const inputColor = document.getElementById("inputColorTitulo");
         const inputTamano = document.getElementById("inputTamanoTitulo");
-
         const inputColorSubtitulo = document.getElementById("inputColorSubtitulo");
         const inputTamanoSubtitulo = document.getElementById("inputTamanoSubtitulo");
 
