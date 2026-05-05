@@ -2539,20 +2539,25 @@ if (snapshot.empty) {
      const btnGuardarTitulo = document.getElementById("btnGuardarTitulo");
 
 if (btnGuardarTitulo) {
-    btnGuardarTitulo.onclick = async () => {
+ btnGuardarTitulo.onclick = async () => {
 
-        await guardarEstiloTitulo(
-            inputColor?.value,
-            inputTamano?.value,
-            document.getElementById("subtituloWeb")?.textContent || "",
-            document.getElementById("inputColorSubtitulo")?.value,
-            document.getElementById("inputTamanoSubtitulo")?.value,
-            document.getElementById("inputColorNavbarLinks")?.value,
-            document.getElementById("inputColorNavbarHover")?.value,
-            document.getElementById("inputColorNavbarLogo")?.value
-        );
+    await guardarEstiloTitulo(
+        inputColor?.value,
+        inputTamano?.value,
+        document.getElementById("subtituloWeb")?.textContent || "",
+        document.getElementById("inputColorSubtitulo")?.value,
+        document.getElementById("inputTamanoSubtitulo")?.value,
+        document.getElementById("inputColorNavbarLinks")?.value,
+        document.getElementById("inputColorNavbarHover")?.value,
+        document.getElementById("inputColorNavbarLogo")?.value
+    );
 
-    };
+    // 🔥 FORZAR ACTUALIZACIÓN EN VIVO
+    if (typeof cargarTituloWeb === "function") {
+        await cargarTituloWeb();
+    }
+
+};
 }
 
      
