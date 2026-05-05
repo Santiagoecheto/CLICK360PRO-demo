@@ -282,6 +282,14 @@ type="button">
             <button id="btnTituloBlanco">Blanco</button>
         </div>
 
+     <div style="display:flex; align-items:center; gap:8px; margin-top:6px;">
+    <label style="color:white;">Texto Título:</label>
+    <input type="text"
+           id="inputTituloWeb"
+           placeholder="Nombre del negocio"
+           style="padding:6px; width:220px;">
+</div>
+     
         <div style="display:flex; align-items:center; gap:8px;">
             <label style="color:white;">Tamaño Título:</label>
             <input type="number" id="inputTamanoTitulo" min="10" max="100" style="width:60px;"> 
@@ -1379,6 +1387,17 @@ async function guardarEstiloTitulo(
 ) {
     try {
         const data = {};
+
+     // 🔥 TÍTULO PRINCIPAL (NUEVO)
+const inputTituloWeb = document.getElementById("inputTituloWeb");
+
+if (inputTituloWeb) {
+    const tituloTexto = inputTituloWeb.value.trim();
+
+    if (tituloTexto !== "") {
+        data.titulo = tituloTexto;
+    }
+}
 
         // 🔵 TÍTULO
         if (color) data.colorTitulo = color;
