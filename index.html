@@ -5439,19 +5439,25 @@ if (btnAgregarVideo) {
 }
 // 🎬 ABRIR YOUTUBE STUDIO
 
+// 🎬 ABRIR YOUTUBE STUDIO
+
 const btnAbrirYoutubeStudio =
 document.getElementById("btnAbrirYoutubeStudio");
 
+console.log("BOTON YOUTUBE:", btnAbrirYoutubeStudio);
+
 if (btnAbrirYoutubeStudio) {
 
-    btnAbrirYoutubeStudio.onclick = () => {
+    btnAbrirYoutubeStudio.addEventListener("click", () => {
+
+        console.log("CLICK YOUTUBE OK");
 
         window.open(
-         "https://studio.youtube.com/channel/UCzW2AZLaDfkCGZOUkjSc7OA/videos/upload?filter=%5B%5D&sort=%7B%22columnType%22%3A%22date%22%2C%22sortOrder%22%3A%22DESCENDING%22%7D",
+            "https://studio.youtube.com/channel/UCzW2AZLaDfkCGZOUkjSc7OA/videos/upload?filter=%5B%5D&sort=%7B%22columnType%22%3A%22date%22%2C%22sortOrder%22%3A%22DESCENDING%22%7D",
             "_blank"
         );
 
-    };
+    });
 
 }
  
