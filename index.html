@@ -5431,24 +5431,29 @@ if (btnSubir) {
 
 
  
-// 🔥 BOTÓN VIDEO
-const btnAgregarVideo = document.getElementById("btnAgregarVideo");
+// 🔥 BOTÓN VIDEO YOUTUBE
+
+const btnAgregarVideo =
+document.getElementById("btnAgregarVideo");
 
 if (btnAgregarVideo) {
-    btnAgregarVideo.onclick = agregarVideoFirebase;
-}
-// 🎬 ABRIR YOUTUBE STUDIO
 
-// 🎬 ABRIR YOUTUBE STUDIO
+    btnAgregarVideo.onclick = () => {
+
+        agregarVideoFirebase();
+
+    };
+
+}
+
+// 🎬 BOTÓN ABRIR YOUTUBE STUDIO
 
 const btnAbrirYoutubeStudio =
 document.getElementById("btnAbrirYoutubeStudio");
 
-console.log("BOTON YOUTUBE:", btnAbrirYoutubeStudio);
-
 if (btnAbrirYoutubeStudio) {
 
-    btnAbrirYoutubeStudio.addEventListener("click", () => {
+    btnAbrirYoutubeStudio.onclick = () => {
 
         console.log("CLICK YOUTUBE OK");
 
@@ -5457,7 +5462,7 @@ if (btnAbrirYoutubeStudio) {
             "_blank"
         );
 
-    });
+    };
 
 }
  
