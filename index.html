@@ -5358,8 +5358,112 @@ if (btnVideoHero) {
 } else {
     console.warn("⚠️ No se encontró btnSubirVideoHero");
 }
-
+ 
 });
+
+// 🔥 VIDEO FIREBASE PRO
+
+const btnSubirVideoFirebase =
+document.getElementById("btnSubirVideoFirebase");
+
+if (btnSubirVideoFirebase) {
+
+    btnSubirVideoFirebase.addEventListener("click", async () => {
+
+        try {
+
+            const input =
+                document.getElementById("inputVideoFirebase");
+
+            const tituloInput =
+                document.getElementById("inputVideoFirebaseTitulo");
+
+            const descripcionInput =
+                document.getElementById("inputVideoFirebaseDescripcion");
+
+            if (!input || !input.files || input.files.length === 0) {
+                alert("Seleccioná un video MP4");
+                return;
+            }
+
+            const archivo = input.files[0];
+
+            // 🔥 VALIDAR MP4
+            if (!archivo.type.includes("mp4")) {
+                alert("Solo se permiten videos MP4");
+                return;
+            }
+
+            // 🔥 VALIDAR TAMAÑO
+            if (archivo.size > 50 * 1024 * 1024) {
+                alert("El video es muy pesado (máx 50MB)");
+                return;
+            }
+
+            console.log("📤 Subiendo video PRO...");
+
+            // 🔥 FORM DATA
+            const formData = new FormData();
+            formData.append("video", archivo);
+
+            // 🔥 BACKEND
+            const response = await fetch("/api/subir-video", {
+                method: "POST",
+                body: formData
+            });
+
+            if (!response.ok) {
+                throw new Error("Error en backend");
+            }
+
+            const data = await response.json();
+
+            const url = data.url;
+
+            console.log("✅ Video PRO subido:", url);
+
+            // 🔥 GUARDAR EN FIRESTORE
+            await addDoc(
+                collection(
+                    db,
+                    "clientes",
+                    clienteActual,
+                    "videosFirebase"
+                ),
+                {
+                    url: url,
+                    titulo: tituloInput?.value?.trim() || "Video PRO",
+                    descripcion: descripcionInput?.value?.trim() || "",
+                    fecha: new Date()
+                }
+            );
+
+            console.log("🎬 Video PRO guardado");
+
+            alert("Video PRO subido correctamente");
+
+            // 🔥 LIMPIAR
+            input.value = "";
+
+            if (tituloInput) tituloInput.value = "";
+            if (descripcionInput) descripcionInput.value = "";
+
+        } catch (error) {
+
+            console.error("❌ Error video PRO:", error);
+
+            alert("Error subiendo video PRO");
+        }
+
+    });
+
+    console.log("✅ Botón Video PRO conectado");
+
+} else {
+
+    console.warn("⚠️ No se encontró btnSubirVideoFirebase");
+
+}
  
 setTimeout(() => {
 
