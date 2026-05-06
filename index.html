@@ -3676,16 +3676,12 @@ async function cargarVideosFirebasePro() {
 
         onSnapshot(q, (snapshot) => {
 
-            snapshot.forEach(docSnap => {
+         // 🔥 LIMPIAR SOLO VIDEOS FIREBASE ANTERIORES
+        contenedor
+                .querySelectorAll('[id^="video-firebase-"]')
+                .forEach(el => el.remove());
 
-                // 🔥 EVITAR DUPLICADOS VISUALES
-                if (
-                    document.getElementById(
-                        `video-firebase-${docSnap.id}`
-                    )
-                ) {
-                    return;
-                }
+        snapshot.forEach(docSnap => {
 
                 const data = docSnap.data();
 
