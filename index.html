@@ -3210,10 +3210,35 @@ const data = {
 
         snapshot.forEach(docSnap => {
 
-            data.push({
+            const item = {
                 id: docSnap.id,
                 ...docSnap.data()
-            });
+            };
+
+            // 🔥 FILTRO DEFENSIVO
+            const url =
+                (
+                    item.imagen ||
+                    item.url ||
+                    ""
+                ).toLowerCase();
+
+            // 🚫 IGNORAR FAVICONS E ICONOS
+            if (
+                url.includes("favicon") ||
+                url.includes("apple-touch-icon") ||
+                url.includes("android-chrome")
+            ) {
+
+                console.warn(
+                    "⚠ Archivo ignorado en trabajos recientes:",
+                    url
+                );
+
+                return;
+            }
+
+            data.push(item);
 
         });
 
@@ -3222,12 +3247,14 @@ const data = {
         renderTrabajosRecientes(data);
 
     } catch (error) {
-        console.error("❌ Error cargando trabajos recientes:", error);
+
+        console.error(
+            "❌ Error cargando trabajos recientes:",
+            error
+        );
     }
 }
-
-
-
+ 
 async function cargarTestimoniosDesdeFirebase() {
     try {
 
