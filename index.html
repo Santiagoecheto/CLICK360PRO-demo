@@ -3718,11 +3718,11 @@ async function cargarVideosFirebasePro() {
 
                     <div class="video-info">
 
-                        <h4>
+                        <h4 class="titulo-video-firebase">
                             ${data.titulo || "Video"}
                         </h4>
 
-                        <p>
+                        <p class="descripcion-video-firebase">
                             ${data.descripcion || ""}
                         </p>
 
@@ -3737,6 +3737,87 @@ async function cargarVideosFirebasePro() {
 
                     contenedorBotones.style.marginTop = "10px";
 
+                    // ✏️ EDITAR
+                    const btnEditar =
+                        document.createElement("button");
+
+                    btnEditar.textContent = "✏️ Editar";
+
+                    btnEditar.style.marginRight = "10px";
+
+                    btnEditar.onclick = async () => {
+
+                        try {
+
+                            const nuevoTitulo =
+                                prompt(
+                                    "Nuevo título:",
+                                    data.titulo || ""
+                                );
+
+                            if (nuevoTitulo === null) return;
+
+                            const nuevaDescripcion =
+                                prompt(
+                                    "Nueva descripción:",
+                                    data.descripcion || ""
+                                );
+
+                            if (nuevaDescripcion === null) return;
+
+                            await updateDoc(
+                                doc(
+                                    db,
+                                    "clientes",
+                                    clienteActual,
+                                    "videosFirebase",
+                                    docSnap.id
+                                ),
+                                {
+                                    titulo: nuevoTitulo.trim(),
+                                    descripcion:
+                                        nuevaDescripcion.trim()
+                                }
+                            );
+
+                            // 🔥 ACTUALIZAR VISUALMENTE
+                            const tituloHtml =
+                                div.querySelector(
+                                    ".titulo-video-firebase"
+                                );
+
+                            const descripcionHtml =
+                                div.querySelector(
+                                    ".descripcion-video-firebase"
+                                );
+
+                            if (tituloHtml) {
+                                tituloHtml.textContent =
+                                    nuevoTitulo;
+                            }
+
+                            if (descripcionHtml) {
+                                descripcionHtml.textContent =
+                                    nuevaDescripcion;
+                            }
+
+                            console.log(
+                                "✏️ Video Firebase actualizado"
+                            );
+
+                        } catch (error) {
+
+                            console.error(
+                                "❌ Error editando video:",
+                                error
+                            );
+
+                            alert("Error editando video");
+                        }
+
+                    };
+
+                    // 🗑 ELIMINAR
                     const btnEliminar =
                         document.createElement("button");
 
@@ -3776,6 +3857,8 @@ async function cargarVideosFirebasePro() {
 
                     };
 
+                    contenedorBotones.appendChild(btnEditar);
+
                     contenedorBotones.appendChild(btnEliminar);
 
                     div.appendChild(contenedorBotones);
@@ -3797,6 +3880,7 @@ async function cargarVideosFirebasePro() {
         );
     }
 }
+ 
  
  
 window.agregarVideoFirebase = async function() {
