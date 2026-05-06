@@ -629,17 +629,6 @@ Explorá nuestros resultados reales. Hacé clic en la imagen que quieras ver en 
 
 </div>
 
- <h2 style="margin-top:60px;">
-🔥 Videos PRO
-</h2>
-
-<div
-class="grid-videos"
-id="contenedor-videos-firebase">
-
-<!-- 🔥 Videos PRO Firebase -->
-
-</div>
 
 </section>
 
@@ -3642,8 +3631,9 @@ async function cargarVideosFirebasePro() {
 
     try {
 
+        // 🔥 AHORA USA EL MISMO CONTENEDOR GENERAL
         const contenedor =
-            document.getElementById("contenedor-videos-firebase");
+            document.getElementById("contenedor-videos");
 
         if (!contenedor) return;
 
@@ -3659,14 +3649,24 @@ async function cargarVideosFirebasePro() {
 
         onSnapshot(q, (snapshot) => {
 
-            contenedor.innerHTML = "";
-
             snapshot.forEach(docSnap => {
+
+                // 🔥 EVITAR DUPLICADOS VISUALES
+                if (
+                    document.getElementById(
+                        `video-firebase-${docSnap.id}`
+                    )
+                ) {
+                    return;
+                }
 
                 const data = docSnap.data();
 
                 const div = document.createElement("div");
+
                 div.className = "video-item";
+
+                div.id = `video-firebase-${docSnap.id}`;
 
                 div.innerHTML = `
                     <div class="video-wrapper">
@@ -3692,7 +3692,7 @@ async function cargarVideosFirebasePro() {
                     <div class="video-info">
 
                         <h4>
-                            ${data.titulo || "Video PRO"}
+                            ${data.titulo || "Video"}
                         </h4>
 
                         <p>
@@ -3718,7 +3718,7 @@ async function cargarVideosFirebasePro() {
                     btnEliminar.onclick = async () => {
 
                         const confirmar =
-                            confirm("¿Eliminar este video PRO?");
+                            confirm("¿Eliminar este video?");
 
                         if (!confirmar) return;
 
@@ -3734,10 +3734,13 @@ async function cargarVideosFirebasePro() {
                                 )
                             );
 
+                            // 🔥 ELIMINAR VISUALMENTE
+                            div.remove();
+
                         } catch (error) {
 
                             console.error(
-                                "Error eliminando video PRO:",
+                                "Error eliminando video:",
                                 error
                             );
 
@@ -3767,7 +3770,6 @@ async function cargarVideosFirebasePro() {
         );
     }
 }
-
  
  
 window.agregarVideoFirebase = async function() {
