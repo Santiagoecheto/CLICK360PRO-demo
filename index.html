@@ -630,6 +630,18 @@ Explorá nuestros resultados reales. Hacé clic en la imagen que quieras ver en 
 
 </div>
 
+ <h2 style="margin-top:60px;">
+🔥 Videos PRO
+</h2>
+
+<div
+class="grid-videos"
+id="contenedor-videos-firebase">
+
+<!-- 🔥 Videos PRO Firebase -->
+
+</div>
+
 </section>
 
 
@@ -3627,7 +3639,137 @@ async function cargarVideosDesdeFirebase() {
     }
 }
 
+async function cargarVideosFirebasePro() {
 
+    try {
+
+        const contenedor =
+            document.getElementById("contenedor-videos-firebase");
+
+        if (!contenedor) return;
+
+        const q = query(
+            collection(
+                db,
+                "clientes",
+                clienteActual,
+                "videosFirebase"
+            ),
+            orderBy("fecha", "desc")
+        );
+
+        onSnapshot(q, (snapshot) => {
+
+            contenedor.innerHTML = "";
+
+            snapshot.forEach(docSnap => {
+
+                const data = docSnap.data();
+
+                const div = document.createElement("div");
+                div.className = "video-item";
+
+                div.innerHTML = `
+                    <div class="video-wrapper">
+
+                        <video
+                            controls
+                            playsinline
+                            preload="metadata"
+                            style="
+                                width:100%;
+                                border-radius:12px;
+                                background:#000;
+                            ">
+
+                            <source
+                                src="${data.url}"
+                                type="video/mp4">
+
+                        </video>
+
+                    </div>
+
+                    <div class="video-info">
+
+                        <h4>
+                            ${data.titulo || "Video PRO"}
+                        </h4>
+
+                        <p>
+                            ${data.descripcion || ""}
+                        </p>
+
+                    </div>
+                `;
+
+                // 🔥 ADMIN
+                if (adminAutenticado) {
+
+                    const contenedorBotones =
+                        document.createElement("div");
+
+                    contenedorBotones.style.marginTop = "10px";
+
+                    const btnEliminar =
+                        document.createElement("button");
+
+                    btnEliminar.textContent = "🗑 Eliminar";
+
+                    btnEliminar.onclick = async () => {
+
+                        const confirmar =
+                            confirm("¿Eliminar este video PRO?");
+
+                        if (!confirmar) return;
+
+                        try {
+
+                            await deleteDoc(
+                                doc(
+                                    db,
+                                    "clientes",
+                                    clienteActual,
+                                    "videosFirebase",
+                                    docSnap.id
+                                )
+                            );
+
+                        } catch (error) {
+
+                            console.error(
+                                "Error eliminando video PRO:",
+                                error
+                            );
+
+                            alert("Error eliminando video");
+                        }
+
+                    };
+
+                    contenedorBotones.appendChild(btnEliminar);
+
+                    div.appendChild(contenedorBotones);
+                }
+
+                contenedor.appendChild(div);
+
+            });
+
+            console.log("🔥 Videos PRO renderizados");
+
+        });
+
+    } catch (error) {
+
+        console.error(
+            "❌ Error cargando videos PRO:",
+            error
+        );
+    }
+}
+
+ 
  
 window.agregarVideoFirebase = async function() {
     try {
@@ -5109,6 +5251,7 @@ window.open(url, "_blank");
 
     try {
         await cargarVideosDesdeFirebase();
+        await cargarVideosFirebasePro();
         console.log("✅ Videos cargados");
     } catch (e) {
         console.error("❌ Error videos:", e);
