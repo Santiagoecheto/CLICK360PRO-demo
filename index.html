@@ -5437,7 +5437,23 @@ const btnAgregarVideo = document.getElementById("btnAgregarVideo");
 if (btnAgregarVideo) {
     btnAgregarVideo.onclick = agregarVideoFirebase;
 }
+// 🎬 ABRIR YOUTUBE STUDIO
 
+const btnAbrirYoutubeStudio =
+document.getElementById("btnAbrirYoutubeStudio");
+
+if (btnAbrirYoutubeStudio) {
+
+    btnAbrirYoutubeStudio.onclick = () => {
+
+        window.open(
+            "https://studio.youtube.com",
+            "_blank"
+        );
+
+    };
+
+}
  
 // 🔵 EVENTOS TÍTULO
 if (inputColor && inputTamano) {
