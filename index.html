@@ -4076,10 +4076,16 @@ btnPassword.onclick = async () => {
 
         // 🔴 1. TRAER TODO DESDE FIREBASE
        
-        const idsFirebase = snapshot.docs.map(doc => doc.id);
-        let snapshot = await getDocs(
+      
+ // 🔴 1. TRAER TODO DESDE FIREBASE
+
+let snapshot = await getDocs(
     collection(db, "clientes", clienteActual, "servicios")
 );
+
+const idsFirebase =
+snapshot.docs.map(doc => doc.id);
+     
 
 // 🔥 SI NO HAY SERVICIOS DEL CLIENTE → MIGRAR DESDE GLOBAL
 if (snapshot.empty) {
