@@ -887,20 +887,55 @@ visor.addEventListener("click", () => {
 
 /* COMPARADOR ANTES DESPUÉS */
 
-const slider = document.querySelector(".control-comparador");
-const despues = document.querySelector(".imagen-despues");
-const linea = document.querySelector(".linea-divisora");
+const slider =
+document.querySelector(".control-comparador");
+
+const despues =
+document.querySelector(".imagen-despues");
+
+const linea =
+document.querySelector(".linea-divisora");
+
+const labelAntes =
+document.querySelector(".label-antes");
+
+const labelDespues =
+document.querySelector(".label-despues");
 
 slider.addEventListener("input", function(){
 
-const valor = slider.value;
+const valor =
+Number(slider.value);
 
-despues.style.width = valor + "%";
-linea.style.left = valor + "%";
+despues.style.width =
+valor + "%";
+
+linea.style.left =
+valor + "%";
+
+/* 🔥 EFECTO LABELS */
+
+if(labelAntes){
+
+    if(valor > 80){
+        labelAntes.style.opacity = "0";
+    }
+    else{
+        labelAntes.style.opacity = "1";
+    }
+}
+
+if(labelDespues){
+
+    if(valor < 20){
+        labelDespues.style.opacity = "0";
+    }
+    else{
+        labelDespues.style.opacity = "1";
+    }
+}
 
 });
-
-
   
 
 /* MODAL DE VIDEOS */
