@@ -5912,69 +5912,122 @@ if (cerrarModalServicio && modalServicio) {
     });
 }
 
- // 🔥 GUARDAR NUEVO SERVICIO DESDE MODAL
-const btnGuardarNuevoServicio = document.getElementById("btnGuardarNuevoServicio");
+// 🔥 GUARDAR NUEVO SERVICIO DESDE MODAL
+
+const btnGuardarNuevoServicio =
+document.getElementById("btnGuardarNuevoServicio");
 
 if (btnGuardarNuevoServicio) {
- btnGuardarNuevoServicio.onclick = async () => {
 
-    const inputTitulo = document.getElementById("inputNuevoTitulo");
-    const inputCategoria = document.getElementById("inputNuevaCategoria");
-    const modal = document.getElementById("modalServicio");
+    btnGuardarNuevoServicio.onclick = async () => {
 
-    if (!inputTitulo || !inputCategoria) {
-        console.error("Inputs del modal no encontrados");
-        return;
-    }
+        const inputTitulo =
+        document.getElementById("inputNuevoTitulo");
 
-    const titulo = inputTitulo.value.trim();
-    const categoria = inputCategoria.value.trim();
+        const selectCategoria =
+        document.getElementById("selectCategoriaServicio");
 
-    // 🔴 VALIDACIONES
-    if (!titulo) {
-        alert("Ingresá el nombre del servicio");
-        return;
-    }
+        const inputNuevaCategoria =
+        document.getElementById("inputNuevaCategoria");
 
-    if (!categoria) {
-        alert("Ingresá la categoría");
-        return;
-    }
+        const modal =
+        document.getElementById("modalServicio");
 
-    try {
-
-        console.log("INTENTANDO GUARDAR SERVICIO...");
-
-        await addDoc(collection(db, "clientes", clienteActual, "servicios"), {
-            titulo: titulo,
-            categoria: categoria,
-            corto: 0,
-            medio: 0,
-            largo: 0,
-            fecha: new Date()
-        });
-
-        console.log("✅ SERVICIO GUARDADO");
-
-        // 🔵 LIMPIAR INPUTS
-        inputTitulo.value = "";
-        inputCategoria.value = "";
-
-        // 🔵 CERRAR MODAL
-        if (modal) {
-            modal.style.display = "none";
+        if (
+            !inputTitulo ||
+            !selectCategoria ||
+            !inputNuevaCategoria
+        ) {
+            console.error("Inputs del modal no encontrados");
+            return;
         }
 
-        // 🔵 RECARGAR UI
-        await cargarServiciosDesdeFirebase();
+        // 🔹 TÍTULO
+        const titulo =
+        inputTitulo.value.trim();
 
-    } catch (error) {
-        console.error("❌ Error guardando servicio:", error);
-        alert("Error guardando servicio");
-    }
+        // 🔹 CATEGORIA EXISTENTE
+        const categoriaSeleccionada =
+        selectCategoria.value.trim();
 
-};
-} 
+        // 🔹 NUEVA CATEGORIA
+        const nuevaCategoria =
+        inputNuevaCategoria.value.trim();
+
+        // 🔥 PRIORIDAD:
+        // si escribió nueva categoría → usar esa
+        // sino → usar la seleccionada
+
+        let categoriaFinal =
+        nuevaCategoria !== ""
+        ? nuevaCategoria
+        : categoriaSeleccionada;
+
+        // 🔥 NORMALIZAR ESPACIOS
+        categoriaFinal =
+        categoriaFinal.replace(/\s+/g, " ").trim();
+
+        // 🔴 VALIDACIONES
+
+        if (titulo === "") {
+            alert("Ingresá el nombre del servicio");
+            return;
+        }
+
+        if (categoriaFinal === "") {
+            alert("Seleccioná o creá una categoría");
+            return;
+        }
+
+        try {
+
+            console.log("INTENTANDO GUARDAR SERVICIO...");
+
+            await addDoc(
+                collection(
+                    db,
+                    "clientes",
+                    clienteActual,
+                    "servicios"
+                ),
+                {
+                    titulo: titulo,
+                    categoria: categoriaFinal,
+                    corto: 0,
+                    medio: 0,
+                    largo: 0,
+                    fecha: new Date()
+                }
+            );
+
+            console.log("✅ SERVICIO GUARDADO");
+
+            // 🔵 LIMPIAR
+            inputTitulo.value = "";
+            selectCategoria.value = "";
+            inputNuevaCategoria.value = "";
+
+            // 🔵 CERRAR MODAL
+            if (modal) {
+                modal.style.display = "none";
+            }
+
+            // 🔵 RECARGAR UI
+            await cargarServiciosDesdeFirebase();
+
+        } catch (error) {
+
+            console.error(
+                "❌ Error guardando servicio:",
+                error
+            );
+
+            alert("Error guardando servicio");
+        }
+    };
+}
+
+ 
  // 🔥 BOTON AGREGAR VIDEO
 const btnAgregarVideo = document.getElementById("btnAgregarVideo");
 
@@ -6037,24 +6090,57 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
- <!-- 🔥 MODAL AGREGAR SERVICIO -->
+<!-- 🔥 MODAL AGREGAR SERVICIO -->
 <div class="modal-servicio" id="modalServicio" style="display: none;">
-    
+
     <div class="contenido-servicio">
 
         <span id="cerrarModalServicio" style="cursor:pointer; float:right;">X</span>
 
         <h2>Agregar servicio</h2>
 
-        <input type="text" id="inputNuevoTitulo" placeholder="Nombre del servicio">
-        <input type="text" id="inputNuevaCategoria" placeholder="Categoría">
+        <input
+            type="text"
+            id="inputNuevoTitulo"
+            placeholder="Nombre del servicio"
+        >
 
-        <button id="btnGuardarNuevoServicio">Guardar</button>
+        <!-- 🔥 SELECT CATEGORIAS -->
+        <select id="selectCategoriaServicio">
+
+            <option value="">
+                Seleccionar categoría
+            </option>
+
+            <option value="Cortes">
+                Cortes
+            </option>
+
+            <option value="Servicios básicos">
+                Servicios básicos
+            </option>
+
+            <option value="Color y tratamientos">
+                Color y tratamientos
+            </option>
+
+        </select>
+
+        <!-- 🔥 NUEVA CATEGORIA -->
+        <input
+            type="text"
+            id="inputNuevaCategoria"
+            placeholder="Nueva categoría (opcional)"
+        >
+
+        <button id="btnGuardarNuevoServicio">
+            Guardar
+        </button>
 
     </div>
 
 </div>
-
+ 
  <!-- LOGIN ADMIN PREMIUM -->
 <div id="modalLoginAdmin" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.75); z-index:99999; align-items:center; justify-content:center; padding:20px;">
 
